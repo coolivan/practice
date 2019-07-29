@@ -55,7 +55,7 @@ export default class ControlledComponents extends React.Component{
 
     change4 = ({target:{options}})=>{
         this.setState({
-            v4:[...options].filter(o=>o.selected)
+            v4:[...options].filter(o=>o.selected).map(o=>o.value)
         })
     }
     change5 = ({target:{value:v5}})=>{
