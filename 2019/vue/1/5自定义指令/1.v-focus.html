@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-focus.x.y='z'>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+    
+        // Vue.directive('focus',{
+        //     inserted(el){
+        //         el.focus()
+        //     }
+        // })
+
+        let app = new Vue({
+            el:'#app',
+            data:{
+                z:'zzz'
+            },
+            directives:{
+                'focus':{
+                    bind(el,binding){
+                        console.log(el,binding);
+                    },
+                    inserted(el) {
+                        el.focus()
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "name": "iPhone XR",
+        "price": 542500
+    },
+    {
+        "id": 2,
+        "name": "Apple iPad Air 3",
+        "price": 377700
+    },
+    {
+        "id": 3,
+        "name": "Macbook Pro 15.4",
+        "price": 1949900
+    },
+    {
+        "id": 4,
+        "name": "Apple iMac",
+        "price": 1629900
+    },
+    {
+        "id": 5,
+        "name": "Apple Magic Mouse",
+        "price": 72900
+    },
+    {
+        "id": 6,
+        "name": "Apple Watch Series 4",
+        "price": 599900
+    },
+    {
+        "id": 7,
+        "name": "iPhone XR",
+        "price": 542500
+    },
+    {
+        "id": 8,
+        "name": "Apple iPad Air 3",
+        "price": 377700
+    },
+    {
+        "id": 9,
+        "name": "Macbook Pro 15.4",
+        "price": 1949900
+    },
+    {
+        "id": 10,
+        "name": "Apple iMac",
+        "price": 1629900
+    },
+    {
+        "id": 11,
+        "name": "Apple Magic Mouse",
+        "price": 72900
+    },
+    {
+        "id": 12,
+        "name": "Apple Watch Series 4",
+        "price": 599900
+    },
+    {
+        "id": 13,
+        "name": "iPhone XR",
+        "price": 542500
+    },
+    {
+        "id": 14,
+        "name": "Apple iPad Air 3",
+        "price": 377700
+    },
+    {
+        "id": 15,
+        "name": "Macbook Pro 15.4",
+        "price": 1949900
+    },
+    {
+        "id": 16,
+        "name": "Apple iMac",
+        "price": 1629900
+    },
+    {
+        "id": 17,
+        "name": "Apple Magic Mouse",
+        "price": 72900
+    },
+    {
+        "id": 18,
+        "name": "Apple Watch Series 4",
+        "price": 599900
+    }
+]

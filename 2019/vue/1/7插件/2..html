@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .js_animation_box {
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="animate">vue动画</button>
+        <button @click="getMusic">加载数据</button>
+        <div ref="div" class="js_animation_box"></div>
+        <p v-text="music"></p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <script>
+        const MyPlugin = {
+            install(_Vue, options) {
+                console.dir(_Vue === Vue);//true
+                _Vue.prototype.jquery = _Vue.prototype.$ = $;
+            }
+        }
+
+        function http(_Vue, options) {
+            _Vue.prototype.$http = axios.create(options)
+        }
+
+        Vue.use(MyPlugin);
+        Vue.use(http, { baseURL: 'https://api.apiopen.top' });
+
+        let app = new Vue({
+            el: '#app',
+            data: {
+                music: ''
+            },
+            created: async function () {
+                // let rs = await axios({
+                //     method: 'post',
+                //     url: 'https://api.apiopen.top/musicRankings'
+                // });
+                // console.log(rs);
+                // method / methods 都可以
+                let res = await this.$http({
+                    methods: 'post',
+                    url: '/musicRankings'
+                });
+                console.log(res);
+                // this.music = res;
+            },
+            methods: {
+                animate() {
+                    this.$(this.$refs.div).animate({ width: 200 }).animate({ height: 200 })
+                },
+                async getMusic() {
+                    let res = await this.$http({
+                        methods: 'post',
+                        url: '/musicRankings'
+                    });
+                    // this.music = res.data.result;
+                    console.log(res);
+                }
+
+            }
+
+        })
+
+    </script>
+</body>
+
+</html>

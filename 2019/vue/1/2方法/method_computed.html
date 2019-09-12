@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	</head>
+
+	<body>
+
+<!--HTML部分-->
+<div id="app">
+    <ul>
+    	<li>{{methodTest()}}——methodTest()//要括号</li>
+    	<li>{{computedTest}}——computedTest</li>
+    </ul>
+</div>
+
+<!--script部分-->
+<script type="text/javascript">
+	let vm = new Vue({
+    el: '#app',
+    data: {
+        message: '我是消息，'
+    },
+    methods: {
+        methodTest() {
+            return this.message + '现在我用的是methods'
+        }
+    },
+    computed: {
+        computedTest() {
+            return this.message + '现在我用的是computed'
+        }
+    }
+})
+</script>
+
+	</body>
+
+</html>

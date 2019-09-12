@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        {{val}}
+        <hr>
+        <my-component-1></my-component-1> 
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        Vue.component('my-component-1',{
+            data(){
+                return {
+                    val:'cool'
+                }
+            },
+            template:`
+                <h1>my-component-1 {{val}}</h1>
+            `
+        })
+       
+
+        let app = new Vue({
+            el: '#app',
+            data:{
+                val:'ivan'
+            }
+        });
+    </script>
+</body>
+
+</html>

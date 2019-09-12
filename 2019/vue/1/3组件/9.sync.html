@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- <bb :num="n" @add="count"></bb> -->
+        父：{{n}}
+        <br>
+        <bb :num.sync="n"></bb>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+       const bb={
+           props:['num'],
+           data(){
+              return{
+                  m:this.num
+              }
+           },
+           template:`<h1 @click="add">组件通信-{{m}}</h1>`,
+           methods:{
+               add() {
+                   this.m++;
+                   this.$emit('update:num',this.m)
+               }
+           }
+       }
+
+       let app = new Vue({
+           el:'#app',
+           data:{
+               n:1
+           },
+           components:{
+               bb
+           }
+       })
+    </script>
+</body>
+
+</html>

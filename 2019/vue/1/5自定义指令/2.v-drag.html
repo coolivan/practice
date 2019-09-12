@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .box {
+        width: 100px;
+        height: 100px;
+        background: red;
+        position: absolute;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <button @click='changeDrag'>canDrag:{{canDrag}}</button>
+        <button @click='changeLimit'>limit:{{limit}}</button>
+        <hr>
+        <div class="box" v-drag="{canDrag,limit}"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        Vue.directive('drag', {
+            bind(el, binding) {
+                let { modifiers, value } = binding;
+                el.canDrag = value.canDrag;
+                el.limit = value.limit;
+                // v-drag.limit -> modifiers
+
+                let isDragStart = false;
+                let disX = 0;
+                let disY = 0;
+
+                el.addEventListener('mousedown', e => {
+                    if (!el.canDrag) return;
+                    disX = e.clientX - el.offsetLeft;
+                    disY = e.clientY - el.offsetTop;
+                    isDragStart = true;
+
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', e => {
+                    if (isDragStart) {
+                        let x = e.clientX - disX;
+                        let y = e.clientY - disY;
+
+                        // 是否限制边界
+                        if (el.limit) {
+                            let w = document.documentElement.clientWidth - el.offsetWidth;
+                            let h = document.documentElement.clientHeight - el.offsetWidth;
+
+                            x = Math.max(0, x);
+                            y = Math.max(0, y);
+                            x = Math.min(x, w);
+                            y = Math.min(y, h);
+                        }
+
+                        el.style.left = x + 'px';
+                        el.style.top = y + 'px';
+
+                    }
+                });
+
+                document.addEventListener('mouseup', e => {
+                    isDragStart = false;
+                });
+
+            },
+
+           update(el,{modifiers, value }) {
+                console.log('componentUpdated', value);
+                el.canDrag = value.canDrag;
+                el.limit = value.limit;
+            }
+        })
+
+        let app = new Vue({
+            el: '#app',
+            data: {
+                canDrag: true,
+                limit:false
+            },
+            methods:{
+                changeDrag(){
+                    this.canDrag = !this.canDrag;
+                },
+                changeLimit(){
+                    this.limit = !this.limit;
+                }
+            }
+        })
+
+        console.log(app);
+      
+    </script>
+</body>
+
+</html>

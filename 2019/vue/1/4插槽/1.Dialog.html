@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .dialog {
+            position: fixed;
+            left: 50%;
+            top: 30%;
+            transform: translateX(-50%) translateY(-50%);
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+            box-sizing: border-box;
+            background: #fff;
+            width: 60vmin;
+        }
+        .dialog.hidden{
+            display: none
+        }
+
+        .dialog-header {
+            padding: 20px 20px 0;
+            text-align: left;
+        }
+
+        .dialog-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2d3d;
+        }
+
+        .dialog-content {
+            padding: 30px 20px;
+            color: #48576a;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .dialog-close {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+        }
+
+       .dialog-close:before {
+            content: 'x';
+            color: #999;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <my-dialog>
+            <template v-slot:title>
+                <h1>这是标题</h1>
+            </template>
+            <template v-slot:default>
+                <p>这是内容</p>
+            </template>
+        </my-dialog>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        const dialog = {
+            inheritAttrs: false,
+            data(){
+                // console.log(this.$attrs);
+                return{
+                    hidden:false,
+                    show:true
+                }
+            },
+            template:`
+                <div class="dialog" :class="{hidden}" v-show="show">
+                    <i class="dialog-close" @click="close"></i>
+                    <div class="dialog-header">
+                        <slot name="title"></slot>
+                    </div>
+                    <div class="dialog-content">
+                        <slot></slot>
+                    </div>
+                </div>
+            `,
+            methods:{
+                close(){
+                    this.hidden = true
+                    // this.show = false
+                }
+            }
+        }
+
+        let app = new Vue({
+            el: '#app',
+            components:{
+                'my-dialog':dialog
+            }
+        })
+    </script>
+</body>
+
+</html>
