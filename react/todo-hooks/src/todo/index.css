@@ -1,0 +1,94 @@
+.todo-wrap * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.todo-wrap {
+    width: 500px;
+    border: 1px solid lightblue;
+    vertical-align: middle;
+}
+
+.todo-header {
+    padding: 10px 10px 0;
+}
+
+.todo-title {
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.todo-footer {
+    padding: 10px;
+    margin-top: 10px;
+    background: lightblue;
+}
+
+.todo-footer .clear{
+    background: #eee;
+    border-radius: 1em;
+    padding: 0 5px;
+    cursor: pointer;
+    float: right;
+}
+
+.todo-inner {
+    padding: 0 10px 10px;
+}
+
+.todo-wrap ul {
+    padding: 15px 0 0;
+}
+
+
+.todo-wrap li {
+    list-style: none;
+    border-bottom: 1px dashed lightblue;
+    padding: 10px 0;
+}
+
+.todo-wrap li:last-child {
+    border: 0;
+}
+
+.todo-wrap input[type='text'] {
+    display: block;
+    width: 100%;
+    padding: 5px;
+}
+
+.todo-wrap input:checked~label {
+    text-decoration: line-through;
+}
+
+
+.todo-wrap .view span {
+    float: right;
+    cursor: pointer;
+    display: none;
+    width: 1em;
+    height: 1em;
+    line-height: .9;
+    text-align: center;
+    background: lightblue;
+    border-radius: 50%;
+    color: white;
+}
+
+.todo-wrap li:hover span {
+    display: block;
+}
+
+.todo-wrap label {
+    display: inline-block;
+    width: 90%;
+    overflow: hidden;
+    vertical-align: bottom;
+    text-overflow: ellipsis;
+}
+
+.todo-wrap li.done label {
+    color: gray;
+}
