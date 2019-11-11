@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        min-height: 200vh;
+    }
+    div{
+        margin-top: 100vh;
+    }
+    img {
+        display: block;
+    }
+</style>
+
+<body>
+    <div>
+        <img is="lazy-load" src="img/1.jpg" alt="1">
+        <img is="lazy-load" src="img/2.jpg" alt="2">
+    </div>
+
+
+    <script>
+
+        class LazyLoadImage extends HTMLImageElement {
+            constructor() {
+                super();
+
+                let _src = this.getAttribute('src');
+                this.setAttribute('src', '');
+
+                document.addEventListener('scroll', e => {
+                    let clientHeight = document.documentElement.clientHeight || window.innerHeight;
+                    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+                    console.log(this,this.offsetTop);
+
+                    if (this.offsetTop < clientHeight + scrollTop) {
+                        this.setAttribute('src', _src)
+                    }
+                })
+
+                // setTimeout(_=>{
+                //     this.setAttribute('src',_src)
+                // },2000)
+            }
+        }
+
+
+        customElements.define('lazy-load', LazyLoadImage, { extends: 'img' })
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .box1 {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            background: red;
+        }
+
+        .box2 {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            background: blue;
+            left: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box1"></div>
+    <div class="box2"></div>
+
+    <script>
+        function Drag(el) {
+            this.el = el;
+            this.downFn();
+        }
+
+        Drag.prototype.downFn = function(){
+            this.el.onmousedown = e => {
+                e.preventDefault();
+                let x = e.clientX - this.el.offsetLeft;
+                let y = e.clientY - this.el.offsetTop;
+                this.moveFn(x, y);
+                this.upFn();
+            }
+        }
+
+        Drag.prototype.moveFn = function(x, y){
+            document.onmousemove = e => {
+                let xx = e.clientX - x;
+                let yy = e.clientY - y;
+                this.el.style.left = xx + 'px';
+                this.el.style.top = yy + 'px';
+            }
+        }
+
+        Drag.prototype.upFn = () => {
+            document.onmouseup = () => {
+                document.onmousemove = null;
+            }
+        }
+
+        function LimitDrag(el){
+            Drag.call(this,el);
+        }
+        // 深拷贝
+        // LimitDrag.prototype = deepCopy(Drag.prototype);
+        // 组合继承
+        function Link(){}
+        Link.prototype = Drag.prototype;
+        LimitDrag.prototype = new Link();
+        LimitDrag.prototype.constructor = LimitDrag;
+
+
+
+
+        LimitDrag.prototype.moveFn = function(x,y){
+            let w = document.documentElement.clientWidth-this.el.offsetWidth;
+            let h = document.documentElement.clientHeight-this.el.offsetHeight;
+            console.log(w,h)
+            document.onmousemove = e => {
+                let xx = e.clientX - x;
+                let yy = e.clientY - y;
+                xx = Math.max(0,xx);
+                xx = Math.min(xx,w);
+                yy = Math.max(0,yy);
+                yy = Math.min(yy,h);
+                this.el.style.left = xx + 'px';
+                this.el.style.top = yy + 'px';
+            }
+        }
+
+        function deepCopy(obj){
+            let _obj = Array.isArray(obj)?[]:{};
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if(typeof obj[key] === 'object'){
+                        deepCopy(obj[key])
+                    }else{
+                        _obj[key] = obj[key]
+                    }
+                }
+            }
+            return _obj;
+        }
+
+
+        let box1 = document.querySelector('.box1');
+        let box2 = document.querySelector('.box2');
+
+        let drag1 = new Drag(box1);
+        let drag2 = new LimitDrag(box2);
+        // drag2.downFn()
+        console.log(drag1, drag2);
+    </script>
+</body>
+
+</html>

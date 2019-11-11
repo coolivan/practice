@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>修改文本</title>
+	</head>
+	<style type="text/css">
+		.edit{
+			display: none;
+		}
+		.active .edit{
+			display: block;
+		}
+		.active .wrap{
+			display: none;
+		}
+		
+	</style>
+	<body>
+		<div id="app">
+			<ul>
+				<li>
+					<div class="wrap">
+						<span>手机</span>
+						<input type="button" value="编辑" />
+					</div>
+					<div class="edit">
+						<input type="text"  value="手机" />
+						<input type="button" value="保存">
+						<input type="button" value="取消">
+					</div>
+				</li>
+				<li>
+					<div class="wrap">
+						<span>手机</span>
+						<input type="button" value="编辑" />
+					</div>
+					<div class="edit">
+						<input type="text"  value="手机" />
+						<input type="button" value="保存">
+						<input type="button" value="取消">
+					</div>
+				</li>
+			
+			</ul>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var li = document.getElementsByTagName('li');				
+				
+				for(var i=0; i<li.length;i++){
+					fn(li[i])
+				}
+				
+				function fn(el){
+					var input = el.getElementsByTagName('input');
+					var edit = el.getElementsByClassName('edit')[0];
+					var wrap = el.getElementsByClassName('wrap')[0];
+					var span = el.getElementsByTagName('span')[0];
+					
+					
+					input[0].onclick = function(){
+						el.className = 'active';
+						input[1].focus();
+					}
+					
+					input[2].onclick = function(){
+						span.innerHTML = input[1].value;
+						el.className = '';
+												
+					}
+					
+					input[3].onclick = function(){
+						input[1].value = span.innerHTML;
+						el.className = '';						
+					}
+					
+					
+				}
+				
+			}
+		</script>
+	</body>
+</html>

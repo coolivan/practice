@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .k-dialog {
+            width: 30%;
+            z-index: 9999;
+            display: none;
+            position: absolute;
+            background: #fff;
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+            margin: 0 auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        .k-mask {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            background: black;
+            opacity: 0.4;
+            z-index: 999;
+            display: none;
+        }
+
+        .k-header {
+            padding: 20px 20px 10px;
+        }
+
+        .k-header .k-title {
+            line-height: 24px;
+            font-size: 18px;
+            color: #303133;
+            float: left;
+        }
+
+        .k-body {
+            padding: 30px 20px;
+            color: #606266;
+            font-size: 14px;
+        }
+
+        .k-footer {
+            padding: 10px 20px 30px;
+            text-align: right;
+        }
+
+        .k-close {
+            color: #909399;
+            font-weight: 400;
+            float: right;
+            cursor: pointer;
+        }
+
+        .k-cancel {
+            color: #606266;
+            border: 1px solid #dcdfe6;
+            text-align: center;
+            cursor: pointer;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        .k-cancel:hover {
+            color: #409eff;
+            background: #ecf5ff;
+            border-color: #c6e2ff;
+        }
+
+        .k-confirm {
+            border: 1px solid #dcdfe6;
+            text-align: center;
+            cursor: pointer;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            font-weight: 500;
+            background: #409eff;
+            color: #fff;
+            margin-left: 10px;
+        }
+
+        .k-confirm:hover {
+            background: #66b1ff;
+        }
+
+        .k-input {
+            width: 100%;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .k-prompt {
+            -webkit-appearance: none;
+            background-color: #fff;
+            background-image: none;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            box-sizing: border-box;
+            color: #606266;
+            display: inline-block;
+            font-size: inherit;
+            height: 40px;
+            line-height: 40px;
+            outline: none;
+            padding: 0 15px;
+            transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <button>点击显示文字弹框</button>
+    <button>点击显示输入弹框</button>
+
+    <script>
+        {
+            class dialog extends EventTarget {
+                constructor(options) {
+                    let op = Object.assign({
+                        width: '30%',
+                        height: '200px',
+                        title: 'title',
+                        content: 'content',
+                        dragable: false,
+                        maskable: true,
+                        isCancel: false,
+                        cancel: function () { },
+                        confirm: function () { }
+                    }, options)
+                    super();
+                    this.options = op;
+                    this.init()
+                }
+                init() {
+                    this.render();
+                    this.els = {
+                        dialog: this.dialogContainer.querySelector('.k-dialog'),
+                        mask: this.dialogContainer.querySelector('.k-mask'),
+                        close: this.dialogContainer.querySelector('.k-close'),
+                        body:this.dialogContainer.querySelector('.k-body'),
+                    }
+                    this.options.dragable && this.drag();
+                    this.handle();
+                    
+                }
+
+                render() {
+                    let dialogContainer = document.createElement('div');
+                    dialogContainer.className = 'k-wrap';
+                    dialogContainer.innerHTML = `
+                        <div class="k-mask"></div>
+                        <div class="k-dialog">
+                            <div class="k-header">
+                                <span class="k-title">${this.options.title}</span><span class="k-close">X</span>
+                            </div>
+                            <div class="k-body">
+                                <span>${this.options.content}</span>
+                            </div>
+                            <div class="k-footer">
+                                ${this.options.isCancel ? '<span class="k-cancel">取消</span>' : ''}
+                                <span class="k-confirm">确定</span>
+                            </div>
+                        </div> 
+                    `;
+                    document.body.appendChild(dialogContainer);
+                    this.dialogContainer = dialogContainer;
+                }
+
+                handle() {
+                    // 自定义事件 回调
+                    let cancel = new Event("cancel");
+                    this.addEventListener("cancel", this.options.cancel);
+                    this.addEventListener("confirm", this.options.confirm);
+                    // 绑定事件
+                    this.dialogContainer.addEventListener('click', e => {
+                        if (e.target.className === 'k-close') {
+                            this.close();
+                            this.dispatchEvent(cancel)
+                        }
+                        if (e.target.className === 'k-cancel') {
+                            this.close();
+                            this.dispatchEvent(cancel)
+                        }
+                        if (e.target.className === 'k-confirm') {
+                            this.confirm();
+                        }
+                    })
+                }
+                confirm(detail={}){
+                    this.close();
+                    this.dispatchEvent(new CustomEvent('confirm',detail))
+                }
+
+                open() {
+                    this.els.dialog.style.display = 'block';
+                    if (this.options.maskable) {
+                        this.els.mask.style.display = 'block';
+                    }
+                }
+
+                close() {
+                    this.els.dialog.style.display = 'none';
+                    if (this.options.maskable) {
+                        this.els.mask.style.display = 'none';
+                    }
+                }
+                drag(){
+                    let x,y;
+                    let move = e => {
+                        let xx = e.clientX - x;
+                        let yy = e.clientY - y;
+                        this.els.dialog.style.left = xx + 'px';
+                        this.els.dialog.style.top = yy + 'px';
+                    }
+                    this.els.dialog.addEventListener('mousedown',e=>{
+                        x = e.clientX - this.els.dialog.offsetLeft;
+                        y = e.clientY - this.els.dialog.offsetTop;
+                        document.addEventListener('mousemove',move);
+                        document.addEventListener('mouseup',()=>{
+                            document.removeEventListener('mousemove',move)
+                        })
+                    })
+
+                }
+            }
+
+
+            class Prompt extends dialog{
+                constructor(options){
+                    super(options);
+                    this.renderPrompt()
+                }
+                renderPrompt(){
+                    let input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'k-prompt';
+                    this.els.body.appendChild(input);
+                    this.els.prompt = input;
+                }
+                confirm(){
+                    let value = this.els.prompt.value;
+                    super.confirm({detail:{value}});
+                    this.els.prompt.value = ''
+                }
+
+            }
+
+
+
+            // 测试
+            let btn = document.querySelectorAll('button');
+            let d1 = new dialog({
+                title:'title 1',
+                dragable:true,
+                content:'我可以拖动',
+                confirm:function(){
+                    console.log('confirm 1')
+                },
+                cancel:function(){
+                    console.log('cancel 1')
+                }
+            });
+            console.log(d1);
+
+            btn[0].onclick = function () {
+                d1.open();
+            }
+
+            ///////////////////////////////////////////////////
+            let d2 = new Prompt({
+                title:'title 2',
+                content:'我有取消按钮',
+                isCancel:true,
+                confirm:function(e){
+                    console.log('confirm 2',e.detail.value)
+                },
+                cancel:function(){
+                    console.log('cancel 2')
+                }
+            })
+            console.log(d2);
+            btn[1].onclick = function(){
+                d2.open();
+            }
+
+        }
+    </script>
+</body>
+
+</html>

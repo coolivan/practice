@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+//__proto__
+        function Foo(){
+
+        }
+        Foo.prototype.go = function(){
+            console.log('go');
+        }
+        let f = new Foo();
+        console.log(f.__proto__ === Foo.prototype);//true
+        console.log(Foo.__proto__ === Object.__proto__);//true
+
+
+// constructor覆盖
+        function Bar(){
+            this.name = 'Bar';
+            this.age = 20
+        }
+        
+        console.log(Bar.prototype);//{constructor: ƒ}
+        Bar.prototype = {
+            // contstructor:Bar,
+            say:function(){
+                console.log(this.age)
+            }
+        }
+        console.log(Bar.prototype);//{say: ƒ}
+        let b = new Bar();
+        b.say();
+
+    </script>
+</body>
+</html>

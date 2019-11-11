@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>正则</title>
+</head>
+<body>
+	<h1>正则</h1>
+    <script>
+		/*
+		* 1. str.search(reg)返回位置index
+		* 2. str.match(reg) 返回匹配的元素数组
+		* 3. str.replace(reg,'')
+		* 4. reg.test(str) 返回布尔（注意：部分匹配也能返回true）
+		* 5. split(reg)
+		* 
+		* g全局
+		* i不区分大小写
+		* \d [0-9]
+		* \w [a-z0-9_]
+		* \s 空格
+		* \D [^0-9]
+		* \W [^a-z]
+		* \S 非空白
+		* +或{1,} 匹配多少个
+		* ?{0,1} /\.jsx?$/i =>.js,.jsx
+		* .任意字符
+		* /^(...|...)$/有|必加括号（）
+		* 
+		* 
+		* []
+		* 1.任何一个：/a[abc]z/ => aaz,abz,acz (abbz错)
+		* 2.范围：[a-z0-9_]等同于\w
+		* 3.排除：[^a] 其中^在[]里表示排除
+		* 
+		* 
+		* 
+		*/
+        // let str = 'Akdi123iaa123ma7';
+        // let reg1 = /a/g;
+		// let reg2 = /\d{1,}/g;
+		
+		
+		
+		// //正则方法
+		// let reg3 = /123/;
+		// console.log(reg3.test(str));
+		// let reg4 = /\d+/;
+		// console.log(reg4.exec(str));
+
+		// // 字符串方法
+        // console.log(str.search(reg1));//indexof
+		// console.log(str.match(reg2));//exec
+		// console.log(str.replace(reg1,'*'));
+		
+		
+		// //分组
+		// let str = `<div><span>48949aa</span></div>`
+		// let reg = /^<div>(.*)<\/div>$/;
+		// reg.exec(str)
+		// console.log(RegExp.$1);
+
+// let str = "fdbsfdabfdsfaabfdsab1212";
+// let reg = /[ab]/g;
+// let res =  str.replace(reg,"*");
+// console.log(res);
+
+// let str = "this knife is 5cM";
+// let reg = /[kdc][mM]/
+// let res = str.replace(reg,"光年");
+// console.log(res);
+
+// let str = "afdas023123faf1231A";
+// let reg = /\d/g;
+// let reg = /\d+/g;
+// let reg = /[0-9]+/g
+// let reg = /[^0-9]+/g
+// let reg = /[0-9a-zA-Z]+/g
+// let res = str.replace(reg,"*");
+// console.log(res);
+
+// let str = "abbabfsafdsafababfdsaabab";
+// let reg = /ab{2}/g;  //abb 
+// let res = str.replace(reg,"*");
+// console.log(res);
+
+
+// let str = "I am lilei";
+// // let reg = /li(L|l)ei/g;
+// let reg = /li[lL]ei/g;
+// let res = str.replace(reg,"李磊");
+// console.log(res);
+
+
+// let str = "fsadfd213fdsaf3141";
+// let reg = /(\d+)|(?<mystr>[a-z]+)/;
+// let res = str.match(reg);
+// console.log(res);
+// let r = reg.exec(str);
+// console.log(r);
+
+
+// let str = "fsadfd213fdsaf3141";
+// let reg = /(ad)|(\d+)|(41)/g;
+// let res = str.match(reg);
+// reg.test(str)
+// console.log(RegExp.$1);
+// console.log(res);
+
+
+// let str = "iphone3iphone4iphone5iphonenumber";
+// let reg = /iphone(?=\d)/g;  //肯定
+// // let reg = /iphone(?!\d)/g;  //否定
+// let res = str.replace(reg,"苹果");
+// console.log(res);
+
+// let str = "2020-12-16";
+// let reg = /(\d{4})-(\d{1,2})-(\d{1,2})/g;
+// let res = str.replace(reg,'$3/$2/$1');
+// console.log(res);
+
+
+// let str = `fdsafdsa
+//     fdafdsa
+// `
+// let reg = /^/gm;
+// let res = str.replace(reg,"*");
+// console.log(res);
+
+let str = "123456789";
+let reg = /\d/gy;
+console.log(reg.exec(str));
+console.log(reg.exec(str));
+console.log(reg.exec(str));
+console.log(reg.exec(str));
+console.log(reg.exec(str));
+console.log(reg.exec(str));
+console.log(reg.exec(str));
+
+
+    </script>
+
+</body>
+</html>

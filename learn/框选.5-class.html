@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+
+        ul {
+            padding: 15px;
+            display: flex;
+            justify-content: start;
+            flex-wrap: wrap;
+        }
+
+        li {
+            width: 50px;
+            height: 50px;
+            background: #bbbbbb;
+            list-style: none;
+            margin: 5px;
+        }
+
+        .selected {
+            background: red;
+        }
+
+
+        p {
+            padding: 15px 15px 0 15px;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+    <p>框选、右键、复制(ctrl+c)、剪切(ctrl+x)、粘贴(ctrl+v)、删除(delete)</p>
+
+    <div id="list1">
+        <p class="item">1</p>
+        <p class="item">2</p>
+        <p class="item">3</p>
+        <p class="item">4</p>
+        <p class="item">5</p>
+        <p class="item">6</p>
+        <p class="item">7</p>
+        <p class="item">8</p>
+        <p class="item">9</p>
+        <p class="item">10</p>
+    </div>
+    <ul id="list2"></ul>
+
+
+
+    <script>
+        {
+            let list = document.querySelector('#list2');
+            list.innerHTML = [...'.'.repeat(10)].map((item, index) => `<li class="item">${index}</li>`).join('');
+        }
+
+        {
+            class SelectFrame {
+                constructor(el) {
+                    this.list = document.querySelector(el);
+                    this.els = Array.from(this.list.querySelectorAll('.item'));
+                    // this.frame = null;
+                    // this.drag = null;
+                    // this.selectedArr = [];
+                    this.downFn();
+                }
+
+                downFn() {
+                    document.addEventListener('mousedown', e => {
+                        e.preventDefault();
+                        this.frame = document.createElement('div');
+                        this.frame.className = 'select-frame';
+                        this.frame.style.border = '1px dotted grey';
+                        this.frame.style.position = 'absolute';
+                        document.body.appendChild(this.frame);
+                        let x = e.pageX;
+                        let y = e.pageY;
+                        this.selectedArr = [];
+                        this.moveFn(x, y);
+                        this.upFn();
+                    })
+                }
+                
+
+                moveFn(x, y) {
+                    this.drag = e =>{
+                        let xx = e.pageX - x;
+                        let yy = e.pageY - y;
+                        let maxW = document.documentElement.clientWidth;
+
+                        let pos = {
+                            l: Math.min(x, e.pageX),
+                            t: Math.min(y, e.pageY),
+                            w: Math.min(Math.abs(xx), maxW - Math.min(x, e.pageX) - 2),
+                            h: Math.abs(yy)
+                        }
+                        this.frame.style.left = pos.l + 'px';
+                        this.frame.style.top = pos.t + 'px';
+                        this.frame.style.width = pos.w + 'px';
+                        this.frame.style.height = pos.h + 'px';
+
+                        this.els.forEach(el => {
+                            if (this.constructor.collide(el, this.frame)) {
+                                el.classList.add('selected');
+                            } else {
+                                el.classList.remove('selected')
+                            }
+                        });
+                    }
+
+                    document.addEventListener('mousemove',this.drag);
+
+                }
+
+
+
+                upFn() {
+                    document.addEventListener('mouseup', () => {
+                        this.getSelectedEl();
+                        document.removeEventListener('mousemove',this.drag);
+                        this.drag = null;
+                        document.body.removeChild(this.frame);
+                    }, { once: true });
+                }
+
+                getSelectedEl() {
+                    this.els.forEach(el => {
+                        if (el.classList.contains('selected') && !this.selectedArr.includes(el)) {
+                            this.selectedArr.push(el)
+                        }
+                    })
+                }
+
+                static collide(a, b) {
+                    let rectA = a.getBoundingClientRect();
+                    let rectB = b.getBoundingClientRect();
+                    return !(
+                        rectA.right < rectB.left ||
+                        rectB.right < rectA.left ||
+                        rectA.bottom < rectB.top ||
+                        rectB.bottom < rectA.top
+                    )
+                }
+            }
+
+
+            class SelectHandle extends SelectFrame {
+                constructor(els) {
+                    super(els);
+                    // this.clonedArr = [];
+                    // this.contextmenu = null;
+                    this.init();
+                }
+                init() {
+                    this.keyFn();
+                    this.contextmenuFn();
+                    this.mouseFn();
+                }
+
+                keyFn() {
+                    document.addEventListener('keydown', e => {
+                        if (this.selectedArr.length == 0) {
+                            return
+                        }
+                        // 复制
+                        if (e.ctrlKey && e.keyCode === 67) {
+                            this.ctrlC();
+                        }
+                        // 粘贴
+                        if (e.ctrlKey && e.keyCode === 86) {
+                            this.ctrlV();
+                        }
+                        // 剪切
+                        if (e.ctrlKey && e.keyCode === 88) {
+                            this.ctrlX();
+                        }
+                        // 删除
+                        if (e.keyCode === 46) {
+                            this.remove()
+                        }
+                    })
+                }
+
+                // 右键
+                contextmenuFn() {
+                    document.addEventListener('contextmenu', e => {
+                        e.preventDefault();
+                        this.contextmenu = document.createElement('div');
+                        this.contextmenu.className = 'contextmenu';
+                        this.contextmenu.innerHTML = `    
+                            <div class="cut">剪切</div>
+                            <div class="copy">复制</div>
+                            <div class="paste">粘贴</div>
+                            <div class="delete">删除</div>
+                        `
+
+                        this.contextmenu.style.border = '1px solid grey';
+                        this.contextmenu.style.position = 'absolute';
+                        this.contextmenu.style.background = 'white';
+                        this.contextmenu.style.left = e.clientX + scrollX + 'px';
+                        this.contextmenu.style.top = e.clientY + scrollY + 'px';
+                        document.body.appendChild(this.contextmenu);
+
+                        let div = this.contextmenu.querySelectorAll('div');
+                        div.forEach((item, index) => {
+                            // if (!this.clonedArr.length && item.className === 'paste') {
+                            //     item.style.display = 'none'
+                            // }
+                            item.style.padding = '5px 15px';
+                            item.style.borderBottom = '1px dashed grey';
+                            item.style.cursor = 'pointer';
+                            if (index == div.length - 1) {
+                                item.style.borderBottom = '0'
+                            }
+                        });
+                    })
+                }
+
+                mouseFn() {
+                    document.addEventListener('mouseup', (e) => {
+                        this.getSelectedEl();
+                        if (!this.contextmenu) return;
+                        if (e.target.className == 'copy') {
+                            this.ctrlC();
+                        }
+                        if (e.target.className == 'cut') {
+                            this.ctrlX()
+                        }
+                        if (e.target.className == 'paste') {
+                            this.ctrlV()
+                        }
+                        if (e.target.className == 'delete') {
+                            this.remove()
+                        }
+                        this.contextmenu.remove()
+
+                        e.stopPropagation();
+                    })
+                }
+
+                ctrlC() {
+                    this.clonedArr = [];
+                    this.selectedArr.forEach(el => {
+                        this.clonedArr.push(el.cloneNode(true))
+                    })
+                }
+
+
+                ctrlV() {
+                    this.clonedArr.forEach((item, index) => {
+                        item.classList.remove('selected');
+                        this.list.appendChild(item);
+                        // 重点克隆一份
+                        this.clonedArr[index] = item.cloneNode(true);
+                    })
+
+                    this.els.forEach(item => {
+                        item.classList.remove('selected');
+                    })
+                    this.els = Array.from(this.list.querySelectorAll('.item'));
+                }
+
+                ctrlX() {
+                    this.clonedArr = [];
+                    this.selectedArr.forEach(item => {
+                        this.clonedArr.push(item.cloneNode(true));
+                        item.remove();
+                    });
+                }
+
+                remove() {
+                    this.selectedArr.forEach(item => item.remove());
+                }
+
+            }
+
+
+            // 测试
+            let p = new SelectHandle('#list1');
+            let ul = new SelectHandle('#list2');
+
+            console.log(p, ul);
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>

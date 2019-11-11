@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        background: #f5f5f5;
+    }
+
+    #app {
+        width: 300px;
+        height: 300px;
+        margin: 50px auto;
+        background: white;
+        overflow: hidden;
+        position: relative;
+    }
+
+    ul {
+        position: relative;
+    }
+
+    li {
+        list-style: none;
+        padding: 0.5em;
+        border: 1px solid #f5f5f5;
+    }
+
+    .scroll-wrap {
+        position: absolute;
+        width: 10px;
+        height: 98%;
+        right: 5px;
+        top: 1%;
+        background: #eeeeee;
+        border-radius: 10px;
+    }
+
+    .scroll-bar {
+        position: absolute;
+        width: 10px;
+        height: 50px;
+        right: 0;
+        top: 0;
+        background: red;
+        border-radius: 8px;
+        z-index: 9;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <ul class="list">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>10</li>
+            <li>11</li>
+            <li>12</li>
+            <li>13</li>
+            <li>14</li>
+            <li>15</li>
+            <li>16</li>
+            <li>17</li>
+            <li>18</li>
+            <li>19</li>
+            <li>20</li>
+        </ul>
+        <!-- <div class="scroll-wrap">
+				<div class="scroll-bar"></div>
+			</div> -->
+    </div>
+</body>
+<script>
+    {
+        let app = document.querySelector('#app');
+        let list = app.querySelector('.list');
+        let scrollWrap;
+        let scrollBar;
+        let r = app.clientHeight / list.clientHeight;
+
+        render();
+        function render() {
+            scrollWrap = document.createElement('div');
+            scrollWrap.className = 'scroll-wrap';
+            scrollWrap.innerHTML = `<div class="scroll-bar"></div>`;
+            app.appendChild(scrollWrap);
+            scrollBar = app.querySelector('.scroll-bar');
+        }
+
+
+        drag();
+        function drag() {
+            // let scrollBar = app.querySelector('.scroll-bar');
+
+            // 根据比率设置滚动条高度
+            
+
+            if (r >= 1) {
+                scrollWrap.style.display = 'none';
+                return
+            } else {
+                scrollWrap.style.display = 'block'
+            };
+
+            scrollBar.style.height = r * scrollWrap.clientHeight + 'px';
+
+            // 最大滚动距离
+            let maxY = scrollWrap.clientHeight - scrollBar.clientHeight;
+
+            let startMouseY = 0; //鼠标按下时位置
+            let startPosY = 0; //鼠标按下时滚动条位置
+
+            let move = (e) => {
+                let nowMouseY = e.clientY;
+                let disY = nowMouseY - startMouseY;
+                let nowY = disY + startPosY;
+                nowY = Math.max(0, nowY);
+                nowY = Math.min(nowY, maxY);
+
+                let listY = nowY / maxY * (list.clientHeight - app.clientHeight);
+
+                // console.log(nowY,maxY)
+                scrollBar.style.top = nowY + 'px';
+                list.style.top = -listY + 'px';
+            }
+
+            scrollBar.addEventListener('mousedown', (e) => {
+                startMouseY = e.clientY;
+                startPosY = scrollBar.offsetTop;
+
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', () => {
+                    document.removeEventListener('mousemove', move)
+                }, {
+                        once: true
+                    })
+                e.preventDefault();
+            })
+
+
+            // 鼠标滚轮
+            mouseWheel(app, (e) => {
+                let nowY = scrollBar.offsetTop;
+                nowY -= 10;
+                nowY = Math.max(0, nowY);
+                //ul滚动距离
+                let listY = nowY / maxY * (list.clientHeight - app.clientHeight);
+                scrollBar.style.top = nowY + 'px';
+                list.style.top = -listY + 'px';
+            }, (e) => {
+                let nowY = scrollBar.offsetTop;
+                nowY += 10;
+                nowY = Math.min(maxY, nowY);
+                //ul滚动距离
+                let listY = nowY / maxY * (list.clientHeight - app.clientHeight);
+                scrollBar.style.top = nowY + 'px';
+                list.style.top = -listY + 'px';
+            })
+        }
+        
+        // 鼠标兼容
+        function mouseWheel(el, upFn, downFn) {
+            el.addEventListener('mousewheel', (e) => {
+                if (e.wheelDelta > 0) {
+                    upFn && upFn.call(el)
+                } else {
+                    downFn && downFn.call(el)
+                }
+            });
+
+            el.addEventListener('DOMMouseScroll', (e) => {
+                if (e.detail > 0) {
+                    downFn && downFn.call(el)
+                } else {
+                    upFn && downFn.call(el)
+                }
+            })
+        }
+    }
+</script>
+
+</html>

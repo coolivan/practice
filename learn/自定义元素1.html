@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    p{
+        color: red;
+    }
+</style>
+<body>
+    &lt;user-info&gt;&lt;/user-info&gt;
+    &lt;p&gt;我是span&lt;/p&gt;
+    <user-info></user-info>
+    <p>我是span</p>
+
+
+    <script>
+    
+        class UserInfoElement extends HTMLElement{
+            constructor(){
+                super();
+
+                let shadow = this.attachShadow({mode:'closed'});
+                let style = document.createElement('style');
+                style.textContent = `p{color:blue}`;
+
+                let p = document.createElement('p');
+                p.innerText = '我是内容';
+                shadow.appendChild(p);
+                shadow.appendChild(style);
+            }
+        }
+
+        customElements.define('user-info',UserInfoElement);
+
+        let userInfo = document.querySelector('user-info');
+
+        userInfo.addEventListener('click',e=>{
+            console.log(e.target)
+        })
+        
+    </script>
+</body>
+</html>

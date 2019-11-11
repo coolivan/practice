@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        class myEvent {
+            constructor() {
+                this.handle = {};
+            }
+            addEvent(eventName, callback) {
+                if (typeof this.handle[eventName] === 'undefined') {
+                    this.handle[eventName] = [];
+                }
+                if (typeof callback === 'function' && !this.handle[eventName].includes(callback)) {
+                    this.handle[eventName].push(callback);
+                }
+            }
+            trigger(eventName) {
+                if (!eventName in this.handle) {
+                    return;
+                }
+                // console.log(this.handle)
+                this.handle[eventName].forEach(v => {
+                    v.call(this);
+                })
+            }
+            removeEvent(eventName, callback) {
+                for (let i = 0; i < this.handle[eventName].length; i++) {
+                    if (this.handle[eventName][i] === callback) {
+                        this.handle[eventName].splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

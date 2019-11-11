@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>手风琴</title>
+	</head>
+	<style type="text/css">
+		ul,
+		li,
+		h2 {
+			padding: 0;
+			margin: 0;
+		}
+		
+		#app {
+			width: 300px;
+		}
+		
+		h2 {
+			background-color: #03A9F4;
+			background-image: url(img/right.png);
+			background-repeat: no-repeat;
+			text-indent: 1em;
+		}
+		h2.active{
+			background-image:url(img/down.png);
+		}
+		li {
+			list-style: none;
+			border: 1px solid black;
+		}
+		
+		#app ul{
+			display: none;
+		}
+		#app li.cur{
+			background: #ffc107;
+		}
+	</style>
+
+	<body>
+
+		<ul id="app">
+			<li class="list">
+				<h2>手机</h2>
+				<ul>
+					<li class="cur">1</li>
+					<li>2</li>
+					<li>3</li>
+				</ul>
+			</li>
+			<li class="list">
+				<h2>配件</h2>
+				<ul>
+					<li>4</li>
+					<li>5</li>
+					<li>6</li>
+				</ul>
+			</li>
+			<li class="list">
+				<h2>耳机</h2>
+				<ul>
+					<li>7</li>
+					<li>8</li>
+					<li>9</li>
+				</ul>
+			</li>
+		</ul>
+
+		<script type="text/javascript">
+			
+			window.onload = function() {
+				var app = document.getElementById("app");
+				var list = app.getElementsByClassName("list");
+				var ul = app.getElementsByTagName('ul');
+				var h2 = app.getElementsByTagName('h2');
+				var flag = false;
+				var arrLi = [];
+
+				for(let i = 0; i < h2.length; i++) {
+					h2[i].index = i;
+					h2[i].onclick = function() {
+						
+						//点击当项，收缩其它项
+						for (let i = 0; i < ul.length; i++) {
+							ul[i].style.display = 'none'
+						}
+						for (let i = 0; i < h2.length; i++) {
+							if(this.className !== 'active'){
+								h2[i].className = ''
+							}
+						}
+												
+						if(this.className == 'active'){
+							this.className = ''
+							ul[i].style.display= 'none';
+						}else{
+							ul[i].style.display= 'block';
+							this.className = 'active';	
+						}
+						
+						
+						
+					}
+					
+				}
+				
+				//li转换成数组
+				for (let i = 0; i < ul.length; i++) {
+					li = ul[i].getElementsByTagName('li');
+					for (let j = 0; j < li.length; j++) {
+						arrLi.push(li[j])
+					}
+				}
+				
+				
+				for (let i = 0; i < arrLi.length; i++) {
+					arrLi[i].onclick = function(){
+						
+						for (let i = 0; i < arrLi.length; i++) {
+							arrLi[i].className = ''
+						}
+					
+						this.className = 'cur';
+					}
+				}
+				
+				
+			}
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+        function flat(arr){
+            return arr.reduce((prev,next)=>{
+                return prev.concat(Array.isArray(next) ? flat(next) : next)
+            },[])
+        }
+
+
+        // function flat(arr){
+        //     while (arr.some(item=>Array.isArray(item))) {
+        //         arr=[].concat(...arr)
+        //     }
+        //     return arr;
+        // }
+
+        // function flat(arr){
+        //     while (arr.some(item=>Array.isArray(item))) {
+        //         arr=[].concat.apply([],arr)
+        //     }
+        //     return arr;
+        // }
+
+
+        // function flat(arr){
+        //     let res = [];
+        //     if(!Array.isArray(arr)) return res;
+        //     arr.forEach(item=>{
+        //         if(Array.isArray(item)){
+        //             res = res.concat(flat(item))
+        //         }else(
+        //             res.push(item)
+        //         )
+        //     })
+        //     return res;
+        // }
+
+
+        // function flat(arr){
+        //     //改变了类型！！！
+        //     return arr.toString().split(',')
+        // }
+
+        let a = [1,2,3,['a','b',[7,8,9]]];
+        console.log(flat(a));
+
+
+
+        
+    </script>
+</body>
+</html>

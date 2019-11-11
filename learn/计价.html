@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>购物车结算</title>
+</head>
+<body>
+	<div id="app">
+		<ul>
+			<li>
+				<input type="button" name="" id="" value="-" />
+				<strong>0</strong>
+				<input type="button" name="" id="" value="+" />
+				单价：<em>15</em>    元
+				小计：<span>0.00</span> 元
+			</li>
+			<li>
+				<input type="button" name="" id="" value="-" />
+				<strong>0</strong>
+				<input type="button" name="" id="" value="+" />
+				单价：<em>56.51</em>元
+				小计：<span>0.00</span>元
+			</li>
+			<li>
+				<input type="button" name="" id="" value="-" />
+				<strong>0</strong>
+				<input type="button" name="" id="" value="+" />
+				单价：<em>84.10</em>元
+				小计：<span>0.00</span>元
+			</li>
+			
+		</ul>
+		<p></p>
+	</div>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = document.getElementById('app');
+			var li = app.getElementsByTagName('li');
+
+			
+			
+			for (var i = 0; i < li.length; i++) {
+				product(li[i]);				
+			}
+			
+			function counter(){
+				var p = app.getElementsByTagName('p')[0];
+				var n = 0;
+				var m = 0;
+				var l = 0;
+				for (var i = 0; i < li.length; i++) {
+					var liNum =parseInt(li[i].getElementsByTagName('strong')[0].innerHTML);
+					var liPrice = parseFloat(li[i].getElementsByTagName('em')[0].innerHTML);
+					n += liNum;
+					m += liNum*liPrice;
+					
+					if(liNum != 0 && l < liPrice){
+						l = liPrice
+					}
+					
+				}
+								
+				p.innerHTML = '共'+n+'件，总价' + m.toFixed(2)+'元，其中最贵的是'+l+'元'; 
+			}
+			
+			
+			
+			function product(el){
+				var btn = el.getElementsByTagName('input');
+				var strong = el.getElementsByTagName('strong')[0];
+				var em = el.getElementsByTagName('em')[0];
+				var span = el.getElementsByTagName('span')[0];
+				
+				var num = parseInt(strong.innerHTML);
+				var price = parseFloat(em.innerHTML);
+				
+				counter();
+				btn[0].onclick = function(){
+					if (num == 0) return;			
+					num--;
+					strong.innerHTML = num;
+					span.innerHTML = parseFloat(num*price).toFixed(2);
+					counter()
+				}
+				
+				btn[1].onclick = function(){
+					num++;
+					strong.innerHTML = num;
+					span.innerHTML = parseFloat(num*price).toFixed(2);
+					counter()
+				}
+			}
+			
+		}
+	</script>
+	
+	
+	
+</body>
+</html>

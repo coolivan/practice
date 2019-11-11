@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background: #eeeeee;
+        }
+
+        ul {
+            background: white;
+            padding: 15px;
+            position: relative;
+            width: 50vw;
+            margin: 5% auto;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        input {
+            display: none;
+        }
+        label{
+            display: block;
+            background: lightblue;
+            padding: 5px;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        p{
+            display: none;
+        }
+        input:checked ~ p{
+            display: block;
+        }
+
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li>
+            <input type="checkbox" name="" id="r1" checked>
+            <label for="r1">tab1</label>
+            <p>
+                相同name属性的radio组一次性只能选择一个，模拟面板切换
+                利用radio具有可聚焦属性，模拟点击事件
+                通过CSS派生选择器，结合z-index层级来完成内容显隐切换
+            </p>
+        </li>
+        <li>
+            <input type="checkbox" name="" id="r2">
+            <label for="r2">tab2</label>
+            <p>text2</p>
+        </li>
+        <li>
+            <input type="checkbox" name="" id="r3">
+            <label for="r3">tab3</label>
+            <p>text3</p>
+        </li>
+    </ul>
+</body>
+
+</html>

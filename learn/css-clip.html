@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        .Adv_area {
+            max-width: 200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .Adv_ico {
+            width: 90px;
+            height: 90px;
+            overflow: hidden;
+            margin: 0 0 0 50px;
+            position: relative;
+            z-index: 99;
+            background: #ccc;
+            border-radius: 100%;
+        }
+
+
+        .Adv_ico::before,.Adv_ico::after {
+            content: '';
+            display: block;
+            position: absolute;
+            z-index: 11;
+            left: -4px;
+            top: -2px;
+            margin: 0;
+            padding: 0;
+            width: 92px;
+            height: 92px;
+            background: #1161c0;
+            border: 3px solid #fff;
+            border-radius: 100%;
+
+            transition: all .5s ease-in-out 0s;
+        }
+
+        .Adv_ico::before {
+            clip: rect(0px, 105px, 0, 52px);
+        }
+
+        .Adv_ico::after {
+            clip: rect(105px, 52px, 105px, 0px);
+        }
+
+        .Adv_ico img {
+            position: absolute;
+            z-index: 12;
+        }
+
+
+        .Adv_ico:hover:before {
+            clip: rect(0px, 105px, 105px, 52px);
+        }
+
+        .Adv_ico:hover:after{
+            clip: rect(0px, 52px, 105px, 0px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Adv_area">
+        <a href="javascript:void(0)" title="">
+            <div class="Adv_ico">
+                <!-- <img src="img/1.jpg" alt="产品优势"> -->
+            </div>
+
+        </a>
+    </div>
+
+
+
+</body>
+
+</html>

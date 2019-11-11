@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>新闻列表</title>
+	</head>
+	<style>
+		img{
+			width: 100px;
+			display: none;
+		}
+		.current img{
+			display: block;
+		}
+		ul{
+			padding: 0;
+			margin: 0;
+		}
+		input.active{
+			background: red;
+		}
+		
+	</style>
+	<body>
+		<div id="app">
+			<div id="header">
+				<h4>新闻列表</h4>
+				<input type="button" value="每日">
+				<input type="button" value="每周">
+				<input type="button" value="每月">
+			</div>
+			<ul></ul>
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				var app = document.getElementById('app');
+				var btn = app.getElementsByTagName('input');
+				var ul = app.getElementsByTagName('ul')[0];
+
+				var arr = [
+					[{
+						img: 'img/1.jpg',
+						title: '我是每日新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/1.jpg',
+						title: '我是每日新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/1.jpg',
+						title: '我是每日新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/1.jpg',
+						title: '我是每日新闻，我很长我很长我很长我很长我很长'
+					}],
+					[{
+						img: 'img/2.jpg',
+						title: '我是每周新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/2.jpg',
+						title: '我是每周新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/2.jpg',
+						title: '我是每周新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/2.jpg',
+						title: '我是每周新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/2.jpg',
+						title: '我是每周新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/2.jpg',
+						title: '我是每周新闻，我很长我很长我很长我很长我很长'
+					}],
+					[{
+						img: 'img/3.jpg',
+						title: '我是每月新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/3.jpg',
+						title: '我是每月新闻，我很长我很长我很长我很长我很长'
+					}, {
+						img: 'img/3.jpg',
+						title: '我是每月新闻，我很长我很长我很长我很长我很长'
+					}, ]
+				];
+
+				for (let i = 0; i < btn.length; i++) {
+					btn[i].onclick = function() {
+						for (let j = 0; j < btn.length; j++) {
+							btn[j].className = '';
+						}
+					
+						init(i);
+					}
+				}
+
+
+				function init(n) {
+					btn[n].className = 'active';
+					let data = arr[n];
+					let str = '';
+
+					for (let i = 0; i < data.length; i++) {
+						str += `<li><img src="${data[i].img}"><span>${i+1} ${data[i].title}</span></li>`
+					}
+					ul.innerHTML = str;
+					
+					var li = ul.getElementsByTagName('li');
+					
+					for(let i=0; i<li.length;i++){
+						li[i].onmouseenter = function(){
+							this.className = 'current'
+						}
+						li[i].onmouseleave = function(){
+							this.className = ''
+						}
+						
+						
+					}
+
+				}
+
+				init(0)
+
+
+				
+				
+				
+				
+
+
+
+			}
+		</script>
+	</body>
+</html>

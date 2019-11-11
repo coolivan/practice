@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    #app {
+        width: 300px;
+        margin: auto;
+        position: relative;
+    }
+
+    li {
+        width: 100%;
+        background: red;
+        list-style: none;
+        margin: 5px;
+        padding: 5px;
+        color: white;
+        display: flex;
+    }
+
+    span {
+        float: right;
+        padding: 0 5px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <ul>
+            <li>
+                <p>1</p>
+                <span>上移</span>
+                <span>下移</span>
+            </li>
+            <li>2
+                <span>上移</span>
+                <span>下移</span>
+            </li>
+            <li>3
+                <span>上移</span>
+                <span>下移</span>
+            </li>
+            <li>4
+                <span>上移</span>
+                <span>下移</span>
+            </li>
+            <li>5
+                <span>上移</span>
+                <span>下移</span>
+            </li>
+        </ul>
+    </div>
+</body>
+<script src="js/itween.js"></script>
+<script>
+    let ul = document.querySelector('ul');
+    let lis = document.querySelectorAll('li');
+    let disLi = lis[1].offsetTop - lis[0].offsetTop;
+    let disLast = disLi * (lis.length - 1);
+    // let disLast = lis[lis.length-1].offsetTop - lis[0].offsetTop;
+    let flag = false;
+
+
+    lis.forEach(li => {
+        css(li, 'translateY', 0);
+        let spans = li.querySelectorAll('span');
+
+        //up
+        spans[0].onclick = function () {
+            if (flag) return;
+            flag = true;
+            let prev = li.previousElementSibling;
+            if (prev) {
+                itween({
+                    el: li,
+                    attr: {
+                        translateY: -disLi
+                    }
+                });
+                itween({
+                    el: prev,
+                    attr: {
+                        translateY: disLi
+                    },
+                    cb() {
+                        ul.insertBefore(li, prev);
+                        css(li, 'translateY', 0);
+                        css(prev, 'translateY', 0);
+                        flag = false;
+                    }
+                });
+            } else {
+                //li移到最后，其它依次向上移动
+                lis.forEach(item => {
+                    if (item === li) {
+                        itween({
+                            el: li,
+                            attr: {
+                                translateY: disLast
+                            },
+                            cb() {
+                                ul.appendChild(li);
+                                lis.forEach(li => {
+                                    css(li, 'translateY', 0)
+                                });
+                                flag = false;
+                            }
+                        })
+                    } else {
+                        itween({
+                            el: item,
+                            attr: {
+                                translateY: -disLi
+                            }
+                        })
+                    }
+                })
+            }
+        }
+
+        //down
+        spans[1].onclick = function () {
+            if (flag) return;
+            flag = true;
+            let next = li.nextElementSibling;
+            if (next) {
+                itween({
+                    el: li,
+                    attr: { translateY: disLi },
+                });
+                itween({
+                    el: next,
+                    attr: { translateY: -disLi },
+                    cb() {
+                        ul.insertBefore(next, li);
+                        css(li, 'translateY', 0);
+                        css(next, 'translateY', 0);
+                        flag = false;
+                    }
+                })
+            } else {
+                //最后一个上移到第一位，其他所有依次下移
+                lis.forEach(item => {
+                    if (item === li) {
+                        itween({
+                            el: li,
+                            attr: { translateY: -disLast },
+                            cb(){
+                                ul.insertBefore(li,ul.firstElementChild);
+                                lis.forEach(li=>{
+                                    css(li,'translateY',0)
+                                });
+                                flag = false;
+                            }
+                        })
+                    }else{
+                        itween({
+                            el:item,
+                            attr:{translateY:disLi}
+                        })
+                    }
+                })
+            }
+        }
+    })
+
+</script>
+
+</html>

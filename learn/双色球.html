@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>双色球</title>
+</head>
+
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	#app {
+		width: 400px;
+		border: 1px solid #ccc;
+		text-align: center;
+		margin: 100px auto;
+		padding: 50px 0;
+	}
+	ul{
+		height: 40px;
+	}
+	li {
+		display: inline-block;
+		width: 40px;
+		height: 40px;
+		color: #ff4b4b;
+		border: 2px solid #ff4b4b;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 40px;
+		font-size: 24px;
+		vertical-align: middle;
+		margin: 2px;
+	}
+
+	li:last-child {
+		color: #3ea1f4;
+		border-color: #3ea1f4;
+	}
+
+	button {
+		background: white;
+		color: #3ea1f4;
+		border: 1px solid #3ea1f4;
+		margin-top: 30px;
+		font-size: 16px;
+		padding: 5px 10px;
+		border-radius: 5px;
+		cursor: pointer;
+		outline: none;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<ul>
+			<p>还没有开奖...</p>
+		</ul>
+		<button>开奖</button>
+	</div>
+
+	<script type="text/javascript">
+		let btn = document.querySelector('button');
+		let ul = document.querySelector('ul');
+		let arr = [];
+
+
+
+		btn.onclick = function () {
+			arr = [...rand(6, 33), ...rand(1, 16)];
+			console.log(arr);
+
+			ul.innerHTML = arr.map((item, index) => {
+				return `<li>${item}</li>`
+			}).join('')
+		}
+
+		function rand(num, max) {
+			//num为所需个数，max为最大范围
+			let temp = [];
+			//递归
+			(function loop() {
+				let r = parseInt(Math.random() * max + 1)
+				//不存在就插入
+				if (temp.indexOf(r) == -1) {
+					temp.push(r);
+				}
+				//还没有够数就递归
+				if (temp.length < num) {
+					loop();
+				}
+			}())
+
+			//排序
+			if (temp.length > 1) {
+				temp.sort((a, b) => a - b)
+			}
+
+			return temp;
+		}
+
+		
+
+
+	</script>
+
+</body>
+
+</html>

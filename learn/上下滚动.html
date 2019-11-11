@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>上下滚动</title>
+	</head>
+	<style>
+		#app{
+			width: 300px;
+			border: 1px solid #000000;
+			margin: 50px auto;
+		}
+		img{
+			max-width: 100%;
+		}
+		.box{
+			height: 700px;
+			overflow: hidden;
+			position: relative;
+		}
+		ul{
+			padding: 0;
+			margin: 0;
+			position: absolute;
+		}
+		
+		li{
+			list-style: none;
+		}
+		input{
+			width: 100%;
+			font-size: 20px;
+			cursor: pointer;
+		}
+		
+	</style>
+	<body>
+		<div id="app">
+			<input type="button" value="up">
+			<div class="box">
+				<ul></ul>
+			</div>
+			<input type="button" value="down">
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				let app = document.getElementById('app');
+				let input = document.querySelectorAll('input');
+				let box = document.querySelectorAll('.box')[0];
+				let ul = document.querySelectorAll('ul')[0];
+				let str = '';
+				let timer = null;
+				
+				let arr = ['img/1.jpg','img/2.jpg','img/3.jpg','img/4.jpg','img/1.jpg','img/2.jpg','img/3.jpg','img/4.jpg',]
+				
+				for(let i=0;i<arr.length;i++){
+					str += `<li><img src="${arr[i]}" /></li>`;
+				}
+				ul.innerHTML = str;
+				
+				function getStyle(obj, attr) {
+					return obj.currentStyle ? cureentStyle(obj)[attr] : getComputedStyle(obj)[attr];
+				}				
+				
+				
+				//////////////////
+				let boxHeight = parseInt(getStyle(box,'height'));
+				let t = 0;
+				input[0].onmouseover = function(){
+				    let ulHeight = parseInt(getStyle(ul,'height'));
+					clearInterval(timer);
+					
+					timer = setInterval(function(){
+						let t = parseInt(getStyle(ul,'top'));
+						t--;
+						if(t == boxHeight-ulHeight){
+							clearInterval(timer)
+						}
+						
+						ul.style.top = t + 'px';
+					},10)
+					
+				}
+				
+				input[0].onmouseout = function(){
+					clearInterval(timer)
+				}
+				
+					
+				input[1].onmouseover = function(){
+					let t = parseInt(getStyle(ul,'top'));
+					clearInterval(timer);
+					if(t==0)return;
+					
+					timer = setInterval(function(){
+						let t = parseInt(getStyle(ul,'top'));
+						t++;
+						if(t == 0){
+							clearInterval(timer)
+						}
+						
+						ul.style.top = t + 'px';
+					},10)
+					
+					
+				}
+				
+				input[1].onmouseout = function(){
+					clearInterval(timer)
+				}
+				
+				
+				
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>js类型判断</title>
+</head>
+
+
+
+<body>
+	<div id="app">
+		<p>var arr = ['100px', 'abc' - 6, [], -98765, 34, -2, 0, '300', , function() { alert(1); }, null, document, [], true, '200px' - 30, '23.45元', 5, Number('abc'), function() { alert(3); }, 'xyz' - 90]</p>
+	</div>
+
+	<script type="text/javascript">
+		var arr = ['100px', 'abc' - 6, [], -98765, 34, -2, 0, '300', , function () {
+			alert(1);
+		}, null, document, [], true, '200px' - 30, '23.45元', 5, Number('abc'), function () {
+			alert(3);
+		}, 'xyz' - 90];
+
+		/*
+			1、找到arr里所有的数字：-98765, 34, -2, 0, 5
+			2、找到可以转成数字的：'100px', -98765, 34, -2, 0, '300', '23.45元',  5
+			3、把转成数字以后，最大值判断出来：300
+			4、把 NaN 所在的位置找出来：1 14 17  19
+			5  把转成数字以后，按小到大顺序排列出来
+		*/
+
+
+
+		var a = '找到arr里所有的数字:'
+		var b = "找到可以转成数字的：";
+		var c = "把转成数字以后，最大值判断出来:";
+		var d = '把 NaN 所在的位置找出来：';
+		var e = "把转成数字以后，按小到大顺序排列出来"
+		var maxNum = -Infinity;
+		var numberArr = [];
+
+		for (var i = 0; i < arr.length; i++) {
+			//找到arr里所有的数字
+			if (!isNaN(arr[i]) && typeof arr[i] === "number") {
+				a += ' ' + arr[i]
+			}
+
+			//找到可以转成数字的
+			if (!isNaN(parseFloat(arr[i]))) {
+				b += ' ' + arr[i];
+				numberArr.push(parseFloat(arr[i]))
+			}
+
+			//把转成数字以后，最大值判断出来
+			// if(maxNum < Number(arr[i])){
+			//     maxNum = Number(arr[i]);
+			//     console.log(maxNum);
+			// }
+
+			!isNaN(arr[i]) && (maxNum = Math.max(maxNum, Number(arr[i])));
+			// maxNum = Math.max.apply(null,numberArr);
+
+
+
+
+
+			//把 NaN 所在的位置找出来
+			if (isNaN(arr[i]) && typeof (arr[i]) === 'number') {
+				d += i + ' '
+			}
+
+			//把转成数字以后，按小到大顺序排列出来
+			var sortArr = numberArr.sort(function (a, b) {
+				return a - b
+			})
+		}
+
+		let app = document.querySelector('#app');
+
+		let html = 
+		`
+			<p>${a}</p>
+			<p>${b}</p>
+			<p>${c}${maxNum}</p>
+			<p>${d}</p>
+			<p>${e}${sortArr}</p>
+		`;
+
+		app.innerHTML += html;
+
+
+
+
+		console.log(a)
+		console.log(b);
+		console.log(c, maxNum);
+		console.log(d);
+		console.log(e, sortArr);
+
+		//console.log(numberArr);
+		//console.log(Math.max.apply(null,numberArr));
+
+	</script>
+</body>
+
+</html>

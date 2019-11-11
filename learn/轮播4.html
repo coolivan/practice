@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>轮播4</title>
+</head>
+<style>
+	#app {
+		width: 600px;
+		border: 1px solid red;
+		position: relative;
+		margin: 100px auto;
+	}
+
+	img {
+		max-width: 100%;
+	}
+
+	ul {
+		padding: 0;
+		margin: 0;
+		position: absolute;
+		top: 0;
+	}
+
+	.left {
+		left: 0;
+	}
+
+	.right {
+		right: 0;
+	}
+
+	li {
+		width: 100px;
+		height: 87px;
+		list-style: none;
+		border: 1px solid white;
+		opacity: 0.5;
+		background: #FF9800;
+		cursor: pointer;
+	}
+
+	li img {
+		vertical-align: middle;
+	}
+
+	li.active {
+		background: red;
+	}
+
+	.btns {
+		text-align: center;
+		padding: 10px 0;
+	}
+	button.active{
+		color: red;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<ul class="left">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<img src="img/1.jpg" alt="">
+		<ul class="right">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<div class="btns">
+			<button class="active">顺序</button>
+			<button>先顺序,再倒序</button>
+			<button>左边顺序,右边倒序</button>
+		</div>
+	</div>
+	<script type="text/javascript">
+		window.onload = function () {
+			let app = document.getElementById('app');
+			let li = document.querySelectorAll('li');
+			let img = document.querySelector('img');
+			let n = 0;
+			let timer = null;
+
+			let arr = ['img/1.jpg', 'img/2.jpg', 'img/3.jpg', 'img/4.jpg', 'img/1.jpg', 'img/2.jpg', 'img/3.jpg', 'img/4.jpg'];
+			let list = [...li];
+
+
+			//改变
+			change(n);
+			function change(num) {
+				img.src = arr[num];
+				list.forEach((item,index)=>{
+					item.index = index;
+					item.innerHTML = index;
+					item.classList.remove('active');
+				})
+				list[num].classList.add('active');
+				// console.log(list,num)
+			}
+
+
+
+			let fnType = [];
+			let fnState = 0;
+
+			//按顺序走
+			fnType[0] = function () {
+				n++;
+				n %= arr.length;
+				change(n);
+			}
+
+			//先顺序,再倒序
+			let flag = true;
+			fnType[1] = function(){
+				if(flag && n < arr.length-1){
+					n++;
+					flag = (n == arr.length-1) ? false : true;
+				}else{
+					n--;
+					flag = (n==0) ? true : false;
+				}
+				change(n);
+			}
+
+
+			//左边顺序,右边倒序
+			let onOff = true;
+			fnType[2] = function(){
+				if(n<=3){
+					n++;
+					if(n==4){
+						n = 7;
+					}
+				}else{
+					n--;
+					if(n==3){
+						n = 0;
+					}	
+				}
+				change(n);
+			}
+
+			//底部按钮点击事件
+			let btns = document.querySelectorAll('button');
+			btns.forEach((item,index)=>{
+				item.onclick = function(){
+					autoPlay(index);
+					btns.forEach(el=>el.classList.remove('active'));
+					item.classList.add('active')
+				}
+			})
+
+
+			// 自动播放
+			autoPlay(fnState);
+			function autoPlay(state){
+				clearInterval(timer);
+				timer = setInterval(fnType[state], 2000);
+				//鼠标事件
+				list.forEach((item,index)=>{
+					item.onmouseover = function () {
+						clearInterval(timer);
+						n = index;
+						change(n);
+					};
+					item.onmouseout = function () {
+						timer = setInterval(fnType[state], 2000);
+					}			
+				});
+			}
+			
+			
+
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    ul{
+        border: 10px solid red;
+    }
+    li{
+        height: 300px;
+        border: 1px solid black;
+    }
+</style>
+<body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+    </ul>
+</body>
+<script>
+{
+    let li = document.querySelector('li');
+    // // getComputedStyle
+    
+    console.log('offsetHeight',li.offsetHeight);//含边框
+    console.log('clientHeight',li.clientHeight)//不含边框
+    console.log('clientTop',li.clientTop)//边框
+    console.log('getComputedStyle',getComputedStyle(li)['height']);//不含边框
+    console.log('scrollHeight',li.scrollHeight);//不含边框
+    console.log(li.getBoundingClientRect());//含边框
+
+    console.log(document.documentElement.clientWidth);//不含滚动条
+    console.log(document.documentElement.offsetWidth);//不含滚动条
+    console.log(document.documentElement.scrollWidth);//不含滚动条
+    console.log(window.innerWidth)//含滚动条
+
+    console.log(screen.width)
+    console.log(screen.height);
+
+
+    // 可视区尺寸
+    console.log(window.innerHeight,window.innerWidth);//包含滚动条
+    console.log(document.documentElement.clientHeight);//不包含滚动条
+    
+    // 页面尺寸
+    console.log(document.documentElement.offsetHeight);
+    console.log(document.documentElement.scrollHeight);
+    
+    // 屏幕尺寸
+    console.log(window.screen.height);
+
+
+    console.log(document.documentElement);
+    
+ 
+}
+</script>
+</html>

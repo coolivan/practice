@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数组去重</title>
+</head>
+
+<body>
+    <script>
+        let arr = ['one','two','three','one','four'];
+
+        //方法一
+        let a = [];
+        arr.forEach((item, index) => {
+            if(a.indexOf(item) === -1){
+                a.push(item)
+            }
+        })
+        // console.log(a);
+
+        //方法二
+        let b = arr.filter((item,index)=>{
+            return arr.indexOf(item) == index;
+        })
+        // console.log(b)
+
+        //方法三
+        let obj = {},c=[];
+        arr.forEach((item,index)=>{
+            obj[item] = item;
+        })
+        for (const key in obj) {
+            c.push(obj[key])
+        }
+        // console.log(c);
+
+        //方法四
+        let [...d] = new Set(...[arr]);
+        console.log(d);
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

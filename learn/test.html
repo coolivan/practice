@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+</head>
+<style>
+    .bg {
+        height: 1vh;
+    }
+</style>
+
+<body>
+    <div class="bg"></div>
+
+    <script src="js/jquery.min.js"></script>
+    <script>
+
+            $.ajax({
+                url: "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN",    //用作跨域的url
+                dataType: "jsonp",                       //jsonp类型
+                jsonp: 'callbacks',                     //测试项目一中的返回函数名
+                success: function (data) {
+                    console.log(data)
+                }
+            })
+
+        // https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN
+
+        fetch('https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN')
+            .then(function (res) {
+                console.log(res);
+                return response.json();
+            })
+            .then(function (myJson) {
+                console.log(myJson);
+            });
+    </script>
+</body>
+
+</html>

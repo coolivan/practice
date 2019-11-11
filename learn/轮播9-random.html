@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title></title>
+</head>
+
+<style type="text/css">
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	#app {
+		background: #CCCCCC;
+		padding: 15px;
+		width: 620px;
+		margin: 50px auto;
+		text-align: center;
+	}
+
+	ul {
+		clear: both;
+		overflow: hidden;
+		margin-top: 15px;
+	}
+
+	li {
+		list-style: none;
+		width: 300px;
+		height: 180px;
+		margin: 5px;
+		float: left;
+		position: relative;
+		overflow: hidden;
+	}
+
+	li div {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	li a {
+		display: block;
+		height: 100%;
+	}
+
+	img {
+		max-width: 100%;
+	}
+</style>
+
+
+<body>
+
+	<div id="app">
+		<ul></ul>
+	</div>
+
+	<script src="js/itween.js"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			let app = document.querySelector('#app');
+			let ul = app.querySelector('ul');
+
+			let arr = [{
+				img: 'img/1.jpg',
+				title: '图片1'
+			}, {
+				img: 'img/2.jpg',
+				title: '图片2'
+			}, {
+				img: 'img/3.jpg',
+				title: '图片3'
+			}, {
+				img: 'img/4.jpg',
+				title: '图片4'
+			}];
+
+			// 渲染
+			ul.innerHTML= arr.map((v,k)=>{
+				// 图片1为[0,1,2,3]
+				// 图片2为[3,2,1,0]
+				let rev = Object.keys(arr).reverse();
+				return `
+					<li>
+						<div><a href=""><img src="${v.img}" alt=""></a></div>
+						<div><a href=""><img src="${arr[rev[k]].img}" alt=""></a></div>
+					</li>
+				`
+			}).join('')
+			
+
+
+			let lis = document.querySelectorAll('li');
+
+			// 定时
+			let temp = null, r = 0;
+			autoPlay(lis[r],r)
+			setInterval(function () {
+				// 相邻两次随机不能相同
+				(function rand() {
+					r = Math.round(Math.random() * 3);
+					if(temp === r){
+						rand()
+					}else{
+						temp = r;
+						autoPlay(lis[r])
+					}
+				})()
+				
+			}, 1000)
+
+			// 动画
+			function autoPlay(el) {
+				let div = el.querySelectorAll('div');
+				// 初始化css
+				div.forEach(item => {
+					css(item, 'translateY', 0)
+				});
+				// 首次flag为undefined
+				if(!el.flag){
+					css(div[0],'translateY',-180);
+					
+					itween({
+						el:div[1],
+						attr:{translateY:180},
+						cb(){
+							el.flag = true;
+						}
+					});
+
+					itween({
+						el:div[0],
+						attr:{translateY:0},
+					})
+
+
+				}else{
+					css(div[1], 'translateY', 180);
+					itween({
+						el: div[0],
+						attr: { translateY: -180 },
+						cb() {
+							el.flag = false;
+						}
+					});
+
+					itween({
+						el: div[1],
+						attr: { translateY: 0 },
+					})
+				}
+				
+				
+
+			}
+
+
+
+
+
+		}
+	</script>
+</body>
+
+</html>

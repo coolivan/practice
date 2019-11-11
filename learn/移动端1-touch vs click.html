@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<style>
+	html{
+		font-size: 10px;
+	}
+
+	div{
+		width: 100px;
+		height: 100px;
+		background: red
+	}
+</style>
+<body>
+<div class="page">
+</div>
+
+<script>
+{
+	// 在移动端，手指点击一个元素，会经过：touchstart --> touchmove -> touchend --》click。
+	let div  = document.querySelector('div');
+
+	function hasTouch(){
+		let touch = {};
+		touch.isSupportTouch = 'ontouchend' in document ? true :false;
+		touch.event = touch.isSupportTouch ? 'touchend' :'click';
+		return touch.event
+	}
+
+	div.addEventListener(hasTouch(),()=>{
+		console.log(hasTouch())
+	})
+
+
+}
+
+</script>
+</body>
+
+</html>

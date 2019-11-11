@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+       let arr = [2,40,93,12,39,11];
+
+        function fn() {
+            let flag = false;
+            for (let j = 0; j < arr.length; j++) {
+                /**
+                    注意 arr[i+1]=length-1
+                    arr.length - 1 -j
+                */
+                flag = true;
+                for (let i = 0; i < arr.length - 1 - j; i++) {
+                    if (arr[i] > arr[i + 1]) {
+                        //方法一：解耦法
+                        [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+
+                        // 方法二：求和法
+                        // arr[i] = arr[i] + arr[i+1];
+                        // arr[i+1] = arr[i] - arr[i+1];
+                        // arr[i] = arr[i] - arr[i+1];
+
+                        // 方法三：临时法
+                        // let temp = arr[i];
+                        // arr[i] = arr[i+1];
+                        // arr[i+1] = temp;
+
+                        flag = false;
+                    }
+                }
+                if (flag) break;
+                console.log(arr)
+            }
+        }
+        // fn()
+
+
+
+
+        function bubbleSort(arr) {
+            let len = arr.length,flag = true,res=[...arr];
+            for (let j = 0; j < len && flag; j++) {
+                flag = false;
+                for (let i = 0; i < len - 1 - j; i++) {
+                    if (res[i] > res[i + 1]) {
+                        [res[i], res[i + 1]] = [res[i + 1], res[i]];
+                        flag = true;
+                    }
+                }
+                console.log(res);
+            }
+            return res
+        }
+
+        bubbleSort(arr)
+        // console.log(bubbleSort(arr));
+
+    </script>
+
+
+
+
+
+</body>
+</html>

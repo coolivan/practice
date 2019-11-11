@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>原生组件-插槽</title>
+</head>
+<body>
+    <my-dialog title="hello world">
+        <div slot="header">我是slot标题</div>
+        <div>这是内容</div>
+        <div slot="footer">footer</div>
+    </my-dialog>
+
+
+    <script>
+        class MyDialog extends HTMLElement{
+            constructor(){
+
+                super();
+
+                this.shadow = this.attachShadow({mode:'open'});
+                this.title = this.getAttribute('title')|| '<slot name="header"></slot>';
+
+                this.renderHTML();
+                this.renderStyle();
+
+
+
+            }
+
+            // 首次被插入文档时调用
+            connectedCallback(){
+                console.log('connectedCallback');
+                console.log(document.querySelector('.dialog_header'));
+            }
+            // 从文档中删除时
+            disconnectedCallback(){
+                console.log('disconnectedCallback')
+            }
+            // 被移动到新的文档时
+            adoptedCallback(){
+                console.log('adoptedCallback')
+            }
+            // 增加、删除、修改自身属性时，被调用
+            attributeChangedCallback(){
+                console.log('attributeChangedCallback')
+            }
+            /*
+            这里需要注意的是，attributeChangedCallback 
+            函数必须配合 static get observedAttributes 方法一起使用，
+            该方法返回一个数组，数组包含了要监听变化的属性列表
+            */ 
+            static get observedAttributes(){
+                console.log('static get observedAttributes');
+
+                return ['attr1', 'attr2']; 
+            }
+
+            renderHTML(){
+                let html = `
+                    <div class="dialog">
+                        <i class="dialog_close_btn"></i>
+                        <div class="dialog_header">
+                            <slot name="header"></slot>
+                        </div>
+                        <div class="dialog_content">
+                            <slot></slot>
+                        </div>
+                        <div class="dialog_footer">
+                            <slot name="footer"></slot>
+                        </div>
+                    </div>
+                `;
+                this.shadow.innerHTML = html;
+            }
+
+
+            renderStyle(){
+                let css =`
+                    .dialog {
+                        position: fixed;
+                        left: 50%;
+                        top: 30%;
+                        transform: translateX(-50%) translateY(-50%);
+                        border-radius: 2px;
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+                        box-sizing: border-box;
+                        background: #fff;
+                        width: 80vmin;
+                    }
+
+                    .dialog_header {
+                        padding: 20px;
+                        text-align: left;
+                        background:#f5f5f5;
+                    }
+
+                    .dialog_title {
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: #1f2d3d;
+                    }
+
+                    .dialog_content {
+                        padding: 30px 20px;
+                        color: #48576a;
+                        font-size: 14px;
+                        text-align: left;
+                    }
+                    .dialog_footer {
+                        padding: 20px;
+                        border-top: 1px solid #f5f5f5;
+                    }
+
+                    .dialog_close_btn {
+                        position: absolute;
+                        right: 10px;
+                        top: 5px;
+                    }
+
+                    .dialog_close_btn:before {
+                        content: 'x';
+                        color: #999;
+                        font-size: 20px;
+                        cursor: pointer;
+                    }
+                `;
+
+                let style = document.createElement('style');
+                style.innerHTML = css;
+                this.shadow.appendChild(style)
+            }
+
+  
+        }
+
+        customElements.define('my-dialog',MyDialog);
+
+   
+
+        document.addEventListener('click',e=>{
+            console.log(e.target)
+        })
+    
+    </script>
+</body>
+</html>

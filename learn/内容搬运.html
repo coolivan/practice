@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>内容搬运</title>
+</head>
+
+<style>
+	*{
+		padding: 0;
+		margin: 0;
+	}
+	#app{
+		width: 554px;
+		background: #EEEEEE;
+		padding: 15px;
+		margin:50px auto;
+		display: flex;
+		align-items: center;
+	}
+	ul{
+		width: 230px;
+		height: 510px;
+		background: #ddd;
+	}
+	li{
+		list-style: none;
+		width: 200px;
+		padding: 15px;
+		cursor: pointer;
+	}
+	li.active{
+		background: #CCCCCC;
+	}
+	.box{
+		padding: 15px;
+	}
+	button{
+		padding: 5px;
+		display: block;
+		margin: 5px;
+	}
+</style>
+<body>
+	<div id="app">
+		<ul>
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+		<div class="box">
+			<button>《向左</button>
+			<button>向右》</button>
+		</div>
+		<ul>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+			<li>9</li>
+			<li>10</li>
+		</ul>
+	</div>
+	<script>
+		window.onload = function(){
+			let app = document.querySelector('#app');
+			let ul = document.querySelectorAll('ul');
+			let btn = document.querySelectorAll('button');
+			let li = app.querySelectorAll('li');
+			
+			li.forEach(item=>{
+				item.onclick = function(){
+					this.classList.toggle('active')
+				}
+			})
+			
+			btn[0].onclick = function(){
+				let list = ul[1].querySelectorAll('li.active');
+				
+				if(!list.length){
+					alert('请先选择');
+					return
+				}
+				list.forEach(item=>{
+					//ul[0].children[0]左边第一个节点
+					ul[0].insertBefore(item,ul[0].children[0])
+// 					ul[1].removeChild(item);
+// 					ul[0].appendChild(item);
+				})
+				
+				
+			}
+			
+			btn[1].onclick = function(){
+				let list = ul[0].querySelectorAll('li.active');
+				
+				if(!list.length){
+					alert('请先选择');
+					return
+				}
+				list.forEach(item=>{
+					ul[0].removeChild(item);
+					ul[1].appendChild(item);
+				})
+				
+				
+			}
+			
+			
+
+			
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .draw {
+            border: 1px solid black;
+            position: fixed;
+        }
+
+        ul {
+            padding: 50px 0;
+            /* display: flex; */
+            justify-content: space-around;
+        }
+
+        li {
+            width: 100px;
+            height: 100px;
+            background: #bbbbbb;
+            list-style: none;
+            float: left;
+            margin: 5px;
+        }
+
+        li.active {
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="list"></ul>
+    <script>
+        {
+            let list = document.querySelector('.list');
+            list.innerHTML = [...'.'.repeat(10)].map((item, index) => `<li>${index}</li>`).join('');
+        }
+        {
+            select();
+            function select() {
+                let startMouse = {};
+                let draw = null;
+                let max = {
+                    w: document.documentElement.clientWidth,
+                    h: document.documentElement.clientHeight
+                }
+                let lis = document.querySelectorAll('li');
+                let move = (e) => {
+                    let nowMouse = {
+                        x: e.clientX,
+                        y: e.clientY
+                    }
+                    let dis = {
+                        x: startMouse.x - nowMouse.x,
+                        y: startMouse.y - nowMouse.y
+                    }
+
+                    let pos = {
+                        l: Math.min(startMouse.x, nowMouse.x),
+                        t: Math.min(startMouse.y, nowMouse.y),
+                        w: Math.abs(dis.x),
+                        h: Math.abs(dis.y)
+                    }
+
+                    draw.style.left = pos.l + 'px';
+                    draw.style.top = pos.t + 'px';
+                    draw.style.width = pos.w + 'px';
+                    draw.style.height = pos.h + 'px';
+                    // console.log(pos);
+
+                    lis.forEach(item => {
+                        // console.log(collide(item,draw))
+                        if (collide(item, draw)) {
+                            item.classList.add('active')
+                        } else {
+                            item.classList.remove('active')
+                        }
+                    })
+
+                }
+
+                document.addEventListener('mousedown', (e) => {
+                    startMouse = {
+                        x: e.clientX,
+                        y: e.clientY
+                    }
+                    draw = document.createElement('div');
+                    draw.className = 'draw';
+                    document.body.appendChild(draw);
+
+                    document.addEventListener('mousemove', move);
+                    document.addEventListener('mouseup', () => {
+                        document.body.removeChild(draw);
+                        document.removeEventListener('mousemove', move)
+                    }, { once: true })
+                    e.preventDefault();
+                });
+            }
+
+            function collide(a, b) {
+                let rectA = a.getBoundingClientRect();
+                let rectB = b.getBoundingClientRect();
+                return !(
+                    rectA.right < rectB.left ||
+                    rectB.right < rectA.left ||
+                    rectA.bottom < rectB.top ||
+                    rectB.bottom < rectA.top
+                )
+            }
+
+        
+ 
+
+        }
+    </script>
+</body>
+
+</html>

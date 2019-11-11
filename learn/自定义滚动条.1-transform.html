@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        background: #f5f5f5;
+    }
+
+    #app {
+        width: 300px;
+        height: 300px;
+        margin: 50px auto;
+        background: white;
+        overflow: hidden;
+        position: relative;
+    }
+
+    ul {
+        position: relative;
+    }
+
+    li {
+        list-style: none;
+        padding: 0.5em;
+        border: 1px solid #f5f5f5;
+    }
+
+    .scroll-wrap {
+        position: absolute;
+        width: 10px;
+        height: 98%;
+        right: 5px;
+        top: 1%;
+        background: #eeeeee;
+        border-radius: 10px;
+    }
+
+    .scroll-bar {
+        position: absolute;
+        width: 10px;
+        height: 50px;
+        right: 0;
+        top: 0;
+        background: red;
+        border-radius: 8px;
+        z-index: 9;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>10</li>
+            <li>11</li>
+            <li>12</li>
+            <li>13</li>
+            <li>14</li>
+            <li>15</li>
+            <li>16</li>
+            <li>17</li>
+            <li>18</li>
+            <li>19</li>
+            <li>20</li>
+        </ul>
+        <div class="scroll-wrap">
+            <div class="scroll-bar"></div>
+        </div>
+    </div>
+</body>
+<script src="js/mTween.js"></script>
+<script>
+    {
+        let app = document.querySelector('#app');
+        let ul = app.querySelector('ul');
+        let scrollWrap = app.querySelector('.scroll-wrap');
+        let scrollBar = app.querySelector('.scroll-bar');
+
+
+
+
+        drag()
+        function drag() {
+            css(scrollBar,'translateY',0);
+            css(ul,'translateY',0);
+
+            // 根据比率设置滚动条高度
+            let r = app.clientHeight / ul.clientHeight;
+
+            if(r>=1){
+                scrollWrap.style.display = 'none';
+                return;
+            }else{
+                scrollWrap.style.display = 'block'
+            };
+
+            scrollBar.style.height = r * scrollWrap.clientHeight + 'px';
+
+            // 最大滚动距离
+            let maxY = scrollWrap.clientHeight - scrollBar.clientHeight;
+
+            let startMouseY = 0;//鼠标按下时位置
+            let startPosY = 0;//鼠标按下时滚动条位置
+
+            let move = (e) => {
+                let nowMouseY = e.clientY;//鼠标移动时位置
+                let disY = nowMouseY - startMouseY;//鼠标移动距离
+                let nowY = disY + startPosY;//鼠标移动时滚动条位置
+
+                // 设置边界
+                nowY = Math.max(0, nowY);
+                nowY = Math.min(nowY, maxY);
+
+                //ul滚动距离
+                let ulY = nowY / maxY * (ul.clientHeight - app.clientHeight);
+
+                // console.log(nowY,maxY)
+                css(scrollBar,'translateY',nowY);
+                css(ul,'translateY',-ulY);
+            }
+
+            scrollBar.addEventListener('mousedown', (e) => {
+                startMouseY = e.clientY;
+                startPosY = css(scrollBar,'translateY');
+
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', () => {
+                    document.removeEventListener('mousemove', move)
+                }, { once: true })
+                e.preventDefault();
+            })
+
+
+            // 鼠标滚轮
+            mouseWheel(app,(e)=>{
+                let nowY = css(scrollBar,'translateY');
+                nowY -=10;
+                nowY = Math.max(0,nowY);
+                //ul滚动距离
+                let ulY = nowY / maxY * (ul.clientHeight - app.clientHeight);
+                css(scrollBar,'translateY',nowY);
+                css(ul,'translateY',-ulY);
+            },(e)=>{
+                let nowY = css(scrollBar,'translateY');
+                nowY +=10;
+                nowY = Math.min(maxY,nowY);
+                //ul滚动距离
+                let ulY = nowY / maxY * (ul.clientHeight - app.clientHeight);
+                css(scrollBar,'translateY',nowY);
+                css(ul,'translateY',-ulY);
+            })
+
+
+        }
+
+    }
+</script>
+
+</html>

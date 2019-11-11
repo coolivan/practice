@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<style>
+	li{
+		list-style: none;
+		width: 100px;
+		height: 50px;
+		background: red;
+		margin-top:5px;
+		position: relative;
+	}
+</style>
+
+<body>
+	<ul>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	<script src="js/itween.js"></script>
+	<script type="text/javascript">
+		let li = document.querySelectorAll('li');
+
+		li.forEach(item=>{
+			item.onmouseover = function(){
+				itween.stop(this);
+				itween({
+					el:this,
+					attr:{
+						width:Math.random()*1000 + 100
+					},
+					duration:{
+						multiple:2
+					}
+				})
+			};
+		})
+
+
+
+
+
+
+
+	</script>
+
+</body>
+
+</html>

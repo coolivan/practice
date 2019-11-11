@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>当滚动条超过1屏显示 backTop</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        height: 5000px;
+        transition: 1s ease-in-out;
+    }
+
+    #app {
+        background: red;
+        height: 50px;
+        width: 50px;
+        line-height: 50px;
+        position: fixed;
+        right: 5px;
+        /* bottom: 100px; */
+        text-align: center;
+        color: white;
+        font-size: 30px;
+        cursor: pointer;
+        transition: 1s;
+        opacity: 0.5;
+        bottom: -50px;
+		font-family: sans-serif;
+    }
+</style>
+
+<body>
+    <h1>当滚动条超过1屏显示 backTop</h1>
+    <div id="app">^</div>
+</body>
+<script>
+    {
+        let app = document.querySelector('#app');
+
+
+        window.addEventListener('scroll', () => {
+            let t = document.body.scrollTop || document.documentElement.scrollTop;
+            // 当滚动条超过1屏显示 backTop 否则 不显示
+            // console.log(scrollY, innerHeight)
+            if (scrollY >= innerHeight) {
+                app.style.opacity = 1;
+                app.style.bottom = 100 + 'px'
+            } else {
+                app.style.opacity = 0.5;
+                app.style.bottom = -50 + 'px'
+            }
+        })
+
+        app.addEventListener('click', () => {
+            // window.scrollTo(0,0)
+            moveScroll(0)
+        })
+
+        function moveScroll(target) {
+            cancelAnimationFrame(window.scrollTimer);
+            window.scrollTimer = requestAnimationFrame(move);
+            function move() {
+                if(scrollY<=0) return;
+                let speed = (target - scrollY)/10;
+                console.log(scrollY);
+                window.scrollTo(0,scrollY + speed);
+                window.scrollTimer = requestAnimationFrame(move);
+            }
+        }
+    }
+</script>
+
+</html>

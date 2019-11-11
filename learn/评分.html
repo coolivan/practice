@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		#app{
+			width: 250px;
+			height: 100px;
+			margin: 50px auto;
+			border: 1px solid #ccc;
+			padding: 15px;
+		}
+		li{
+			display: inline-block;
+			list-style: none;
+			margin: 5px;
+			vertical-align: middle;
+			cursor: pointer;
+			font-size: 30px;
+		}
+		p{
+			text-align: center;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<p>总体评价：<strong>0</strong>分</p>
+			<ul>
+				<li>&#9733;</li>
+				<li>&#9733;</li>
+				<li>&#9733;</li>
+				<li>&#9733;</li>
+				<li>&#9733;</li>
+				<span></span>
+			</ul>
+			
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = document.querySelector('#app');
+				var li = document.querySelectorAll('li');
+				var strong = document.querySelector('strong');
+				var span = document.querySelector('span');
+				let tags = ["极差", "差", "一般", "不错", "极好"];
+				var num = -1;
+				
+				
+				for(let i=0;i<li.length;i++){
+					li[i].onmouseover = function(){
+						fn(i)
+					}
+					li[i].onmouseout = function(){
+						fn(num)
+					};
+					
+					li[i].onclick = function(){
+						num = i;
+					}
+				}
+				
+				
+				
+				function fn(n){
+					if(n>=0){
+						span.innerHTML = tags[n];
+						strong.innerHTML = n+1;
+						
+					}else{
+						span.innerHTML = '';
+						strong.innerHTML = 0
+					}
+					
+					for(let i=0;i<li.length;i++){
+						if(i<=n){
+							li[i].style.color = 'orange'
+						}else{
+							li[i].style.color = 'gray';
+						}
+					}
+					
+				}
+				
+				
+				
+			}
+		</script>
+	</body>
+</html>

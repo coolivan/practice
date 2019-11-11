@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>选项卡嵌套</title>
+	</head>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		#app{
+			background: #eee;
+			width: 610px;
+			margin: 50px auto;
+			display: flex;
+		}
+		li{
+			list-style: none;
+			cursor: pointer;
+		}
+		.tab{
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+		}
+		.tab li{
+			width: 100px;
+			height: 100px;
+			line-height: 100px;
+			text-align: center;
+		}
+		.tab li.active{
+			background: #ffb746;
+		}
+		img{
+			max-width: 100%;
+			display: none;
+		}
+		.row{
+			position: relative;
+			display: none;
+		}
+		.row.active{
+			display: block;
+		}
+		.row ul{
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.row li{
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			margin: 5px;
+			background: rgba(0,0,0,.5);
+			color: white;
+		}
+		.row li.active{
+			background: #FFB746;
+		}
+	
+		
+	</style>
+
+	<body>
+		<div id="app">
+			<ul class="tab">
+				<li class="active">手机</li>
+				<li>耳机</li>
+				<li>配件</li>
+			</ul>
+			<div class="row active">
+				<img src="img/1.jpg" alt="" style="display: block;">
+				<img src="img/2.jpg" alt="">
+				<ul>
+					<li class="active">1</li>
+					<li>2</li>
+				</ul>
+			</div>
+			<div class="row">
+				<img src="img/1.jpg" alt="" style="display: block;">
+				<img src="img/2.jpg" alt="">
+				<img src="img/3.jpg" alt="">
+				<ul>
+					<li class="active">1</li>
+					<li>2</li>
+					<li>3</li>
+				</ul>
+			</div>
+			<div class="row">
+				<img src="img/1.jpg" alt="" style="display: block;">
+				<img src="img/2.jpg" alt="">
+				<img src="img/3.jpg" alt="">
+				<img src="img/4.jpg" alt="">
+				<ul>
+					<li class="active">1</li>
+					<li>2</li>
+					<li>3</li>
+					<li>4</li>
+				</ul>
+			</div>
+		</div>
+		<script src="js/ivan.js"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+				let app = document.getElementById('app');
+				let tab = app.querySelectorAll('.tab li');
+				let row = app.querySelectorAll('.row');
+				let timer = null;
+				let m = 0;//tab
+				let n = 0;//nav
+				
+				//tab切换
+				tab.forEach((item,index)=>{
+					change(row[index]);
+					item.onmouseover = function(){
+						m = index;
+						tab.forEach((item,index)=>{
+							item.className = '';
+							row[index].style.display = 'none'
+						})
+						item.className = 'active';
+						row[index].style.display = 'block'
+					}
+				})
+				
+				//nav切换,传入row
+				function change(el){
+					let sub = el.querySelectorAll('.row li');
+					let img = el.querySelectorAll('img');
+					
+					sub.forEach((item,index)=>{
+						item.onmouseover = function(){
+							n = index;
+							//样式
+							sub.forEach((item,index)=>{
+								item.className = '';
+								img[index].style.display = 'none'
+							})
+							item.className = 'active' 
+							img[index].style.display = 'block'
+							
+							
+				
+						}
+						
+						
+					})
+				}
+				
+				
+				function next(){
+					let nav = row[m].querySelectorAll('.row li');
+					let img = row[m].querySelectorAll('img');
+					/* ************ */
+					n++;
+					if(n >= nav.length){
+						m++;
+						if(m >= tab.length){
+							m = 0;
+						}
+						n = 0;
+						
+						//左边tab
+						tab.forEach((item,index)=>{
+							item.className = '';
+							row[index].classList.remove('active')
+						})
+						tab[m].className = 'active';
+						row[m].classList.toggle('active');
+						
+					}
+					/* ************ */
+					
+					//底部nav
+					nav.forEach((item,index)=>{
+						item.className = '';
+					})
+					nav[n].className = 'active';
+					
+					//图片
+					img.forEach((item,index)=>{
+						item.style.display = 'none'
+					})
+					img[n].style.display = 'block';
+				}	
+				
+				autoPlay();
+				function autoPlay(){
+					timer = setInterval(next,2000)
+				}
+					
+				app.onmouseover = function(){
+					clearInterval(timer)
+				}
+				app.onmouseout = function(){
+					autoPlay()
+				}
+						
+
+
+			}
+		</script>
+	</body>
+</html>

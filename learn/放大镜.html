@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .box {
+        width: 350px;
+        border: 1px solid red;
+        position: relative;
+        left: 50px;
+        top: 50px;
+    }
+
+    .box img {
+        max-width: 100%;
+        /* 这里有坑，图片本身是行内元素，底下在白边 */
+        display: block;
+    }
+
+    .mask {
+        width: 100px;
+        height: 100px;
+        background: yellow;
+        opacity: 0.3;
+        position: absolute;
+        z-index: 2;
+        cursor: move;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+
+    .scale {
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        left: 450px;
+        top: 50px;
+        border: 1px solid #cccccc;
+        overflow: hidden;
+        display: none;
+    }
+    .scale img{
+        width: 1000px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div class="box">
+            <img src="img/1.jpg" alt="">
+            <div class="mask"></div>
+        </div>
+        <div class="scale">
+            <img src="img/1.jpg" alt="">
+        </div>
+    </div>
+</body>
+<script>
+    {
+
+        let box = document.querySelector('.box');
+        let mask = document.querySelector('.mask');
+        let scale = document.querySelector('.scale');
+        let img1 = document.querySelector('.box img');
+        let img2 = document.querySelector('.scale img');
+
+
+
+        box.addEventListener('mouseover', (e) => {
+            mask.style.display = 'block';
+            scale.style.display = 'block';
+
+            let scaleX = img1.offsetWidth/img2.offsetWidth;
+            let scaleY = img1.offsetHeight/img2.offsetHeight;
+
+            // 设置mask同比例大小
+            mask.style.width = scale.clientWidth * scaleX + 'px';
+            mask.style.height = scale.clientHeight * scaleY + 'px'
+
+            let rect = box.getBoundingClientRect();
+            let maxL = box.clientWidth- mask.offsetWidth;
+            let maxH = box.clientHeight - mask.offsetHeight;
+
+            box.addEventListener('mousemove', (e) => {
+                let l = e.clientX - rect.left - mask.offsetWidth/2;
+                let t = e.clientY - rect.top - mask.offsetHeight/2;
+                // let l = e.clientX - box.offsetLeft - mask.offsetWidth/2;
+                // let t = e.clientY - box.offsetTop - mask.offsetHeight/2;
+
+                // 判断边界
+                l = Math.max(0,l);
+                l = Math.min(l,maxL);
+
+                t = Math.max(0,t);
+                t = Math.min(t,maxH);
+
+                mask.style.left = l + 'px';
+                mask.style.top = t + 'px';
+
+                img2.style.left = -l / scaleX + 'px';
+                img2.style.top = -t / scaleY + 'px';
+
+            })
+
+        })
+
+        box.addEventListener('mouseout',()=>{
+            mask.style.display= 'none';
+            scale.style.display = 'none';
+        })
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    自定义事件
+    <button>test</button>
+    <script>
+
+        {
+            console.log(HTMLElement);
+
+            if (window.HTMLElement) {
+                // 使用原型扩展DOM自定义事件
+                
+                HTMLElement.prototype.addEvent = function (type, fn, capture) {
+                    var el = this;
+                    if (window.addEventListener) {
+                        el.addEventListener(type, function (e) {
+                            fn.call(el, e);
+                        }, capture);
+                    } else if (window.attachEvent) {
+                        el.attachEvent("on" + type, function (e) {
+                            fn.call(el, e);
+                        });
+                    }
+                };
+                console.log(HTMLElement.prototype);
+            } else {
+                // 如果是不支持HTMLElement扩展的浏览器
+                // 通过遍历所有元素扩展DOM事件
+
+                var elAll = document.all, lenAll = elAll.length;
+                for (var iAll = 0; iAll < lenAll; iAll += 1) {
+                    elAll[iAll].addEvent = function (type, fn) {
+                        var el = this;
+                        el.attachEvent("on" + type, function (e) {
+                            fn.call(el, e);
+                        });
+                    };
+                }
+
+            }
+
+            document.querySelector('button').addEvent("click", function () {
+                console.log(this);
+            });
+
+
+
+
+        }
+    </script>
+</body>
+
+
+</html>

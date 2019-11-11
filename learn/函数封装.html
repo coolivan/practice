@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>函数封装</title>
+	</head>
+	<style>
+		#app{
+			width: 100px;
+			height: 100px;
+			background: red;
+		}
+	</style>
+	<body>
+		<div id="app" style="width: 200px;">
+			
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){ 
+				var app = document.getElementById('app');
+				
+				
+				
+				
+				
+				
+// 				console.log(getStyle(app,"backgroundColor"))
+// 				console.log(getStyle(app,"margin"))
+				
+// 				$(function(){
+// 					function aaa(){
+// 						alert(1)
+// 					}
+// 					aaa()
+// 				})
+// 				
+// 				console.log($('#app'));
+				// console.log($([1]));
+				
+// 				console.log('|' +" 123 ".trim()+'|');
+// 				console.log(String.trim);
+				
+				
+				function $(obj){
+					if(typeof obj == 'function'){
+						window.onload = obj();
+					}else if(typeof obj == "string"){
+						return document.querySelector(obj);
+					}else if(typeof obj == 'object'){
+						return obj
+					}
+				}
+				
+				String.prototype.trim = String.trim||function(){
+					return this.replace(/(^\s*)|(\s*$)/g,'');
+				}
+				
+				function getStyle(obj,attr){
+					return obj.currentStyle ? cureentStyle(obj)[attr] : getComputedStyle(obj)[attr];
+				}
+				
+			}
+		</script>
+	</body>
+</html>

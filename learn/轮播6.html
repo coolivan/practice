@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	#app {
+		width: 600px;
+		height: 354px;
+		margin: 100px auto;
+		position: relative;
+		overflow: hidden;
+		border: 1px solid red;
+	}
+
+	img {
+		max-width: 100%;
+	}
+
+	ul {
+		display: flex;
+		position: absolute;
+		left: 0;
+	}
+
+	li {
+		list-style: none;
+		width: 600px;
+		height: 354px;
+		position: relative;
+	}
+
+	p {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: rgba(0, 0, 0, 0.5);
+		margin: 0;
+		text-align: center;
+		color: white;
+		padding: 15px;
+		opacity: 0;
+	}
+
+	input {
+		position: absolute;
+		top: 45%;
+		z-index: 9;
+		background: white;
+		border: 0;
+		padding: 5px;
+		cursor: pointer;
+	}
+
+	#next {
+		right: 0;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<ul>
+			<li>
+				<img src="" alt="">
+				<p></p>
+			</li>
+		</ul>
+		<div class="btn">
+			<input id="prev" type="button" value="prev">
+			<input id="next" type="button" value="next">
+		</div>
+	</div>
+	<script src="js/itween.js"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			let app = document.querySelector('#app');
+			let ul = document.querySelector('ul');
+			let btn = document.querySelectorAll('input');
+			let num = 0;
+			let timer = null;
+
+
+			let arr = [{
+				img: 'img/1.jpg',
+				text: '图片1'
+			}, {
+				img: 'img/2.jpg',
+				text: '图片2'
+			}, {
+				img: 'img/3.jpg',
+				text: '图片3'
+			}, {
+				img: 'img/4.jpg',
+				text: '图片4'
+			}];
+
+			arr[arr.length] = arr[0];
+			// console.log(arr);
+
+			ul.innerHTML = arr.map(item => {
+				return `
+						<li>
+							<img src="${item.img}" alt="">
+							<p>${item.text}</p>
+						</li>
+					`
+			}).join('');
+			let p = app.querySelectorAll('p');
+			p[num].style.opacity = 1;
+
+
+			function autoPlay(){
+				itween({
+					el: p[num],
+					attr: { opacity: 0 },
+					duration:250
+				})
+
+				if (num == arr.length - 1) {
+					num = 0;
+					css(ul, 'left', 0);
+				}
+
+				num++;
+
+				itween({
+					el: ul,
+					attr: { left: -600 * num },
+					cb: function () {
+						itween({
+							el: p[num],
+							attr: { opacity: 1 },
+						})
+					}
+				});
+			}
+
+
+
+
+			btn[0].addEventListener('click', function () {
+				itween({
+					el: p[num],
+					attr: { opacity: 0 },
+				})
+
+				if (num == 0) {
+					num = arr.length-1;
+					css(ul, 'left', -600*num);
+				}
+
+				num--;
+
+				itween({
+					el: ul,
+					attr: { left: -600 * num },
+					cb: function () {
+						itween({
+							el: p[num],
+							attr: { opacity: 1 },
+						})
+					}
+				});
+			})
+
+			btn[1].addEventListener('click', function () {
+				autoPlay()
+			})
+
+			timer=setInterval(autoPlay,2000);
+
+			app.addEventListener('mouseover',()=>{clearInterval(timer)})
+			app.addEventListener('mouseout',()=>{timer=setInterval(autoPlay,2000);})
+
+
+
+
+
+		}
+	</script>
+</body>
+
+</html>

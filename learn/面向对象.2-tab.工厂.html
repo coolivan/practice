@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        button.active {
+            background: red
+        }
+
+        p {
+            display: none;
+        }
+
+        p.active {
+            display: block
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tab1">
+        <button class="active">1</button>
+        <button>2</button>
+
+        <p class="active">text1</p>
+        <p>text2</p>
+    </div>
+    <div class="tab2">
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+
+        <p class="active">text1</p>
+        <p>text2</p>
+        <p>text3</p>
+    </div>
+
+    <button class="next">第一个手动切换</button>
+    <button class="auto">第二个自动切换</button>
+    <script>
+
+        function tabFn(el) {
+            let wrap = document.querySelector(el);
+            let btns = wrap.querySelectorAll('button');
+            let ps = wrap.querySelectorAll('p');
+            let num = 0;
+            btnFor();
+            function btnFor() {
+                btns.forEach((btn, i) => {
+                    btn.onclick = () => {
+                        num = i;
+                        psFor(i)
+                    }
+                })
+            }
+            function psFor(i) {
+                ps.forEach((p, j) => {
+                    if (i == j) {
+                        btns[j].className = 'active'
+                        ps[j].className = 'active'
+                    } else {
+                        btns[j].className = ''
+                        ps[j].className = ''
+                    }
+                })
+            }
+            return {
+                psFor,
+                num,
+                btns
+            }
+        }
+        let tab1 = tabFn('.tab1');
+        let tab2 = tabFn('.tab2');
+        console.log(tab1,tab2)
+
+        let next = document.querySelector('.next');
+        let auto = document.querySelector('.auto');
+        next.addEventListener('click',()=>{
+            tab1.num ++;
+            tab1.num = tab1.num > tab1.btns.length-1?0:tab1.num;
+            tab1.psFor(tab1.num)
+        })
+
+
+        auto.addEventListener('click',()=>{
+            setInterval(()=>{
+                tab2.num++;
+                tab2.num = tab2.num > tab2.btns.length-1?0:tab2.num;
+                tab2.psFor(tab2.num);
+            },1000)
+        })
+
+
+    </script>
+</body>
+
+</html>

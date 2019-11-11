@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Event {
+            constructor() {
+                this.handlers = {};
+            }
+            on(type, fn) {
+                if (!this.handlers[type]) {
+                    this.handlers[type] = [];
+                }
+                this.handlers[type].push(fn);
+                return this;
+            }
+            off(type, fn) {
+                let fns = this.handlers[type];
+                for (let i = 0; i < fns.length; i++) {
+                    if (fns[i] == fn) {
+                        fns.splice(i, 1);
+                        break;
+                    }
+                }
+                return this;
+            }
+            emit(...args) {
+                console.log('args',args);
+                let event = args[0];
+                let params = [].slice.call(args, 1);
+                let fn = this.handlers[event];
+                fn.forEach((item) => {
+                    item.apply(this, params);//执行函数
+                })
+                return this;
+            }
+            once(type, fn) {
+                let wrap = (...args) => {
+                    fn.apply(this, args);
+                    this.off(type, wrap);
+                }
+                this.on(type, wrap);
+                return this;
+            }
+        }
+
+
+        // 测试
+        function callback1() { console.log(111) };
+        function callback2() { console.log(222) };
+        function callback3() { console.log(333) };
+
+        const myEvent = new Event();
+        myEvent.on('click', callback1)
+        myEvent.on('click', callback2)
+        myEvent.once('click', callback3)
+
+        console.log('emit');
+        myEvent.emit('click')//一次输出111，222，333
+
+        console.log('off');
+        myEvent.off('click', callback1);
+
+        console.log('emit');
+        myEvent.emit('click')//222
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>导航</title>
+</head>
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    #app {
+        margin: 50px auto;
+        position: relative;
+    }
+
+    ul {
+        display: flex;
+        border: 1px solid #ccc;
+        position: relative;
+        padding: 15px;
+        overflow: hidden;
+    }
+
+    li {
+        list-style: none;
+        position: relative;
+        perspective: 60px;
+    }
+
+    p {
+        transform-style: preserve-3d;
+        transform-origin: center center -18px;
+        height: 36px;
+        transition: .3s;
+        padding: 15px;
+    }
+
+    .active p,
+    li:hover p {
+        transform: rotateX(90deg);
+    }
+
+    a {
+        display: block;
+        text-decoration: none;
+        backface-visibility: hidden;
+        color: black;
+        text-align: left;
+        font-size: 18px;
+        padding: 5px;
+    }
+
+    li a:nth-of-type(2) {
+        transform-origin: top;
+        transform: rotateX(-90deg);
+        color: red;
+    }
+
+    .line {
+        position: absolute;
+        bottom: 0;
+        background: red;
+        height: 3px;
+        transition: 0.3s
+    }
+</style>
+
+<body>
+    <nav id="app">
+        <ul>
+            <li>
+                <p><a href="">Home</a><a href="">Home</a></p>
+            </li>
+            <li>
+                <p><a href="">Products</a><a href="">Products</a></p>
+            </li>
+            <li>
+                <p><a href="">Accessory</a><a href="">Accessory</a></p>
+            </li>
+            <li>
+                <p><a href="">Support</a><a href="">Support</a></p>
+            </li>
+            <li class="active">
+                <p><a href="">Community</a><a href="">Community</a></p>
+            </li>
+            <li>
+                <p><a href="">About Us</a><a href="">About Us</a></p>
+            </li>
+        </ul>
+        <div class="line"></div>
+    </nav>
+
+
+    <script>
+        {
+            let lis = document.querySelectorAll('li');
+            let line = document.querySelector('.line');
+            let oldLeft = document.querySelector('.active').offsetLeft;
+            let oldwidth = document.querySelector('.active').offsetWidth;
+            line.style.left = oldLeft + 'px';
+            line.style.width = oldwidth + 'px';
+
+            lis.forEach(item => {
+                item.addEventListener('mouseover', function () {
+                    let l = item.offsetLeft,
+                        w = item.offsetWidth;
+                    line.style.left = l + 'px';
+                    line.style.width = w + 'px';
+                });
+
+                item.addEventListener('mouseout', function () {
+                    line.style.left = oldLeft + 'px';
+                    line.style.width = oldwidth + 'px';
+                });
+            })
+        }
+
+
+    </script>
+</body>
+
+</html>

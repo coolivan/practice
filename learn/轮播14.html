@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html {
+            font-size: 10vw;
+        }
+        body {
+            margin: 0;
+			padding: 0;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #app {
+            position: relative;
+            width: 100vw;
+            margin: auto;
+            overflow: hidden;
+        }
+        @media (min-width:1024px){
+            #app{
+                width: 50vw;
+            }
+        }
+        #list {
+            float: left;
+            display: flex;
+            display: -webkit-box;
+        }
+        #list li {
+            flex: none;
+            width: 100%;
+        }
+        #list img {
+            width: 100%;
+			max-width: 100%;
+            display: block;
+        }
+        .nav {
+            position: absolute;
+            left: 0;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            vertical-align: top;
+        }
+        .nav a {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            margin: 0 .1rem;
+            border-radius: 7px;
+            transition: .3s;
+        }
+        .nav .active {
+            width: 24px;  
+            color: #fff;  
+        }
+        .textList {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .textList li {
+            font: 14px/40px "宋体";
+            padding-left: 20px;
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+<body>  
+<div id="app">
+    <ul id="list">
+        <li class="active"><img src="img/1.jpg" /></li>
+        <li><img src="img/2.jpg" /></li>
+        <li><img src="img/3.jpg" /></li>
+        <li><img src="img/4.jpg" /></li>
+    </ul>
+    <nav class="nav">
+        <a class="active"></a><a></a><a></a><a></a>
+    </nav>
+</div>  
+<ul class="textList"></ul>
+<script src="js/mTween.js"></script>
+<script>
+// 列表结构生成
+{
+    let list = document.querySelector(".textList");
+	list.innerHTML = [...'.'.repeat(100)].map((v,k)=>`
+			<li>${k}</li>
+		`
+	).join('')
+}
+// 幻灯片实现    
+{
+	let app = document.querySelector('#app');
+	let list = app.querySelector('#list');
+	let navs = app.querySelectorAll('.nav a');
+
+	list.innerHTML+=list.innerHTML;
+	css(list,'translateX',0);
+
+	let opt = {
+		offset:0.3,//当拖动超过图片尺寸*0.3时转到下一张，否则归位
+		now:0,
+	};
+
+    window.onresize = function(){
+        css(list, 'translateX', -opt.now*app.clientWidth);
+        console.log('ontouchstart' in document.documentElement);
+    }
+
+
+
+    function start(e){
+        let evt = e.changedTouches ? e.changedTouches[0] : e;
+
+        if(opt.now == 0){
+			// 第二组第一张
+			opt.now = navs.length;
+		}else if(opt.now == navs.length * 2 -1){
+			// 第一组最后一张
+			opt.now = navs.length-1
+		}
+		css(list, 'translateX', -opt.now*app.clientWidth);
+		opt.x = evt.pageX;
+		opt.y = evt.pageY;
+		opt.traslateX = css(list,'translateX');
+		opt.isFirst = true;
+		opt.isMove = false;
+
+    }
+
+    function move(e){
+        let evt = e.changedTouches ? e.changedTouches[0] : e;
+
+        let dis = {
+			x:evt.pageX - opt.x,
+			y:evt.pageY - opt.y
+		}
+		opt.dis = dis;
+		/*
+            注意：如果用户在操作过程中，来回滑动，我们会发生误判情况
+            解决方案，在一次操作，如果已经判定了方向，就不在重新判定
+        */
+		if(opt.isFirst){
+			if(Math.abs(dis.x) - Math.abs(dis.y) >= 5){
+				// 左右滑动
+				opt.isFirst = false;
+				opt.isMove = true;
+			}
+		}else{
+			e.cancelable && e.preventDefault()
+		}
+
+		if(opt.isMove){
+			css(list,'translateX',opt.traslateX + dis.x);
+			e.cancelable && e.preventDefault()
+		}
+    }
+
+    function end(e){
+        
+        let evt = e.changedTouches ? e.changedTouches[0] : e;
+        let x = evt.pageX - opt.x;
+
+		if(Math.abs(x) > app.clientWidth * opt.offset){
+			opt.now -= x / Math.abs(x);
+		}
+		mTween({
+			el:list,
+			attr:{
+				translateX:-opt.now * app.clientWidth
+			}
+		})
+
+		
+		list.querySelectorAll('li').forEach((v,k)=>{
+			v.className = (k == opt.now )? 'active' : ''
+		})
+
+		navs.forEach(v=>v.classList.remove('active'))
+		navs[opt.now % navs.length].classList.add('active')
+    }
+
+
+	app.addEventListener('touchstart',e=>{
+        start(e)
+	})
+	app.addEventListener('touchmove',e=>{
+        move(e)
+	})
+
+	app.addEventListener('touchend',e=>{
+        end(e)
+	})
+
+    app.addEventListener('mousedown',e=>{
+        start(e)
+
+        let drag = e =>{
+            move(e)
+        }
+
+        document.addEventListener('mousemove',drag)
+        document.addEventListener('mouseup',(e)=>{
+            document.removeEventListener('mousemove',drag)
+            end(e)			
+        },{once:true})
+
+        e.preventDefault();
+    })
+
+
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>水滴按钮</title>
+</head>
+<style>
+    .more{
+        width: 50px;
+        height: 50px;
+        background: radial-gradient(white,#b8eff6);
+        /* background: #b8eff6; */
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        margin: 50px auto;
+        text-decoration: none;
+        display: block;
+        box-shadow: 0 0 10px 5px #ccc;
+    }
+    .more:hover{
+        /* animation: water 0.8s; */
+        animation-name: water;
+        animation-duration: 0.8s;
+    }
+
+    @keyframes water{
+        0% {
+            transform: scale(1,1)
+        }
+        20% {
+            transform: scale(1.2,.8)
+        }
+        40% {
+            transform: scale(.8,1.2)
+        }
+        60% {
+            transform: scale(1.1,.9)
+        }
+        80% {
+            transform: scale(.9,1.1)
+        }
+        100% {
+            transform: scale(1,1)
+        }
+    }
+</style>
+<body>
+    <a href="" class="more">More</a>
+
+
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function foo() {
+            foo.abc = function () { console.log('def'); }
+            this.abc = function () { console.log('xyz'); }
+            abc = function () { console.log('@@@'); }
+            var abc = function () { console.log('$$$'); }
+        }
+
+        foo.prototype.abc = function () { console.log('456'); }
+        foo.abc = function () { console.log('123'); }
+
+        var f = new foo();
+        f.abc()
+        foo.abc()
+        // abc()
+        // console.log(foo());
+        console.log(f);
+/*
+        // 第一个xyz  : f是实例化对象 所有f.abc 指向 (优先级找自身在找原型)  this.abc  结果  xyz；
+        // 第二个def :  foo 没有申明是全局变量；
+        // 第三个报错  :abc 看起来像 全局变量  但是 底下又申明了一个局部的abc 申明前置 导致abc是局部变量   所有函数外部访问不到 abc  报错；
+        实例化构造函数实际上有调用函数作用 ，调用后 会覆盖上面定义的foo.abc = function(){console.log("123");}
+        */
+
+
+
+
+    </script>
+</body>
+
+</html>

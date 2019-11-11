@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>urlParse</title>
+	</head>
+	<body>
+		<div id="app">
+			<a href="/?name=ivan&age=18?window=xp">链接</a>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				//let url = 'http://www.xxx.com/?name=ivan&age=18';
+				document.write(JSON.stringify(urlArgs()));
+				console.log(urlArgs());
+				
+				function urlArgs(){
+					let obj = {};
+					let query = location.search.substring(1);//查找到查询串，并去掉'?' name=ivan&age=18
+					let pairs = query.split('&');
+					
+					for(let i=0;i<pairs.length;i++){
+						
+					
+						let pos = pairs[i].indexOf('=');//name=ivan
+						if(pos==-1) continue;//如果没有找到,就路过
+						let key = pairs[i].substring(0,pos);
+						let val = decodeURIComponent(pairs[i].substring(pos+1));
+						
+						obj[key] = val;
+					}
+					return obj;
+				}
+			}
+		</script>
+	</body>
+</html>

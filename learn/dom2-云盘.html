@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+</head>
+<style>
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: #666666;
+}
+
+body {
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+  width: 0 !important;
+}
+
+#app {
+  min-width: 1024px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#app a {
+  text-decoration: none;
+  color: #66757f;
+}
+
+#app a:hover, #app a.active {
+  color: #09AAFF;
+}
+
+#app li {
+  list-style: none;
+}
+
+#app *[class*='fa'] {
+  font-family: FontAwesome;
+}
+
+#app *[class*='fa']::before {
+  margin-right: 0.5em;
+}
+
+header {
+  height: 60px;
+  line-height: 60px;
+  padding: 0 15px;
+  background: #fff;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.05);
+}
+
+header .logo {
+  color: #09AAFF;
+  font-size: 20px;
+  float: left;
+  width: 250px;
+}
+
+header nav {
+  float: left;
+}
+
+header nav a {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+header .user {
+  float: right;
+  cursor: pointer;
+}
+
+header .user a {
+  color: #09AAFF !important;
+}
+
+main {
+  display: flex;
+  flex: 1;
+}
+
+aside {
+  width: 250px;
+  padding-top: 15px;
+  background: #f7f7f7;
+  border-right: 1px solid #e1e8ed;
+}
+
+aside li p {
+  padding: 10px 15px;
+  margin: 2px 0;
+  cursor: pointer;
+}
+
+aside li p:hover, aside li p.active {
+  background: white;
+  color: #09AAFF;
+}
+
+aside li p:hover span, aside li p.active span {
+  color: #09AAFF;
+}
+
+aside li ul {
+  display: none;
+}
+
+aside li.open > ul {
+  display: block;
+}
+
+article {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+article input {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+article nav {
+  width: 50px;
+  width: 100%;
+  padding: 15px;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+article nav .breadnav {
+  display: inline-block;
+}
+
+article nav a {
+  font: normal normal normal 16px/1 FontAwesome;
+}
+
+article nav a::after {
+  content: "\f105";
+  color: #ccc !important;
+  margin: 0 .5em;
+}
+
+article nav span {
+  background: white;
+  color: #09AAFF;
+}
+
+.folders {
+  flex: 1;
+}
+
+.folders li {
+    padding: 0 15px;
+    cursor: pointer;
+}
+
+.folders li:hover {
+  background: #f4fbff;
+}
+
+.folders li + li {
+  border-top: 1px solid #f7f7f7;
+}
+.folders span{
+    display: inline-block;
+    padding: 10px 0;
+}
+
+</style>
+
+<body>
+    <div id="app">
+        <header>
+            <h1 class="logo"><a class="fa fa-cloud active">我的云盘</a></h1>
+            <nav>
+                <a class="fa-plus-square-o" href="">新建文件夹</a>
+                <a class="fa-remove" href="">删除</a>
+                <a class="fa-arrows" href="">移动到</a>
+            </nav>
+            <div class="user">
+                <a href="" class="fa-user-o">Coolivan</a>
+            </div>
+        </header>
+
+        <main>
+            <aside>
+                <!-- <ul>
+                    <li class="active">
+                        <p>
+                            <span class="fa-folder-o">全部文件</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <span class="fa-folder-o">2222</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="fa-angle-down1"><span class="fa-folder-o">1111</span></p>
+                        <ul>
+                            <li>
+                                <p><span style="padding-left:1em; " class="fa-folder-o">2222</span></p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul> -->
+            </aside>
+            <article>
+                <nav>
+                    <input id="checkAll" type="checkbox" />
+                    <div class="breadnav">
+                        <!-- <a href="">11111</a>
+                        <a href="">11111</a>
+                        <a class="active" href="">11111</a> -->
+                    </div>
+                </nav>
+
+                <ul class="folders">
+                    <!-- <li>
+                        <input type="checkbox">
+                        <span class="fa-folder-open-o">js</span>
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        <span class="fa-folder-open-o">vue</span>
+                    </li> -->
+                </ul>
+            </article>
+        </main>
+
+    </div>
+</body>
+
+<script>
+    {
+        let data = [
+            {
+                id: 0,
+                pid: -1,
+                title: "微云"
+            },
+            {
+                id: 1,
+                pid: 0,
+                title: "我的文档"
+            },
+            {
+                id: 2,
+                pid: 0,
+                title: "我的音乐"
+            },
+            {
+                id: 2999,
+                pid: 1,
+                title: "js程序设计"
+            },
+            {
+                id: 29000,
+                pid: 1,
+                title: "js权威指南"
+            },
+            {
+                id: 23333,
+                pid: 2,
+                title: "王杰"
+            },
+            {
+                id: 244444,
+                pid: 2,
+                title: "张国荣"
+            },
+            {
+                id: 3,
+                pid: 2,
+                title: "周杰伦"
+            },
+            {
+                id: 4000,
+                pid: 3,
+                title: "稻香"
+            },
+            {
+                id: 4,
+                pid: 3,
+                title: "发如雪"
+            },
+            {
+                id: 600,
+                pid: 3,
+                title: "夜曲"
+            }
+        ]
+
+        let nowId = 0;
+        let topPid = -1;
+        data[0].open = true;
+
+        // 根据id找到自己
+        function getSelf(id) {
+            return data.filter(item => item.id == id)[0]
+        }
+
+        // 根据id找到所有子级
+        function getChild(pid) {
+            return data.filter(item => item.pid == pid)
+        }
+
+        //根据id找到父级
+        function getParent(id) {
+            let pid = getSelf(id).pid;
+            return data.filter(item => item.id == pid)[0]
+        }
+        // 根据id找到所有父级(面包导航)
+        function getAllParent(id) {
+            let p = getParent(id);
+            let allParent = [];
+            while (p) {
+                allParent.push(p);
+                p = getParent(p.id);
+            }
+            return allParent;
+        }
+        // console.log(getSelf(1))
+        // console.log(getChild(0));
+        // console.log(getParent(1));
+        // console.log(getAllParent(3))
+
+
+
+        // 三大视图渲染
+        render();
+        function render() {
+            let aside = document.querySelector('aside');
+            let folders = document.querySelector('.folders');
+            let breadnav = document.querySelector('.breadnav');
+
+            aside.innerHTML = renderAside(topPid, 0);
+            folders.innerHTML = renderFolders(nowId);
+            breadnav.innerHTML = renderBreadnav(nowId);
+
+            asideEvent();
+            foldersEvent();
+            breadnavEvent();
+
+        }
+
+        //左侧菜单
+        // console.log(renderAside(topPid, 0));
+        function renderAside(pid, level) {
+            let child = getChild(pid);
+
+            let html = '<ul>';
+            child.forEach(item => {
+                let childData = getChild(item.id);
+
+                html += `
+                    <li class="${item.open ? 'open' : ''}" data-pid=${item.pid}>
+                        <p class="${item.id == nowId ? 'active' : ''}" data-id="${item.id}">
+                            <span class="fa-folder-o" style="padding-left:${level}em">${item.title}</span>
+                        </p>
+                        ${childData.length > 0 ? renderAside(item.id, level + 1) : ''}
+                    </li>
+                `
+            });
+            html += '</ul>'
+        
+            return html;
+        }
+
+        // 文件夹视图
+        // console.log(renderFolders(1))
+        function renderFolders(id) {
+            let child = getChild(id);
+            let html = '';
+            child.forEach(item => {
+                html += `
+                    <li>
+                        <input type="checkbox">
+                        <span class="fa-folder-open-o" data-id="${item.id}">${item.title}</span>
+                    </li>
+                `
+            });
+            return html;
+        }
+
+        // 面包导航视图
+        // console.log(renderBreadnav(nowId));
+        function renderBreadnav(id) {
+            let self = getSelf(id);
+            let allParent = getAllParent(id).reverse();
+            let html = allParent.map(item => `<a href="javascript:;" data-id="${item.id}">${item.title}</a>`).join('');
+            html += `<span>${self.title}</span>`;
+            return html;
+        }
+
+
+        // 三大块操作
+
+        //左边栏操作
+        function asideEvent() {
+            let p = document.querySelectorAll('aside p');
+            p.forEach(item => {
+                item.onclick = function () {
+                    nowId = this.dataset.id;
+                    //自定义属性 open
+                    let self = getSelf(nowId);
+                    self.open = !self.open;
+                    render();
+                }
+            });
+        }
+
+        //文件夹操作
+        function foldersEvent() {
+            let span = document.querySelectorAll('.folders span');
+            span.forEach(item => {
+                item.onclick = function () {
+                    nowId = this.dataset.id;
+                    let self = getSelf(nowId);
+                    self.open = !self.open;
+                    render()
+                }
+            });
+            //选择
+            isCheckAll()
+        }
+
+        //导航操作
+        function breadnavEvent() {
+            let a = document.querySelectorAll('.breadnav a');
+            a.forEach(item => {
+                item.onclick = function () {
+                    nowId = this.dataset.id;
+                    let self = getSelf(nowId);
+                    self.open = !self.open;
+                    render()
+                }
+            })
+        }
+
+        //全选
+        function isCheckAll() {
+            let input = document.querySelectorAll('.folders input');
+            let checkAll = document.querySelector('#checkAll');
+            checkAll.disabled = input.length?'':'disabled';
+            
+            checkAll.checked = false;
+            checkAll.onchange = function () {
+                input.forEach(item => {
+                    item.checked = this.checked;
+                })
+            }
+            input.forEach(item => {
+                item.checked = this.checked;
+                item.onchange = function(){
+                    checkAll.checked = [...input].every(item=>item.checked);
+                }
+            })
+
+        }
+
+
+
+
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>111</div>
+    <div>222</div>
+    <script>
+        {
+            class Jq {
+                constructor(arg, root) {
+                    // root 上次操作结果
+                    if (typeof root === 'undefined') {
+                        this.prevObject = new Jq(document, null)
+                    }
+                    if (root) {
+                        this.prevObject = root;
+                    }
+                    // 处理 arg
+                    if (typeof arg === 'function') {
+                        this.ready(arg);
+                    } else if (typeof arg === 'string') {
+                        let els = document.querySelectorAll(arg);
+                        this.addElement(els);
+                        this.length = els.length;
+                    } else if (typeof arg === 'undefined') {
+                        // console.log(1111)
+                    } else {
+                        if (typeof arg.length !== 'undefined') {
+                            this.addElement(arg);
+                            this.length = arg.length;
+                        } else {
+                            this[0] = arg;
+                            this.length = 1
+                        };
+                        // console.log(arg)
+                    }
+
+                }
+
+                ready(arg) {
+                    window.addEventListener('DOMContentLoaded', arg, false);
+                }
+                addElement(els) {
+                    [...els].forEach((el, index) => this[index] = el)
+                }
+                eq(index) {
+                    return new Jq(this[index], this)
+                }
+                get(index) {
+                    return this[index]
+                }
+                end() {
+                    return this.prevObject;
+                }
+                click(fn) {
+                    for (let i = 0; i < this.length; i++) {
+                        this[i].addEventListener('click', fn, false)
+                    }
+                }
+                on(eventName, fn) {
+                    let reg = /\s+/g;
+                    eventName = eventName.replace(reg, ' ');
+                    let arr = eventName.split(' ');
+                    for (let i = 0; i < this.length; i++) {
+                        arr.forEach((item, index) => {
+                            this[i].addEventListener(arr[index], fn, false)
+                        })
+                    }
+                }
+
+                getStyle(styleName, el) {
+                    return window.getComputedStyle(el, null)[styleName]
+                }
+                setStyle(el,styleName,styleValue){
+                    if(typeof styleValue === 'number' && !(styleName in $.cssNumber)){
+                        styleValue = styleValue + 'px'
+                    }
+                    el.style[styleName] = styleValue;
+                }
+
+                css() {
+                    if (arguments.length === 1) {
+                        // 字符
+                        if (typeof arguments[0] === 'string') {
+                            return this.getStyle(arguments[0], this[0])
+                        } else {
+                            // 对象
+                            for (let i = 0; i < this.length; i++) {
+                                for (let j in arguments[0]) {
+                                    if (j in $.cssHooks) {
+                                        $.cssHooks[j].set(this[i], arguments[0][j])
+                                    } else {
+                                        this.setStyle(this[i], j, arguments[0][j])
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        // 2个参数
+                        for(let i = 0;i<this.length;i++){
+                            if(arguments[0] in $.cssHooks){
+                                $.cssHooks[arguments[0]].set(this[i],arguments[1]);
+                            }else{
+                                this.setStyle(this[i],arguments[0],arguments[1])
+                            }
+                        }
+                    }
+                }
+
+
+
+
+            }
+            function $(arg) {
+                return new Jq(arg)
+            }
+
+            $.cssNumber = {
+                animationIterationCount: true,
+                columnCount: true,
+                fillOpacity: true,
+                flexGrow: true,
+                flexShrink: true,
+                fontWeight: true,
+                gridArea: true,
+                gridColumn: true,
+                gridColumnEnd: true,
+                gridColumnStart: true,
+                gridRow: true,
+                gridRowEnd: true,
+                gridRowStart: true,
+                lineHeight: true,
+                opacity: true,
+                order: true,
+                orphans: true,
+                widows: true,
+                zIndex: true,
+                zoom: true
+            }
+
+            $.cssHooks = {};
+
+
+        }
+    </script>
+
+    <script>
+        {
+            let div = document.querySelector('div');
+
+            // $(function () {
+            //     console.log(1)
+            // })
+            $()
+
+            // console.log($());
+
+            // console.log($('div'))
+
+            // console.log($(div));
+            // $('div').click(function(){
+            //     console.log(this);
+            // })
+
+            // $('div').on('mouseover  mousedown',function(){
+            //     console.log(this)
+            // })
+
+
+            $('div').css('width', '100px')
+
+        }
+    </script>
+</body>
+
+</html>

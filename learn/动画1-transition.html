@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>动画1-transition</title>
+</head>
+<style>
+	div {
+		width: 100px;
+		height: 100px;
+		background: red;
+		position: absolute;
+		transition: 1s;
+	}
+</style>
+
+<body>
+	<div></div>
+
+	<script type="text/javascript">
+		let div = document.querySelector('div');
+
+		setTimeout(()=>{
+			div.style.height = '300px'
+		},1000)
+
+		div.addEventListener('transitionend',function(){
+			console.log(1);
+		})
+
+
+
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+
+<body>
+	<h1>适配器模式</h1>
+	<p>为对象添加新功能；不改变其原有的结构和功能（手机指环）</p>
+	<h2>场景</h2>
+	<ul>
+		<li>ES7 装饰器babel-plugin-transform-decorators-legacy</li>
+		<li>core-decorators</li>
+	</ul>
+
+
+
+
+
+	<script type="text/javascript">
+		class Circle{
+			draw(){
+				console.log('画一个圆形');
+			}
+		}
+
+		class Decorator{
+			constructor(circle){
+				this.circle = circle;
+			}
+			draw(){
+				this.circle.draw();
+				this.setRedBorder(circle)
+			}
+			setRedBorder(circle){
+				console.log('设置红色边框')
+			}
+		}
+
+		//测试
+		let circle = new Circle();
+		circle.draw();
+
+		console.log('-----------')
+		let dec = new Decorator(circle);
+		dec.draw();
+		dec.setRedBorder();
+
+	</script>
+</body>
+
+</html>

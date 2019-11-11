@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    ul{
+        border: 10px solid red;
+    }
+    li{
+        height: 300px;
+        border: 1px solid black;
+    }
+    div{
+        height: 100px;
+    }
+</style>
+<body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+    </ul>
+</body>
+<script>
+{
+    let lis = document.querySelectorAll('li');
+    
+    console.log(getPageOffset(lis[1]))
+
+    // 方法一
+    // function getPageOffset(el){
+    //     let rect = el.getBoundingClientRect();
+    //     let sY = scrollY;
+    //     let sX = scrollX;
+    //     // console.log(rect,sX,sY)
+    //     return {
+    //         top:rect.top + sY,
+    //         left:rect.left + sX
+    //     }
+    // }
+
+    //方法二
+    function getPageOffset(el){
+        let offset = {
+            top:el.offsetTop,
+            left:el.offsetLeft
+        }
+        while(el.offsetParent){
+            el = el.offsetParent; 
+            offset.top += el.offsetTop + el.clientTop;
+            offset.left += el.offsetLeft + el.clientLeft;
+        }
+        return offset;
+    }
+
+
+}
+</script>
+</html>

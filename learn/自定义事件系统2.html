@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+       function Event() {
+            this._events = {};
+        }
+
+        Event.prototype.on = function (type, fn) {
+            if (!this._events[type]) {
+                this._events[type] = []
+            }
+            this._events[type].push(fn);
+        }
+
+        Event.prototype.off = function (type, fn) {
+            if (!this._events[type]) {
+                return;
+            }
+            if (!fn) {
+                this._events[type] = undefined;
+                return;
+            }
+            var index = this._events[type].indexOf(fn);
+            this._events[type].splice(index, 1);
+
+           
+        }
+
+        Event.prototype.emit = function (type) {
+            if (!this._events[type]) {
+                return;
+            }
+            this._events[type].forEach(fn => fn());
+        }
+
+        Event.prototype.once = function (type, fn) {
+            let wrap = (...args) => {
+                fn.apply(this, args);
+                this.off(type, wrap);
+            }
+            this.on(type, wrap);
+            return this;
+        }
+
+
+        // 测试
+        function callback1() {console.log(111)};
+        function callback2() {console.log(222)};
+        function callback3() {console.log(333)};
+
+        const myEvent = new Event();
+        myEvent.on('click',callback1)
+        myEvent.on('click',callback2)
+        myEvent.once('click',callback3)
+
+        console.log('emit');
+        myEvent.emit('click')//一次输出111，222，333
+
+        console.log('off');
+        myEvent.off('click',callback1);
+
+        console.log('emit');
+        myEvent.emit('click')//222
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+	</head>
+	<style type="text/css">
+		#app{
+			text-align: center;
+		}
+		img {
+			width: 300px;
+			display: block;
+			margin: auto;
+		}
+		
+
+	</style>
+
+	<body>
+		<div id="app">
+			<img src="img/1.jpg" />
+			<button id="prev">prev</button>
+			<button id="next">next</button>
+		</div>
+
+		<script type="text/javascript">
+			window.onload = function() {
+				var app = document.getElementById("app");
+				var img = app.getElementsByTagName('img')[0];
+				var prev = document.getElementById("prev");
+				var next = document.getElementById("next");
+				var num = 0;
+				
+				var arrUrl = ['img/1.jpg','img/2.jpg','img/3.jpg','img/4.jpg'];
+				
+				next.onclick = function(){
+					num++;
+					
+					if (num == arrUrl.length) {
+						num = 0
+					}
+					img.src = arrUrl[num];
+				}
+				
+				prev.onclick = function(){
+					num--;
+					
+					if(num == -1){
+						num = arrUrl.length-1
+					}
+					
+					img.src = arrUrl[num]
+				}
+				
+				
+				// /////////////
+				var timer = null;
+				clearInterval(timer);
+				
+				function autoPlay(){
+					timer = setInterval(function(){
+						num++;
+						num%=arrUrl.length;
+						img.src = arrUrl[num]
+						
+					},1000)
+				}
+				autoPlay();
+				app.onmouseover = function(){
+					clearInterval(timer);
+				}
+				app.onmouseout = function(){
+					autoPlay()
+				}
+			}
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>招聘信息hash分页</title>
+</head>
+<style type="text/css">
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	#app {
+		width: 600px;
+		margin: 50px auto;
+		background: #eee;
+		padding: 15px;
+	}
+
+	
+
+	li {
+		list-style: none;
+	}
+
+	.nav li {
+		display: inline-block;
+		margin-right: 15px;
+	}
+
+	.nav .active {
+		color: red;
+	}
+	.list li{
+		padding: 10px 0;
+	}
+	.page li{
+		display: inline;
+		padding: 5px;
+	}
+	.page .active{
+		color:red;
+	}
+
+	.p404 {
+		display: none;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<ul class="nav">
+			<li><a href="">11</a></li>
+		</ul>
+		<ul class="list">
+			<li></li>
+		</ul>
+		<ul class="detail">
+			<li></li>
+		</ul>
+		<ul class="page">
+			<li></li>
+		</ul>
+		<ul class="p404">
+			<li>404</li>
+		</ul>
+	</div>
+
+	<script>
+		(function () {
+			var data = {
+				list: [{
+						text: '后端工程师',
+						eng: "society"
+					},
+					{
+						text: '前端工程师',
+						eng: "campus"
+					}
+				],
+				society: [{
+						num: 1,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 2,
+						job: "后端工程师",
+						pNum: 1000,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 3,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 4,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 5,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 6,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 7,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 8,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 9,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 10,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					},
+
+					{
+						num: 11,
+						job: "后端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}
+				],
+				campus: [{
+						num: 1,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 2,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 3,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 4,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 5,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 6,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 7,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 8,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 9,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 10,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					},
+
+					{
+						num: 11,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 12,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 13,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 14,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 15,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 16,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 17,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 18,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 19,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 20,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}, {
+						num: 21,
+						job: "前端工程师",
+						pNum: 2,
+						ask: "要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识",
+						date: "2014-04-10"
+					}
+				]
+			};
+
+
+			let app = document.querySelector('#app');
+			let nav = app.querySelector('.nav');
+			let list = app.querySelector('.list');
+			let detail = app.querySelector('.detail');
+			let page = app.querySelector('.page');
+			let p404 = app.querySelector('.p404');
+			let perpage = 4;
+
+			window.onhashchange = function () {
+				tab()
+			}
+			tab();
+			//上边切换
+			function tab() {
+				let hash = location.hash;
+				if (hash === '') {
+					hash = location.hash = '#list/society/1';
+				}
+				hash = hash.substr(1).split('/');
+				console.log(hash)
+
+				switch (hash[0]) {
+					case 'details':
+						detail.style.display = 'block';
+						list.style.display = 'none';
+						break;
+					case 'list':
+						change(hash);
+						break;
+					default:
+						p404.style.display = 'block';
+						return;
+
+				}
+			}
+
+			function change(hash) {
+				detail.style.display = 'none';
+				list.style.display = 'block';
+
+				//导航
+				nav.innerHTML = data['list'].map(item => {
+					return `<li><a class="${item.eng == hash[1]?'active':''}" href="#list/${item.eng}/1">${item.text}</a></li>`
+				}).join('');
+
+
+				//分页
+				let pageCount = Math.ceil(data[hash[1]].length/4);
+				console.log(pageCount);
+				let pageHtml = '';
+				for(let i=1;i<=pageCount;i++){
+					pageHtml += `<li><a class="${hash[2]==i?'active':''}" href="#${hash[0]}/${hash[1]}/${i}">${i}</a></li>`
+				}
+				page.innerHTML = pageHtml;
+
+
+
+				//列表
+				let start = (hash[2] -1) * perpage;
+				let end = hash[2] * perpage;
+				console.log(start,end)
+
+				let _data = data[hash[1]].filter((item,index)=>{
+					return index >= start && index < end;
+				})
+				console.log(_data)
+
+				list.innerHTML = _data.map((item, index) => {
+					return `
+						<li>
+							<p>${item.num}. 职位：${item.job} /${item.pNum}人 时间：${item.date}</p>
+							<p>${item.ask}</p>
+						</li>
+					`
+				}).join('')
+
+
+			}
+
+
+
+
+
+		})()
+	</script>
+
+
+
+</body>
+
+</html>

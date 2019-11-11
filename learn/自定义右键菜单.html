@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    ul{
+        width: 200px;
+        border: 1px solid #cccccc;
+        position:fixed;
+        /* position: absolute; */
+        background: white;
+        display: none;
+    }
+    li{
+        border: 1px solid #f5f5f5;
+        list-style: none;
+        padding: 0 1em;
+        cursor: pointer;
+    }
+    li:hover{
+        background: lightskyblue;
+        color: white;
+    }
+</style>
+<body>
+    <ul>
+        <li>下载</li>
+        <li>删除</li>
+        <li>重命名</li>
+        <li>剪切</li>
+        <li>复制</li>
+        <li>粘贴</li>
+    </ul>
+</body>
+<script>
+    {
+        let ul = document.querySelector('ul');
+        document.addEventListener('contextmenu',(e)=>{
+
+            // 如果元素本身display none 那么就获取不到 可视宽高
+            ul.style.display = 'block';
+
+            let pos = {
+                x:Math.min(e.clientX,document.documentElement.clientWidth - ul.offsetWidth),
+                y:Math.min(e.clientY,document.documentElement.clientHeight - ul.offsetHeight)
+            }
+
+            ul.style.left = pos.x + 'px';
+            ul.style.top = pos.y + 'px';
+            e.preventDefault();
+        })
+
+        document.addEventListener('mousedown',()=>{
+            ul.style.display = 'none'
+        })
+    }
+</script>
+</html>

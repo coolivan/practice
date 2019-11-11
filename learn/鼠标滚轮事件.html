@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        height: 1000vh;
+    }
+    p{
+        position: fixed;
+        top: 15px;
+        height: 15px;
+    }
+</style>
+
+<body>
+    <p></p>
+    <script>
+        {
+
+            let p = document.querySelector('p');
+            wheel(document,function(){
+                console.log('down');
+                p.innerHTML = 'down'
+            },function(){
+                console.log('up');
+                p.innerHTML = 'up'
+            })
+
+
+
+            function wheel(el, downFn, upFn) {
+                el.addEventListener('mousewheel', (e) => {
+                    // e.wheelDelta
+                    // 滚轮向上 - > 120
+                    // 滚轮向下 - >  -120
+                    if (e.wheelDelta > 0) {
+                        upFn && upFn.call(el)
+                    } else {
+                        downFn && downFn.call(el)
+                    }
+                });
+
+                el.addEventListener('DOMMouseScroll', (e) => {
+                    // e.detail
+                    // 滚轮向上  ->  -3
+                    // 滚轮向下  ->  3
+                    if (e.detail > 0) {
+                        downFn && downFn.call(el)
+                    }else{
+                        upFn && downFn.call(el)
+                    }
+                })
+            }
+        }    
+    </script>
+</body>
+
+</html>

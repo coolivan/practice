@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <button>get</button>
+    <button>post</button>
+    <script>
+        let btns = document.querySelectorAll('button');
+        btns[0].addEventListener('click', () => {
+            ajax({
+                url: "/ajax",
+                method: "get",
+                data: {
+                    hello: "get",
+                    height: "170cm"
+                },
+                headers: {
+                    "content-type": "application/json"
+                },
+                success(res) {
+                    console.log(res)
+                },
+                error(err){
+                    console.error(err)
+                }
+            })
+        });
+        btns[1].addEventListener('click', () => {
+            ajax({
+                url: "/ajax",
+                method: "post",
+                data: {
+                    hello: "post",
+                    height: "180cm"
+                },
+                headers: {
+                    "content-type": "application/json"
+                },
+                success(res) {
+                    console.log(res)
+                }
+            })
+        });
+
+
+
+
+        function ajax(options) {
+            let opts = Object.assign({
+                url:'',
+                method:'get',
+                headers:{
+                    'content-type':'application/x-www-form-urlencoded'
+                },
+                data:{},
+                success:function(){}
+            }, options)
+
+            let xhr = new XMLHttpRequest();
+            if(opts.method.toLowerCase() === 'get'){
+                opts.url += `?${o2u(opts.data)}`
+            }
+
+            xhr.open(opts.method,opts.url,true);
+            
+            for(let i in opts.headers){
+                xhr.setRequestHeader(i,opts.headers[i])
+            }
+
+
+
+
+            if(opts.method.toLowerCase() === 'get'){
+                xhr.send()
+            }else{
+                let sendData;
+                switch (opts.headers['content-type']){
+                    case 'application/x-www-form-urlencoded':
+                        sendData = o2u(opts.data)
+                        break;
+                    case 'application/json': 
+                        sendData = JSON.stringify(opts.data)
+                        break;
+                }
+                xhr.send(sendData)
+            }
+
+
+            xhr.onload = function(){
+                let responseData;
+                if(xhr.getResponseHeader('content-type').includes('xml')){
+                    responseData = xhr.responseXML
+                }else if(xhr.getResponseHeader('content-type').includes('json')){
+                    responseData = JSON.parse(xhr.responseText)
+                }
+                opts.success && opts.success(responseData)
+            }
+
+            xhr.onerror = function(){
+                opts.error && opts.error(xhr)
+            }
+
+            function o2u(obj){
+                let keys = Object.keys(obj),
+                    values = Object.values(obj);
+                return keys.map((v,k)=>`${v}=${values[k]}`).join('&')
+            }
+            
+        }
+    </script>
+</body>
+
+</html>

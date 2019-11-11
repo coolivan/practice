@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Event() {
+            this.handles = {};
+        }
+
+        Event.prototype.on = function (eventType,callbackFn) {
+                //如果handles中不存在事件eventType，则将事件存储在handles中，同时初始化该事件对应的回调逻辑函数集合
+                if (!this.handles[eventType]) {
+                    this.handles[eventType] = [];
+                }
+                //往handles中的eventType对应的回调逻辑函数集合push回调函数callback
+                this.handles[eventType].push(callbackFn);
+                return this;
+        }
+
+        Event.prototype.off = function (eventType,callbackFn) {
+             //判断事件eventType是否存在callbackFn这个观察者，如果有，则移除事件eventType的callbackFn观察者
+            if (this.handles[eventType]) {
+                for (var i = 0; i < this.handles[eventType].length; i++) {
+                    if (this.handles[eventType][i] === callbackFn) {
+                        this.handles[eventType].splice(i, 1);
+                        break;
+                    }
+                }
+            }
+            return this;
+        }
+
+        Event.prototype.emit = function (eventType,callbackFn) {
+            //如果事件eventType有订阅者，则依次执行事件eventType的订阅者相应的回调方法
+            console.log(arguments,this.handles);
+            if (this.handles[arguments[0]]) {
+                for (var i = 0; i < this.handles[arguments[0]].length; i++) {
+                    this.handles[arguments[0]][i](arguments[1]);
+                }
+            }
+            return this;
+        }
+
+        Event.prototype.once = function (eventType,callbackFn) {
+            let wrap = (...args) => {
+                callbackFn.apply(this, args);
+                this.off(eventType, wrap);
+            }
+            this.on(eventType, wrap);
+            return this;
+        }
+       
+
+        // 测试
+        function callback1() {console.log(111)};
+        function callback2() {console.log(222)};
+        function callback3() {console.log(333)};
+
+        const myEvent = new Event();
+        myEvent.on('click',callback1)
+        myEvent.on('click',callback2)
+        myEvent.once('click',callback3)
+
+        console.log('emit');
+        myEvent.emit('click')//一次输出111，222，333
+
+        console.log('off');
+        myEvent.off('click',callback1);
+
+        console.log('emit');
+        myEvent.emit('click')//222
+
+
+    </script>
+</body>
+
+</html>

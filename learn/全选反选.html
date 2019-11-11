@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>全选反选</title>
+	</head>
+	<style>
+		ul{
+			padding: 0;
+		}
+		li:nth-child(even){
+			background: #fceef1;
+		}
+		label{
+			cursor: pointer;
+			display: block;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<ul></ul>
+			<input type="checkbox" name="" id="checkall">全选
+			<input type="button" value="反选" id="btn">
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				var ul = document.getElementsByTagName('ul')[0];
+				var li = ul.getElementsByTagName('li');
+				var checkAll = document.getElementById('checkall');
+				var btn = document.getElementById('btn');
+				var input = ul.getElementsByTagName('input');
+				var arr = ["私奔", "北京北京", "我爱你中国", "花火", "回来", "爱要有你才完美"];
+				
+
+				ul.innerHTML = arr.map(item=>{
+					return `<li><label><input type="checkbox">${item}</label></li>`
+				}).join('');
+				
+				for(let i=0;i<li.length;i++){
+					li[i].index = i;
+					
+					//颜色
+					li[i].onmouseover = function(){
+						this.style.background = "#e7788d";
+					}
+					li[i].onmouseout = function(){
+						if(!input[i].checked){
+							this.style.background = "";
+						}
+					}
+					
+					input[i].onchange = function(){
+						if(this.checked){
+							li[i].style.background = "#e7788d";
+						}
+						
+						checkAll.checked = [...input].every(item=>{
+							return item.checked
+						})
+						
+					}
+				}
+				
+				checkAll.onchange = function(){
+					[...input].forEach((item,index)=>{
+						item.checked = this.checked;
+						if(item.checked){
+							li[index].style.background = "#e7788d";
+						}else{
+							li[index].style.background = "";
+						}
+					})
+				}
+				
+				btn.onclick = function(){
+					[...input].forEach((item,index)=>{
+						item.checked = !item.checked;
+						if(item.checked){
+							li[index].style.background = "#e7788d";
+						}else{
+							li[index].style.background = "";
+						}
+					});
+					
+					checkAll.checked = [...input].every(item=>{
+						return item.checked
+					})
+				}
+				
+
+
+
+
+				
+
+			}
+		</script>
+	</body>
+</html>

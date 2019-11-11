@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		#app{
+			position: relative;
+		}
+		ul{
+			position: absolute;
+			top: 250px;
+		}
+		.ul1 li{
+			background: red;
+		}
+		.ul2 li{
+			background: #FF9800;
+		}
+		li{
+			width: 50px;
+			height: 50px;
+			list-style: none;
+			position: absolute;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<ul class="ul1"></ul>
+			<ul class="ul2"></ul>
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				let app = document.getElementById('app');
+				let ul = app.getElementsByTagName('ul');
+				let len = 20;//数量
+				let top = 250;//距离
+				let str = '';
+				
+
+				for (let i = 0; i < len; i++) {
+					str += `<li style="left:${i*60}px;">${i}</li>`;
+				}
+
+				for (let i = 0; i < ul.length; i++) {
+					ul[i].innerHTML = str;
+				    autoPlay(ul[i].getElementsByTagName('li'),i);
+				}
+					
+				function autoPlay(obj,onOff){
+					obj.num = 0;
+					clearInterval(obj.timer);
+					
+					obj.timer = setInterval(function(){
+						obj.target = onOff ? top : -top;
+					    move(obj[obj.num],'top',10,obj.target)
+						
+						obj.num++;
+						if(obj.num == len){
+							obj.num = 0;
+							onOff = !onOff
+						}
+					},50);
+									
+				}
+				
+				//获取样式 
+				function getStyle(obj, attr) {
+					return obj.currentStyle ? cureentStyle(obj)[attr] : getComputedStyle(obj)[attr];
+				}
+				
+				
+				//运动
+				function move(obj,attr,dir,target,endFn) {
+					  dir = parseInt(getStyle(obj,attr)) < target ?dir :-dir;
+					  clearInterval(obj.timer)
+					 
+					  obj.timer = setInterval(function(){
+						 var pos = parseInt(getStyle(obj,attr))+ dir;
+						 if(pos > target && dir >0 || pos < target && dir < 0) {
+								pos = target;
+						 }
+						 obj.style[attr] = pos+'px';
+
+						 if(pos == target) {
+							clearInterval(obj.timer)
+							endFn&&endFn();
+						 }
+					  },30)
+				}
+				
+				
+				
+			}
+		</script>
+							
+	</body>
+</html>

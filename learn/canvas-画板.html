@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="http://www.coolivan.com/" />
+  <title>coolivan.com</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #canvas {
+      background: white;
+    }
+  </style>
+  <script>
+    window.onload = function () {
+      var myCanvas = document.getElementById("canvas");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      var ext = myCanvas.getContext("2d"); //2d绘图对象
+      myCanvas.onmousedown = function (e) {
+        var e = e || window.e;
+        ext.beginPath();
+        ext.moveTo(e.clientX - myCanvas.offsetLeft, e.clientY - myCanvas.offsetTop);
+        document.onmousemove = function (e) {
+          var e = e || window.e;
+          ext.lineTo(e.clientX - myCanvas.offsetLeft, e.clientY - myCanvas.offsetTop);
+          ext.stroke(); //链接起始点和终结点
+          ext.strokeStyle = "black"; //笔触的颜色
+        };
+        document.onmouseup = function () {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        }
+      }
+    }        
+  </script>
+</head>
+
+<body>
+  <p>按住并移动鼠标绘画（canvas）</p>
+  <canvas id="canvas"></canvas>
+</body>
+
+</html>

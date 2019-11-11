@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>无限有菜单</title>
+	</head>
+	<style>
+		ul ul{
+			display: none;
+		}
+		ul.active{
+			display: block;
+		}
+		p{
+			cursor: pointer;
+		}
+	</style>
+	<body>
+		<div id="app">
+		
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				let data = [{
+					title: "一级菜单",
+					child: [{
+							title: "二级菜单"
+						},
+						{
+							title: "二级菜单",
+							child: [{
+								title: "三级菜单"
+							}, {
+								title: "三级菜单"
+							}, {
+								title: "三级菜单"
+							}]
+						},
+						{
+							title: "二级菜单",
+							child: [{
+								title: "三级菜单",
+								child: [{
+									title: "四级菜单"
+								}, {
+									title: "四级菜单",
+									child:[
+										{
+											title:'五级菜单'
+										},{
+											title:'五级菜单'
+										}
+									]
+								}]
+							}]
+						}
+					]
+				}, {
+					title: "一级菜单",
+					child: [{
+							title: "二级菜单"
+						},
+						{
+							title: "二级菜单",
+							child: [{
+								title: "三级菜单"
+							}, {
+								title: "三级菜单"
+							}, {
+								title: "三级菜单"
+							}]
+						},
+						{
+							title: "二级菜单",
+							child: [{
+								title: "三级菜单",
+								child: [{
+									title: "四级菜单"
+								}, {
+									title: "四级菜单"
+								}]
+							}]
+						}
+					]
+				}, {
+					title: "一级菜单",
+					child: [{
+							title: "二级菜单"
+						},
+						{
+							title: "二级菜单",
+							child: [{
+								title: "三级菜单"
+							}, {
+								title: "三级菜单"
+							}, {
+								title: "三级菜单"
+							}]
+						},
+						{
+							title: "二级菜单",
+							child: [{
+								title: "三级菜单",
+								child: [{
+									title: "四级菜单"
+								}, {
+									title: "四级菜单"
+								}]
+							}]
+						}
+					]
+				}];
+				
+				let app = document.querySelector('#app');
+				
+				app.innerHTML = create(data);
+				
+				function create(data){
+					let ul = '<ul>';
+					data.forEach(item=>{
+						ul += 
+						`
+							<li>
+								<p>${item.title}</p>
+								${item.child?create(item.child):''}
+							</li>
+						`;
+					})
+					ul +='</ul>'
+					return ul;
+				}
+				
+				let p = app.querySelectorAll('p');
+				p.forEach(item=>{
+					let ul = item.nextElementSibling;
+					item.onclick = function(){
+						if(ul){
+							ul.classList.toggle('active')
+						}
+					}
+				})
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			}
+		</script>
+	</body>
+</html>

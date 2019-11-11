@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        let arr = [66, 36, 10, 83, 35, 68, 25, 20,1];
+
+        let len = arr.length - 1;
+
+        quickSort(arr, 0, len);
+
+        function quickSort(arr, start, end) {
+            if (start >= end) return;
+
+            let v = arr[start],//基准值
+                i = 1,
+                j = end,
+                flag = false;
+
+            while (i < j) {
+                flag = true;
+                while (arr[i] <= v && i <= j) {
+                    i++;
+                }
+
+                while (arr[j] >= v && i <= j) {
+                    j--;
+                }
+                if (i < j) {
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                    flag = false;
+                }
+                if (flag) {
+                    break;
+                }
+            }
+            if (v > arr[j]) {
+                // console.log(i,j);// 当前j=5,i=6
+                arr[start] = arr[j];
+                arr[j] = v;
+            }
+            quickSort(arr, start, j - 1);
+            quickSort(arr, j+1, end);
+        }
+        console.log(arr);
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+</head>
+<style type="text/css">
+	#app {
+		width: 450px;
+		margin: auto;
+	}
+
+	ul,
+	li,
+	p,
+	span {
+		padding: 0;
+		margin: 0;
+	}
+
+	img {
+		width: 430px;
+		display: block;
+	}
+
+	li img {
+		max-width: 100%;
+	}
+
+	li {
+		width: 100px;
+		display: inline-block;
+		margin: 5px;
+	}
+
+	li.active {
+		border: 1px red solid;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<span>图片数量正在加载...</span>
+		<img src="" />
+		<p>图片说明正在加载...</p>
+		<ul></ul>
+	</div>
+
+	<script type="text/javascript">
+		window.onload = function () {
+			var app = document.getElementById("app");
+			var img = app.getElementsByTagName('img')[0];
+			var span = app.getElementsByTagName('span')[0];
+			var p = app.getElementsByTagName('p')[0];
+			var ul = app.getElementsByTagName('ul')[0];
+			var str = '';
+			var num = 0;
+
+			var data = {
+				url: ['img/1.jpg', 'img/2.jpg', 'img/3.jpg', 'img/4.jpg'],
+				txt: ['图片1', '图片2', '图片3', '图片4']
+			}
+
+
+
+			//li添加
+			for (var i = 0; i < data.url.length; i++) {
+				str += `<li><img src="${data.url[i]}"></li>`
+			}
+			ul.innerHTML = str;
+			var li = app.querySelectorAll('li');
+
+			console.log(li);
+			//初始化
+			function init() {
+				img.src = data.url[num];
+				span.innerHTML = num + 1 + '/' + data.url.length;
+				p.innerHTML = data.txt[num];
+
+				li.forEach(element => {
+					element.className = ''
+				});
+				li[num].className = 'active';
+			}
+			init();
+
+
+			//li点击
+			for (var i = 0; i < li.length; i++) {
+				li[i].index = i;
+				li[i].onclick = function () {
+					if (num == this.index) return;
+					num = this.index;
+					init();
+				}
+
+			}
+
+
+			/////////////////////
+			var timer = null;
+			clearInterval(timer);
+
+			function autoPlay() {
+				timer = setInterval(function () {
+					num++;
+					num %= data['url'].length;
+					init()
+				}, 1000)
+
+			}
+			autoPlay()
+			app.onmouseover = function () {
+				clearInterval(timer);
+			}
+			app.onmouseout = function () {
+				autoPlay()
+			}
+
+
+		}
+	</script>
+
+</body>
+
+</html>

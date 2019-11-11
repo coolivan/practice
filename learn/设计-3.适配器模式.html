@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+
+<body>
+	<h1>适配器模式</h1>
+	<h2>场景</h2>
+	<ul>
+		<li>封装旧接口</li>
+		<li>vue computed</li>
+	</ul>
+	<p>var $={ajax:function(options){return ajax(options)}}</p>
+	<p>computed:{this.msg.split('').reverse().join('')}</p>
+
+
+
+
+
+	<script type="text/javascript">
+		class Adaptee{
+			specifiRequess(){
+				return '德国标准插头'
+			}
+		}
+
+		class Target{
+			constructor(){
+				this.adaptee = new Adaptee()
+			}
+			request(){
+				let info = this.adaptee.specifiRequess()
+				return `${info} - 转换器 - 中国标准插头`
+			}
+		}
+
+		//测试
+		let target = new Target();
+		let res = target.request();
+
+		console.log(res)
+
+	</script>
+</body>
+
+</html>

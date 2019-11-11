@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<style>
+	body {
+		overflow: hidden;
+	}
+
+	.wrap {
+		width: 1000px;
+		height: 600px;
+		margin: 100px auto;
+	}
+
+	.wrap:before {
+		content: '';
+		background: red;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-image: url('img/2.jpg');
+		filter: blur(25px);
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+
+	.inner {
+		perspective: 600px;
+		position: relative;
+		width: 100%;
+		height: 100%;
+		/* border: 1px solid red; */
+		transform-style: preserve-3d;
+	}
+
+	.box {
+		width: 200px;
+		height: 200px;
+		position: absolute;
+		/* 将元素内-开启3d渲染模式 */
+		transform-style: preserve-3d;
+		/* transition: 1s; */
+	}
+
+	/* .box:hover {
+		transform: rotateY(360deg);
+	} */
+
+	.box span {
+		width: 100%;
+		height: 100%;
+		/* border: 1px solid blue; */
+		position: absolute;
+		/* background: rgba(200, 100, 200, 0.2); */
+		background: #ddd;
+		opacity: 0;
+		transition: 1.5s;
+		background-size: 1000px 600px;
+	}
+
+	.show span {
+		opacity: 1;
+	}
+
+	.box span:nth-child(1) {
+		transform: translateZ(100px);
+	}
+
+	.box span:nth-child(2) {
+		transform: rotateY(90deg) translateZ(100px);
+	}
+
+	.box span:nth-child(3) {
+		transform: rotateY(180deg) translateZ(100px);
+	}
+
+	.box span:nth-child(4) {
+		transform: rotateY(270deg) translateZ(100px);
+	}
+
+	.box span:nth-child(5) {
+		transform: rotateX(90deg) translateZ(100px);
+	}
+
+	.box span:nth-child(6) {
+		transform: rotateX(-90deg) translateZ(100px);
+	}
+
+
+	.box[data-z='0'] span:nth-child(1) {
+		background-image: url('img/1.jpg');
+		opacity: 0.1;
+	}
+
+	.box[data-z='1'] span:nth-child(1) {
+		background-image: url('img/1.jpg');
+		opacity: 0.2;
+	}
+
+	.box[data-z='2'] span:nth-child(1) {
+		background-image: url('img/1.jpg');
+	}
+
+	.box[data-z='2'] span:nth-child(2) {
+		background-image: url('img/2.jpg');
+	}
+
+	.box[data-z='2'] span:nth-child(3) {
+		background-image: url('img/3.jpg');
+	}
+
+	.box[data-z='2'] span:nth-child(4) {
+		background-image: url('img/4.jpg');
+	}
+
+	.btns {
+		width: 300px;
+		height: 50px;
+		margin: 30px auto;
+		padding: 15px;
+		position: relative;
+		opacity: 0;
+		transition: 0.5s 0.5s;
+	}
+
+	.btns span {
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		background: gray;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 50px;
+		color: white;
+		font-size: 30px;
+		font-family: serif;
+		position: absolute;
+		cursor: pointer;
+
+	}
+
+	.btns span:last-child {
+		right: 15px;
+	}
+</style>
+
+<body>
+	<div class="wrap">
+		<div class="inner">
+			<!-- <div class="box">
+				<span>1</span>
+				<span>2</span>
+				<span>3</span>
+				<span>4</span>
+				<span>5</span>
+				<span>6</span>
+			</div> -->
+		</div>
+		<div class="btns">
+			<span class="prev">&lt;</span>
+			<span class="next">&gt;</span>
+		</div>
+	</div>
+	<script src="js/itween.js"></script>
+	<script type="text/javascript">
+		let inner = document.querySelector('.inner');
+		create({
+			el: inner,
+		})
+		function create(options) {
+			let { el, boxW = 200, boxH = 200, boxZ = 200 } = options;
+			let innerW = css(el, 'width'),
+				innerH = css(el, 'height'),
+				rows = Math.ceil(innerH / boxH),
+				ceils = Math.ceil(innerW / boxW),
+				zSize = 3;
+
+			let frag = document.createDocumentFragment();
+			for (let z = 0; z < zSize; z++) {
+				for (let y = 0; y < rows; y++) {
+					for (let x = 0; x < ceils; x++) {
+						let box = document.createElement('div');
+						box.classList.add('box');
+						box.dataset.x = x;
+						box.dataset.y = y;
+						box.dataset.z = z;
+						box.innerHTML = `
+						<span style="background-position:${-boxW * x}px ${-boxH * y}px"></span>
+						<span style="background-position:${-boxW * x}px ${-boxH * y}px"></span>
+						<span style="background-position:${-boxW * x}px ${-boxH * y}px"></span>
+						<span style="background-position:${-boxW * x}px ${-boxH * y}px"></span>
+						<span style="background-position:${-boxW * x}px ${-boxH * y}px"></span>
+						<span style="background-position:${-boxW * x}px ${-boxH * y}px"></span>
+					`;
+						css(box, {
+							top: boxH * y,
+							left: boxW * x,
+							translateX: ((x - Math.floor(ceils / 2)) * 200 * (z + 1)),
+							translateY: ((y - Math.floor(rows / 2)) * 200 * (z + 1)),
+							translateZ: (z * 200),
+							rotateY: 0
+						})
+
+						frag.appendChild(box);
+					}
+				}
+			}
+			inner.appendChild(frag);
+		}
+
+
+		//入场动画
+		let boxs = document.querySelectorAll('.box');
+
+		let times = 3000;
+		boxs.forEach(item => {
+			let dely = Math.round(Math.random() * 500) + item.dataset.z * 800;
+			setTimeout(() => {
+				item.classList.add('show');
+				itween({
+					el: item,
+					attr: {
+						translateX: 0,
+						translateY: 0,
+						translateZ: -100
+					},
+					duration: times - dely,
+				})
+			}, dely)
+		});
+
+		//入场完成，删除多余节点，及显示按钮
+		let btns = document.querySelectorAll('.btns span');
+		setTimeout(() => {
+			btns[0].parentNode.style.opacity = 1;
+
+			boxs.forEach(item => {
+				if (item.dataset.z < 2) {
+					item.remove()
+				}
+			});
+		}, times);
+
+
+		//给按钮添加事件
+		let flag = false;
+		let tabArr = [];
+		let tabIndex = 0;
+		let deg = 90;
+
+		function tab(dir) {
+			tabArr[tabIndex % tabArr.length](dir);
+			tabIndex++;
+		}
+
+		/*
+			动画1
+		*/
+		tabArr[0] = function (dir) {
+			let times = 2000;
+			boxs.forEach(item => {
+				let dely = Math.round(Math.random() * 400);
+				setTimeout(() => {
+					itween({
+						el: item,
+						attr: {
+							rotateY: css(item, "rotateY") + dir * 90
+						},
+						duration: times - dely,
+						fx: "backBoth"
+					})
+				}, dely);
+			})
+			setTimeout(() => {
+				flag = false;
+			}, times)
+		}
+		/*
+		* 动画2
+		* 1.前移，2.旋转，3.后移
+		*/
+		tabArr[1] = function (dir) {
+			let times = 2000;
+			boxs.forEach(item => {
+				let x = item.dataset.x;
+				let y = item.dataset.y;
+				let dely = x * 50 + y * 50;
+				setTimeout(() => {
+					itween({
+						el: item,
+						attr: {
+							translateZ: css(item, 'translateZ') + 100
+						},
+						fx: "backBoth",
+						cb: () => {
+							itween({
+								el: item,
+								attr: {
+									rotateY: css(item, 'rotateY') + deg * dir
+								},
+								fx: "backBoth",
+								cb: () => {
+									itween({
+										el: item,
+										attr: {
+											translateZ: css(item, 'translateZ') - 100
+										},
+										fx: "backBoth"
+									})
+								}
+							})
+						}
+					})
+				}, dely);
+			})
+			setTimeout(() => {
+				flag = false;
+			}, times)
+		}
+		/*
+		* 动画3
+		* 
+		*/
+		tabArr[2] = function (dir) {
+			let times = 2000;
+			boxs.forEach((item, index) => {
+				let z = index % 2 ? -1 : 1;
+				let dely = Math.round(Math.random() * 500);
+				setTimeout(() => {
+					itween({
+						el: item,
+						attr: {
+							translateZ: css(item, 'translateZ') + 50 * z
+						},
+						cb: () => {
+							itween({
+								el: item,
+								attr: {
+									rotateY: css(item, 'rotateY') + deg * dir
+								},
+								cb: () => {
+									itween({
+										el: item,
+										attr: {
+											translateZ: -100
+										}
+									})
+								}
+							})
+						}
+					})
+				}, dely);
+			})
+			setTimeout(() => {
+				flag = false;
+			}, times)
+		}
+
+		function autoPlay(){
+			if (flag) return;
+			flag = true;
+			tab(-1)
+		}
+
+		btns[0].addEventListener('click', () => {
+			autoPlay();
+		});
+		btns[1].addEventListener('click', () => {
+			if (flag) return;
+			flag = true;
+			tab(1)
+		});
+		
+		let timer = null;
+		clearInterval(timer);
+		timer = setInterval(autoPlay, 2000);
+
+		let wrap = document.querySelector('.wrap');
+		wrap.addEventListener('mouseover', function () {
+			clearInterval(timer);
+		});
+		wrap.addEventListener('mouseout', function () {
+			timer = setInterval(autoPlay, 2000);
+		});
+
+
+
+	</script>
+</body>
+
+</html>

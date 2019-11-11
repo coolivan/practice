@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>数组排序</title>
+	</head>
+
+	<style type="text/css">
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		#app {
+			background: #CCCCCC;
+			padding: 15px;
+			width: 620px;
+			margin: 50px auto;
+			text-align: center;
+		}
+		ul{
+			clear: both;
+			overflow: hidden;
+			margin-top: 15px;
+		}
+		li{
+			list-style: none;
+			width: 300px;
+			padding: 5px;
+			float: left;
+		}
+		img{
+			max-width: 100%;
+		}
+	</style>
+
+
+	<body>
+
+		<div id="app">
+			<div class="box">
+				<button type="button">从大到小</button>
+				<button type="button">打乱排序</button>
+			</div>
+			<ul></ul>
+		</div>
+
+
+
+		<script type="text/javascript">
+			window.onload = function() {
+				let app = document.getElementById("app");
+				let ul = app.querySelector('ul');
+				let btn = app.getElementsByTagName('button');
+				let list = [];
+				let flag = false;
+				
+				let arr = [{
+					img: 'img/1.jpg',
+					title: '图片1'
+				}, {
+					img: 'img/2.jpg',
+					title: '图片2'
+				}, {
+					img: 'img/3.jpg',
+					title: '图片3'
+				}, {
+					img: 'img/4.jpg',
+					title: '图片4'
+				}];
+				
+				
+				
+				ul.innerHTML = arr.map(item=>{
+					return `
+							<li>
+								<img src="${item.img}">
+								<p>${item.title}</p>
+							</li>
+						`
+				}).join('')
+				
+				
+				
+				let li = app.querySelectorAll('li');
+				li.forEach((item,index)=>{
+					item.index = index;
+					list.push(item);
+				})
+				
+
+				btn[0].onclick = function(){
+					this.innerText = flag?'从大到小':'从小到大';
+					list.sort(function(a,b){
+						/*****重点******/
+						return flag?a.index-b.index:b.index-a.index;
+					});
+					flag = !flag;
+					
+					ul.innerHTML = list.map(item=>{
+						return `<li>${item.innerHTML}</li>`
+					}).join('')
+					
+				}
+				
+				btn[1].onclick = function(){
+					list.sort(()=>(Math.random() - 0.5));
+					ul.innerHTML = list.map(item=>{
+						return `<li>${item.innerHTML}</li>`
+					}).join('')
+				}
+
+
+
+			}
+		</script>
+	</body>
+</html>

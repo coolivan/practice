@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <user-info content="我是标题"></user-info>
+    <user-info content="i am ivan"></user-info>
+
+<script>
+    class UserInfoElement extends HTMLElement{
+        constructor(){
+            super();
+
+            let shadow = this.attachShadow({mode:'open'});
+
+            let p = document.createElement('p');
+            p.innerHTML = this.getAttribute('content');
+
+            shadow.appendChild(p);
+        }
+
+    }
+
+
+    customElements.define('user-info',UserInfoElement);
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .box {
+            border: 1px solid black;
+            position: fixed;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        {
+            let startMouse = {};
+            let box = null;
+            let max = {
+                w : document.documentElement.clientWidth,
+                h : document.documentElement.clientHeight
+            }
+            let move = (e) => {
+                let nowMouse = {
+                    x: e.clientX,
+                    y: e.clientY
+                }
+                let dis = {
+                    x: startMouse.x - nowMouse.x,
+                    y: startMouse.y - nowMouse.y
+                }
+
+               let pos={
+                    l:Math.min(startMouse.x, nowMouse.x),
+                    t:Math.min(startMouse.y, nowMouse.y),
+                    w:Math.abs(dis.x),
+                    h:Math.abs(dis.y)
+                }
+              
+                box.pos = pos;
+                box.style.left = pos.l + 'px';
+                box.style.top = pos.t + 'px';
+                box.style.width = pos.w + 'px';
+                box.style.height = pos.h + 'px';
+
+                
+                console.log(pos);
+            }
+
+            document.addEventListener('mousedown', (e) => {
+                startMouse = {
+                    x: e.clientX,
+                    y: e.clientY
+                }
+
+
+                box = document.createElement('div');
+                box.className = 'box';
+                document.body.appendChild(box);
+
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', () => {
+                    
+                    if(!box.pos){
+                        box.remove();
+                    }
+                    document.removeEventListener('mousemove', move)
+                }, { once: true })
+            })
+        }
+    </script>
+</body>
+
+</html>

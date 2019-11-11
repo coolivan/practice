@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	#app,
+	.app {
+		width: 600px;
+		height: 360px;
+		margin: 50px auto;
+		border: 1px solid red;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.figure {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	img:nth-of-type(1) {
+		z-index: 2;
+	}
+
+	img:nth-of-type(2) {
+		z-index: 1;
+	}
+
+	.prev,
+	.next {
+		position: absolute;
+		color: red;
+		font: 4em serif;
+		font-weight: bold;
+		top: 50%;
+		transform: translateY(-50%);
+		cursor: pointer;
+		z-index: 3;
+	}
+
+	.prev {
+		left: 10px;
+	}
+
+	.next {
+		right: 10px;
+	}
+
+	p {
+		width: 600px;
+		text-align: center;
+		margin: auto;
+	}
+</style>
+
+<body>
+	<div id="app" class="app">
+		<div class="figure">
+			<img src="../img/1.jpg" alt="">
+			<img src="../img/2.jpg" alt="">
+		</div>
+		<div class="prev">&lt;</div>
+		<div class="next">&gt;</div>
+	</div>
+
+	<p>支持点击切换、鼠标左右上下划动切换、鼠标滚轮切换、键盘左下上下切换</p>
+
+	<script src="../js/mTween.js"></script>
+	<script>
+		{
+			class Carousel {
+				constructor(wrap) {
+					this.wrap = document.querySelector(wrap);
+					this.figure = this.wrap.querySelector('.figure');
+					this.img = this.wrap.querySelectorAll('img');
+					this.prev = this.wrap.querySelector('.prev');
+					this.next = this.wrap.querySelector('.next');
+					this.first = 0;
+					this.second = 1;
+					this.w = this.figure.offsetWidth;
+					this.h = this.figure.offsetHeight;
+					this.isMove = false;
+					this.timer = null;
+					this.imgArr = ['../img/1.jpg', '../img/2.jpg', '../img/3.jpg', '../img/4.jpg'];
+					this.init();
+				}
+				init() {
+					this.render();
+					this.bindEvent();
+				}
+
+				render() {
+					css(this.img[1], {
+						'translateX': 0,
+						'translateY': 0
+					});
+					css(this.figure, {
+						'translateX': 0,
+						'translateY': 0
+					});
+					this.img[0].src = this.imgArr[this.first];
+					this.img[1].src = this.imgArr[this.second];
+				}
+
+				move(obj) {
+					if (this.isMove) return;
+					this.isMove = true;
+					let key = Object.keys(obj)[0];
+					// for (key in obj) {};
+
+					if (obj[key] < 0) {
+						// 向左
+						this.second = this.first - 1;
+						this.second = this.second < 0 ? this.imgArr.length - 1 : this.second;
+					} else {
+						// 向右
+						this.second = this.first + 1;
+						this.second = this.second > this.imgArr.length - 1 ? 0 : this.second;
+					}
+
+					this.render();
+
+					let _this = this;
+					css(this.img[1], key, -obj[key]);
+					mTween({
+						el: this.figure,
+						attr: obj,
+						// duration: 1000,
+						fx: 'easeBoth',
+						cb() {
+							_this.first = _this.second;
+							_this.isMove = false;
+						}
+					})
+				}
+
+				// 绑定事件
+				bindEvent() {
+					//点击
+					this.prev.addEventListener('click', () => {
+						this.move({
+							'translateX': this.w
+						})
+					})
+					this.next.addEventListener('click', () => {
+						this.move({
+							'translateX': -this.w
+						})
+					})
+
+					// 键盘
+					document.addEventListener('keydown', (e) => {
+						switch (e.keyCode) {
+							case 37:
+								this.move({
+									'translateX': this.w
+								});
+								break;
+							case 38:
+								this.move({
+									'translateY': this.h
+								});
+								break;
+							case 39:
+								this.move({
+									'translateX': -this.w
+								});
+								break;
+							case 40:
+								this.move({
+									'translateY': -this.h
+								});
+								break;
+
+						}
+					})
+
+					// 滚轮
+					mouseWheel(this.wrap, () => {
+						this.move({
+							'translateY': this.h
+						});
+					}, () => {
+						this.move({
+							'translateY': -this.h
+						});
+					});
+
+					// 拖拽
+					this.figure.addEventListener('mousedown', (e) => {
+
+						let mouseStart = {
+							x: e.clientX,
+							y: e.clientY
+						}
+						document.addEventListener('mousemove', (e) => {
+							let mouseNow = {
+								x: e.clientX,
+								y: e.clientY
+							}
+							let dis = {
+								x: mouseNow.x - mouseStart.x,
+								y: mouseNow.y - mouseStart.y
+							}
+
+							// console.log(dis);
+
+							if (Math.abs(dis.x) > Math.abs(dis.y)) {
+								dis.x < 0 ? this.move({ 'translateX': -this.w }) : this.move({ 'translateX': this.w });
+							} else if (Math.abs(dis.x) < Math.abs(dis.y)) {
+								dis.y < 0 ? this.move({ 'translateY': -this.h }) : this.move({ 'translateY': this.h });
+							}
+						}, { once: true });
+
+						e.preventDefault();
+					})
+
+
+					//自动
+					let autoPlay = () => {
+						let r = Math.floor(Math.random() * 4);
+						switch (r) {
+							case 0:
+								this.move({
+									'translateX': this.w
+								});
+								break;
+							case 1:
+								this.move({
+									'translateY': this.h
+								});
+								break;
+							case 2:
+								this.move({
+									'translateX': -this.w
+								});
+								break;
+							case 3:
+								this.move({
+									'translateY': -this.h
+								});
+								break;
+						}
+
+					}
+
+					// 自动
+					clearInterval(this.timer);
+					this.timer = setInterval(autoPlay, 2000);
+					this.wrap.addEventListener("mouseover", () => {
+						clearInterval(this.timer);
+					})
+					this.wrap.addEventListener("mouseout", () => {
+						this.timer = setInterval(autoPlay, 2000);
+					})
+
+
+				}
+
+
+			}
+
+
+			new Carousel('#app')
+
+
+
+
+
+
+
+
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+</head>
+<style type="text/css">
+	#app {
+		width: 510px;
+		margin: auto;
+	}
+
+	ul,
+	li,
+	p,
+	span {
+		padding: 0;
+		margin: 0;
+	}
+
+	#img1 {
+		width: 300px;
+	}
+
+	#img2 {
+		width: 200px;
+	}
+
+	li {
+		display: inline-block;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<ul>
+			<li>
+				<p>1</p>
+				<img id="img1" src="img/1.jpg" />
+			</li>
+			<li>
+				<p>2</p>
+				<img id="img2" src="img/1.jpg" />
+			</li>
+
+		</ul>
+		<button id="prev">prev</button>
+		<button id="next">next</button>
+	</div>
+
+	<script type="text/javascript">
+		window.onload = function () {
+			var app = document.getElementById("app");
+			var img1 = document.getElementById("img1");
+			var img2 = document.getElementById("img2");
+			var prev = document.getElementById("prev");
+			var next = document.getElementById("next");
+			var p1 = app.getElementsByTagName('p')[0];
+			var p2 = app.getElementsByTagName('p')[1];
+			var str = '';
+			var n = m = 0;
+
+			var url1 = ['img/1.jpg', 'img/2.jpg', 'img/3.jpg', 'img/4.jpg'];
+			var url2 = ['img/1.jpg', 'img/2.jpg', 'img/3.jpg'];
+
+			function start() {
+				img1.src = url1[n];
+				img2.src = url2[m];
+				p1.innerHTML = n + 1 + '/' + url1.length;
+				p2.innerHTML = m + 1 + '/' + url2.length;
+			}
+			start();
+
+			function autoplay() {
+				m--;
+				n--;
+
+				if (n == -1) {
+					n = url1.length - 1
+				}
+				if (m == -1) {
+					m = url2.length - 1
+				}
+
+				console.log(n, m)
+				start();
+			}
+
+			setInterval(autoplay, 1000);
+
+			prev.onclick = function () {
+
+				autoplay()
+			}
+			next.onclick = function () {
+
+				if (n == url1.length - 1) {
+					n = 0
+				} else {
+					n++;
+				}
+				if (m == url2.length - 1) {
+					m = 0
+				} else {
+					m++;
+				}
+				start();
+			}
+
+		}
+	</script>
+
+</body>
+
+</html>

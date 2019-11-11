@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title></title>
+</head>
+
+<style type="text/css">
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	#app {
+		background: #CCCCCC;
+		padding: 15px;
+		width: 620px;
+		margin: 50px auto;
+		text-align: center;
+	}
+
+	ul {
+		clear: both;
+		overflow: hidden;
+		margin-top: 15px;
+	}
+
+	li {
+		list-style: none;
+		width: 300px;
+		height: 180px;
+		margin: 5px;
+		float: left;
+		position: relative;
+		overflow: hidden;
+	}
+
+	li div {
+		position: absolute;
+		top: 0;
+		left: 0;
+
+	}
+
+	li a {
+		display: block;
+		height: 100%;
+	}
+
+	img {
+		max-width: 100%;
+	}
+</style>
+
+
+<body>
+
+	<div id="app">
+		<ul></ul>
+	</div>
+
+
+	<script type="text/javascript">
+		window.onload = function () {
+			let app = document.getElementById("app");
+			let ul = app.getElementsByTagName('ul')[0];
+
+			let arr = [{
+				img: 'img/1.jpg',
+				title: '图片1'
+			}, {
+				img: 'img/2.jpg',
+				title: '图片2'
+			}, {
+				img: 'img/3.jpg',
+				title: '图片3'
+			}, {
+				img: 'img/4.jpg',
+				title: '图片4'
+			}];
+
+
+			let html = '';
+			for (let i = 0; i < arr.length; i++) {
+				let r = Math.floor(Math.random() * 4);
+				let li = document.createElement('li');
+				li.flag = false;
+				li.timer = null;
+
+				li.innerHTML =
+					`
+								<div><a href=""><img src="${arr[r].img}" alt=""></a></div>
+								<div><a href=""><img src="${arr[i].img}" alt=""></a></div>
+						`
+				ul.appendChild(li);
+			}
+
+			let li = app.getElementsByTagName('li');
+			for (let i = 0; i < li.length; i++) {
+				autoPlay(li[i])
+			}
+
+			function autoPlay(obj) {
+				let div = obj.getElementsByTagName('div');
+				obj.timer = setInterval(function () {
+					let r = Math.round(Math.random());
+
+					if (r) {
+						if (!obj.flag) {
+							doMove({
+								el: div[0],
+								attr: 'top',
+								target: -181,
+								step: 20,
+								cb: function () {
+									obj.flag = true
+								}
+
+							});
+							doMove({
+								el: div[1],
+								attr: 'top',
+								target: 0,
+								step: 20,
+							});
+
+						} else {
+							doMove({
+								el: div[0],
+								attr: 'top',
+								target: 0,
+								step: 20,
+								cb: function () {
+									obj.flag = false
+								}
+
+							});
+							doMove({
+								el: div[1],
+								attr: 'top',
+								target: 181,
+								step: 20,
+							});
+
+
+
+						}
+					}
+
+
+				}, 2000)
+
+			}
+
+
+
+			function getStyle(obj, attr) {
+				return obj.currentStyle ? cureentStyle(obj)[attr] : getComputedStyle(obj)[attr];
+			}
+
+
+			function doMove(options) {
+
+				let {
+					el,
+					attr,
+					target,
+					step,
+					cb
+				} = options;
+
+				clearInterval(el.timer);
+				el.timer = setInterval(function () {
+					let current = 0;
+					if (attr == "opacity") {
+						current = Math.round(parseInt(getStyle(el, attr) * 100)) || 0;
+					} else {
+						current = parseInt(getStyle(el, attr));
+					}
+
+					let dir = current < target ? step : -step;
+					let speed = current + dir;
+					if (speed > target && dir > 0 || speed < target && dir < 0) {
+						speed = target;
+					}
+
+					if (attr == "opacity") {
+						if ("opacity" in el.style) {
+							el.style.opacity = speed / 100;
+						} else {
+							el.style.filter = "alpha(opacity = " + (speed) * 10 + ")";
+						}
+					} else {
+						el.style[attr] = speed + 'px';
+					}
+
+					if (speed == target) {
+						clearInterval(el.timer);
+						cb && cb();
+					}
+
+				}, 30);
+			}
+
+
+
+
+
+		}
+	</script>
+</body>
+
+</html>

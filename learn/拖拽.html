@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+
+    }
+
+    body {
+        height: 100vh;
+    }
+
+    #app {
+        width: 100px;
+        height: 100px;
+        background: red;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+</style>
+
+<body>
+    页面文字
+    <div id="app">元素文字</div>
+</body>
+<script>
+    {
+        let app = document.querySelector('#app');
+
+        // 按下时box位置
+        let startBox = {};
+        // 按下时move位置
+        let startMouse = {};
+        
+        let move = (e)=>{
+            let nowMouse = {
+                x:e.clientX,
+                y:e.clientY
+            };
+
+            let dis = {
+                x:nowMouse.x - startMouse.x,
+                y:nowMouse.y - startMouse.y
+            }
+            
+            let nowBox={
+                x:dis.x + startBox.x,
+                y:dis.y + startBox.y
+            }
+
+            // 限制边界
+            nowBox.x = Math.max(0,nowBox.x);
+            nowBox.x = Math.min(nowBox.x, document.documentElement.clientWidth-app.offsetWidth);
+            nowBox.y = Math.max(0,nowBox.y);
+            nowBox.y = Math.min(nowBox.y,document.documentElement.clientHeight-app.offsetHeight);
+
+            app.style.left = nowBox.x + 'px';
+            app.style.top =  nowBox.y + 'px';
+            
+        }
+
+        app.addEventListener('mousedown',(e)=>{
+            e.preventDefault();
+            
+            startMouse = {
+                x:e.clientX,
+                y:e.clientY
+            }
+
+            startBox = {
+                x : app.offsetLeft,
+                y: app.offsetTop 
+            }
+
+            console.log(startBox);
+
+            document.addEventListener('mousemove',move);
+
+            document.addEventListener('mouseup',()=>{
+                document.removeEventListener('mousemove',move)
+            },{once:true})
+
+
+        })
+
+
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title></title>
+</head>
+
+<style>
+	*{
+		padding: 0;
+		margin: 0;
+	}
+	#app{
+		width: 600px;
+		background: #EEEEEE;
+		padding: 15px;
+		margin:50px auto;
+	}
+	form p{
+		display: inline-block;
+	}
+	table{
+		width: 100%;
+		margin: 15px 0;
+		text-align: left;
+	}
+	tr:nth-child(even){
+		background: #CCCCCC;
+	}
+</style>
+<body>
+	<div id="app">
+		<form>
+			<p>姓名<input type="text" value="ivan" id="name"></p>
+			<p>年龄<input type="text" value="18" id="age"></p>
+			<p>性别<select id="gender"><option value="男">男</option><option value="女">女</option></select></p>
+			<p><input type="button" value="添加" id="add"></p>
+		</form>
+		<table>
+			<thead>
+				<tr>
+					<th><label><input type="checkbox" name="" id="checkall">全选</label></th>
+					<th>id</th>
+					<th>姓名</th>
+					<th>年龄</th>
+					<th>性别</th>
+					<th>排序</th>
+					<th>删除</th>
+				</tr>
+				
+				
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<p><input type="button" value="删除所选" id="removeAll"></p>
+	</div>
+	<script>
+		window.onload = function(){
+			let app = document.querySelector('#app');
+			let add = app.querySelector('#add');
+			let tbody = app.querySelector('tbody');
+			let checkall = app.querySelector('#checkall');
+			let id = 1;
+			let arr = [];
+			
+			//初始
+			function init(){
+				tbody.innerHTML = arr.map(item=>{
+					return `<tr>${item.innerHTML}</tr>`
+				}).join('');					
+
+					
+					
+				let remove = tbody.querySelectorAll('.remove');
+				remove.forEach((item,index)=>{
+					item.onclick = function(){
+						arr.splice(index,1)
+						init()
+					}
+				})
+				
+				
+				//向上
+				let prev = tbody.querySelectorAll('.prev');
+				prev.forEach((item,index)=>{
+					item.onclick = function(){
+						let n = index == 0? prev.length -1: index-1;
+						[arr[n],arr[index]] = [arr[index],arr[n]];
+						init(arr)
+					}
+				})
+				//向下
+				let next = tbody.querySelectorAll('.next');
+				next.forEach((item,index)=>{
+					item.onclick = function(){
+						let n = index == prev.length-1? 0: index+1;
+						[arr[index],arr[n]] = [arr[n],arr[index]];
+						init(arr)
+					}
+				})
+				
+				//单选
+				let checkbox = tbody.querySelectorAll('.checkbox');
+				checkbox.forEach((item,index)=>{
+					item.onchange = function(){
+						checkall.checked = [...checkbox].every(item=>{
+							return item.checked
+						})
+					}
+				})
+				
+				//全选
+				checkall.onchange = function(){
+					checkbox.forEach(item=>{
+						item.checked = checkall.checked;
+					})
+				}
+				
+				
+				//删除所选
+				removeAll.onclick = function(){
+					let temp = tbody.querySelectorAll('tr');
+					
+					arr = [...temp].filter(item=>{
+						return !item.querySelector('.checkbox').checked;
+					})
+					checkall.checked = false;
+					init(arr)
+				}
+					
+					
+					
+			}
+			
+			//添加
+			add.onclick = function(){
+				let name = app.querySelector('#name').value;
+				let age = app.querySelector('#age').value;
+				let gender = app.querySelector('#gender').value;
+				let html = 
+				`
+					<tr>
+						<td><input type="checkbox" name="" class="checkbox"></td>
+						<td>${id++}</td>
+						<td>${name}</td>
+						<td>${age}</td>
+						<td>${gender}</td>
+						<td>
+							<a href="javascript:;" class="prev">&uarr;</a>
+							<a href="javascript:;" class="next">&darr;</a>
+						</td>
+						<td><a href="javascript:;" class="remove">删除</a></td>
+					</tr>
+				`
+				tbody.innerHTML += html;
+				let tr = tbody.querySelectorAll('tr');
+				arr = [].slice.apply(tr);
+				
+				init()
+				
+
+			}
+			
+			
+
+			
+		}
+	</script>
+</body>
+</html>

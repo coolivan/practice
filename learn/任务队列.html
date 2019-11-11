@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <button>按钮</button>
+    <button>按钮</button>
+    <button>按钮</button>
+
+    <script>
+    
+        class TaskQueue {
+
+            constructor() {
+                this.status = 0;
+                this.queue  = [];
+            }
+
+            add(task) {
+                this.queue.push(task);
+                if (!this.status) {
+                    this.run();
+                }
+            }
+
+            run() {
+                this.status = 1;
+                let task = this.queue.shift();
+                task().then(resolve => {
+                    if (this.queue.length) {
+                        this.run();
+                    } else {
+                        this.status = 0;
+                    }
+                });
+            }
+
+        }
+
+        let tq = new TaskQueue();
+
+        let buttons = document.querySelectorAll('button');
+        // 模拟
+        let n = 1;
+        buttons.forEach(button => {
+            button.onclick = function() {
+                tq.add( function() {
+                    return new Promise(resolve => {
+                        setTimeout(_=>{
+                            console.log(`任务: ${n++}`);
+                            resolve();
+                        }, 1000)
+                    })
+                } );
+            }
+        })
+
+
+    </script>
+</body>
+</html>

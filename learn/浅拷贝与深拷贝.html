@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			function deepCopy(obj){
+				let _obj = Array.isArray(obj)?[]:{};
+				for (const key in obj) {
+					if (obj.hasOwnProperty(key)) {
+						if(typeof obj[key] === 'object'){
+							_obj[key] = deepCopy(obj[key])
+						}else{
+							_obj[key] = obj[key]
+						}						
+					}
+				}
+			}
+		
+		
+			
+		</script>
+	</body>
+</html>

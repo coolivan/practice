@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<style>
+
+	#app {
+		/* 透视 -近大远小 */
+		perspective: 600px;
+	}
+
+	.box {
+		width: 200px;
+		height: 200px;
+		margin: 50px auto;
+		position: relative;
+		/* 将元素内-开启3d渲染模式 */
+		transform-style: preserve-3d;
+		transition: 1s;
+	}
+
+	.box span {
+		width: 100%;
+		height: 100%;
+		/* border: 1px solid blue; */
+		position: absolute;
+		background: rgba(200, 100, 200, 0.2);
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+
+	/* 前右后左上下 */
+	.box span:nth-child(1) {
+		transform: translateZ(100px);
+		background-image: url('img/1.jpg');
+	}
+
+	.box span:nth-child(2) {
+		transform: rotateY(90deg) translateZ(100px);
+		background-image: url('img/2.jpg');
+	}
+
+	.box span:nth-child(3) {
+		transform: rotateY(180deg) translateZ(100px);
+		background-image: url('img/3.jpg');
+	}
+
+	.box span:nth-child(4) {
+		transform: rotateY(270deg) translateZ(100px);
+		background-image: url('img/4.jpg');
+	}
+
+	.box span:nth-child(5) {
+		transform: rotateX(90deg) translateZ(100px);
+	}
+
+	.box span:nth-child(6) {
+		transform: rotateX(-90deg) translateZ(100px);
+	}
+
+	/* .box:hover {			
+			transform: rotateY(360deg);
+		} */
+	p{
+		text-align: center
+	}
+</style>
+
+<body>
+	<div id="app">
+		<div class="box">
+			<span>1</span>
+			<span>2</span>
+			<span>3</span>
+			<span>4</span>
+			<span>5</span>
+			<span>6</span>
+		</div>
+		<p>
+			<button>prev</button>
+			<button>next</button>
+		</p>
+	</div>
+	<script type="text/javascript">
+		/*
+			perspective 透视 -近大远小
+			transform-style:preserve-3d;
+		*/
+		let box = document.querySelector('.box');
+		let btn = document.querySelectorAll('button');
+
+		let deg = 0;
+		btn[0].addEventListener('click',function(){
+			deg-=90;
+			box.style.transform = `rotateY(${deg}deg)`
+		})
+		btn[1].addEventListener('click',function(){
+			deg+=90;
+			box.style.transform = `rotateY(${deg}deg)`
+		})
+	</script>
+</body>
+
+</html>

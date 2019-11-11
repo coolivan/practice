@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		* {
+			padding: 0;
+			height: 0
+		}
+
+		body {
+			background: #eeeeee;
+			overflow: hidden
+		}
+
+		#app {
+			background: white;
+			font-size: 12px;
+			color: gray;
+			width: 900px;
+			height: 900px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-webkit-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%)
+		}
+
+		#app ul {
+			padding: 0;
+			margin: 0;
+			position: absolute;
+			border-radius: 50%
+		}
+
+		#app li {
+			list-style: none;
+			width: 1em;
+			height: 100%;
+			line-height: 1em;
+			position: absolute;
+			left: 50%;
+			margin-left: -0.5em;
+		}
+
+		#app .current {
+			font-weight: bold;
+			color: black
+		}
+
+		#app .year {
+			width: auto;
+			height: auto;
+			line-height: 1em;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-webkit-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%)
+		}
+
+		#app .seconds {
+			z-index: 1;
+			width: 92%;
+			height: 92%;
+			left: 4%;
+			top: 4%
+		}
+
+		#app .minutes {
+			z-index: 2;
+			width: 78%;
+			height: 78%;
+			left: 11%;
+			top: 11%
+		}
+
+		#app .hours {
+			z-index: 3;
+			width: 66%;
+			height: 66%;
+			left: 17%;
+			top: 17%
+		}
+
+		#app .periods {
+			z-index: 4;
+			width: 52%;
+			height: 52%;
+			left: 24%;
+			top: 24%
+		}
+
+		#app .weeks {
+			z-index: 5;
+			width: 44%;
+			height: 44%;
+			left: 28%;
+			top: 28%
+		}
+
+		#app .days {
+			z-index: 6;
+			width: 34%;
+			height: 34%;
+			left: 33%;
+			top: 33%
+		}
+
+		#app .months {
+			z-index: 7;
+			width: 20%;
+			height: 20%;
+			left: 40%;
+			top: 40%
+		}
+
+		#app::before {
+			content: '';
+			display: block;
+			width: 100%;
+			height: 1px;
+			border-bottom: 1px dashed gray;
+			top: 50%;
+			position: absolute;
+			z-index: -1;
+			opacity: 0.2
+		}
+
+		#app::after {
+			content: '';
+			display: block;
+			height: 100%;
+			width: 1px;
+			border-left: 1px dashed gray;
+			left: 50%;
+			position: absolute;
+			z-index: -1;
+			opacity: 0.2
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<div class="year current"></div>
+		<ul class="months"></ul>
+		<ul class="days"></ul>
+		<ul class="weeks"></ul>
+		<ul class="periods"></ul>
+		<ul class="hours"></ul>
+		<ul class="minutes"></ul>
+		<ul class="seconds"></ul>
+	</div>
+
+
+	<script>
+		{
+
+
+			let app = document.querySelector('#app');
+			let year = app.querySelector('.year');
+			let months = app.querySelector('.months');
+			let days = app.querySelector('.days');
+			let weeks = app.querySelector('.weeks');
+			let periods = app.querySelector('.periods');
+			let hours = app.querySelector('.hours');
+			let minutes = app.querySelector('.minutes');
+			let seconds = app.querySelector('.seconds');
+			let periodsText = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戊', '亥'];
+			let d = new Date();
+			let now = {
+				y: d.getFullYear(),
+				m: d.getMonth(),
+				a: d.getDate(),
+				w: d.getDay(),
+				p: Math.floor(((d.getHours() + 1) % 24) / 2),
+				h: d.getHours(),
+				i: d.getMinutes(),
+				s: d.getSeconds()
+			}
+			// 这个月有多少天
+			let howManyDates = new Date(now.y,now.m+1,0).getDate();
+
+			render();
+			function render() {
+				renderYear()
+				renderSeconds()
+				renderMinutes()
+				renderHours()
+				renderPeriods()
+				renderWeeks()
+				renderDays()
+				renderMonths()
+			}
+
+
+
+			setInterval(() => {
+				d = new Date();
+				now = {
+					y: d.getFullYear(),
+					m: d.getMonth(),
+					a: d.getDate(),
+					w: d.getDay(),
+					p: Math.floor(((d.getHours() + 1) % 24) / 2),
+					h: d.getHours(),
+					i: d.getMinutes(),
+					s: d.getSeconds()
+				}
+				render();
+			}, 1000);
+
+			console.log(now)
+
+
+			function renderYear() {
+				year.innerHTML = toCN(now.y) + '年';
+			}
+			function renderSeconds() {
+				let html = '';
+				for (let i = 0; i < 60; i++) {
+					html += `<li class="${i === now.s ? 'current' : ''}" style="transform:rotate(${-360 / 60 * i}deg)">${toCN(i)}秒</li>`
+				}
+				seconds.style.transform = `rotate(${360 / 60 * now.s}deg)`
+				seconds.innerHTML = html;
+			}
+
+			function renderMinutes() {
+				let html = '';
+				for (let i = 0; i < 60; i++) {
+					html += `<li class="${i === now.i ? 'current' : ''}" style="transform:rotate(${-360 / 60 * i}deg)">${toCN(i)}分</li>`
+				}
+				minutes.style.transform = `rotate(${360 / 60 * now.i}deg)`
+				minutes.innerHTML = html;
+			}
+
+			function renderHours() {
+				let html = '';
+				for (let i = 0; i < 24; i++) {
+					html += `<li class="${i === now.h ? 'current' : ''}" style="transform:rotate(${-360 / 24 * i}deg)">${toCN(i)}点</li>`
+				}
+				hours.style.transform = `rotate(${360 / 24 * now.h}deg)`
+				hours.innerHTML = html;
+			}
+
+			function renderPeriods() {
+				let html = '';
+				for (let i = 0; i < 12; i++) {
+					html += `<li class="${i === now.p ? 'current' : ''}" style="transform:rotate(${-360 / 12 * i}deg)">${"子丑寅卯辰巳午未申酉戌亥"[i]}时</li>`
+				}
+				periods.style.transform = `rotate(${360 / 12 * now.p}deg)`
+				periods.innerHTML = html;
+			}
+
+			function renderWeeks() {
+				let html = '';
+				for (let i = 0; i < 7; i++) {
+					if (i == 0) {
+						html += `<li class="${i === now.w ? 'current' : ''}" style="transform:rotate(${-360 / 7 * i}deg)">星期日</li>`
+					} else {
+						html += `<li class="${i === now.w ? 'current' : ''}" style="transform:rotate(${-360 / 7 * i}deg)">星期${toCN(i)}</li>`
+					}
+				}
+				weeks.style.transform = `rotate(${360 / 7 * now.w}deg)`;
+				weeks.innerHTML = html;
+			}
+
+			function renderDays() {
+				let html = '';
+				for (let i = 1; i <= howManyDates; i++) {
+					html += `<li class="${i === now.a ? 'current' : ''}" style="transform:rotate(${-360 / howManyDates * i}deg)">${toCN(i)}日</li>`
+				}
+				days.style.transform = `rotate(${360 / howManyDates * now.a}deg)`;
+				days.innerHTML = html;
+			}
+
+			function renderMonths() {
+				let html = '';
+				for (let i = 0; i < 12; i++) {
+					html += `<li class="${i === now.m ? 'current' : ''}" style="transform:rotate(${-360 / 12 * i}deg)">${toCN(i + 1)}月</li>`
+				}
+				months.style.transform = `rotate(${360 / 12 * now.m}deg)`;
+				months.innerHTML = html;
+			}
+
+
+
+			function toCN(n) {
+				let text = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+				let arr = `${n}`.split('').map(v => parseInt(v));
+				let str = '';
+				if (arr.length == 1 || arr.length > 2) {
+					arr.forEach(v => str += text[v])
+				} else {
+					str = text[arr[0]] + text[10] + `${arr[1] == 0 ? '' : text[arr[1]]}`
+				}
+				return str;
+			}
+
+			// let periodsText = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戊', '亥'];
+			// function getPeriods(h) {
+			// 	let n = Math.floor(((h + 1) % 24) / 2);
+			// 	var str = "子丑寅卯辰巳午未申酉戌亥"[n] + "时";
+			// 	console.log(n)
+			// 	return str
+			// }
+			// console.log(getPeriods(now.h));
+
+
+
+
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>漂亮的时钟</title>
+</head>
+
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	body {
+		background: #eeeeee;
+	}
+
+	#app {
+		text-align: center;
+		margin: 50px auto;
+		background: white;
+		width: 200px;
+		height: 200px;
+		padding: 10px;
+		border-radius: 50%;
+		position: relative;
+	}
+
+	/* clock 200x200 */
+	.clock {
+		width: 100%;
+		height: 100%;
+		background: #5a5a5a;
+		border-radius: 50%;
+		position: relative;
+		margin: auto;
+		border: 6px solid pink;
+		box-sizing: border-box
+	}
+
+	.dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #5a5a5a;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 5;
+		border: 3px solid pink;
+	}
+
+	.hour {
+		width: 8px;
+		height: 50px;
+		background: white;
+		border-radius: 3px;
+		position: absolute;
+		left: 90px;
+		top: 44px;
+		z-index: 1;
+		transform-origin: center bottom;
+	}
+
+	.hour::before {
+		content: '';
+		display: inline-block;
+		width: 2px;
+		height: 30px;
+		background: #5a5a5a;
+		z-index: 2;
+		margin: 10px auto;
+		border-radius: 50%;
+	}
+
+	.min {
+		width: 4px;
+		height: 70px;
+		background: white;
+		border-radius: 4px;
+		position: absolute;
+		left: 92px;
+		top: 24px;
+		transform-origin: center bottom;
+		z-index: 3;
+	}
+
+	.sec {
+		width: 2px;
+		height: 80px;
+		background: pink;
+		border-radius: 4px;
+		position: absolute;
+		left: 93px;
+		top: 9px;
+		transform-origin: 1px 85px;
+		z-index: 3;
+		border-top-left-radius: 80%;
+		border-top-right-radius: 80%;
+	}
+
+	ul.grid {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		left: 109px;
+		top: 16px;
+		/* transform: translate(-50%, -50%); */
+	}
+
+	.grid li {
+		width: 2px;
+		height: 6px;
+		background: pink;
+		position: absolute;
+		transform-origin: center 94px;
+		list-style: none;
+	}
+
+	.grid li:nth-child(odd)::after {
+		content: '';
+		display: inline-block;
+		width: 4px;
+		height: 6px;
+		background: pink;
+		position: absolute;
+		top: 0;
+		left: 50%;
+		margin-left: -2px;
+	}
+
+	.clock:hover .hour {
+		transform: rotate(45deg);
+	}
+
+	.clock:hover .min {
+		transform: rotate(90deg);
+	}
+
+	.clock:hover .sec {
+		transform: rotate(180deg);
+	}
+
+	.brand {
+		position: absolute;
+		left: 50%;
+		top: 60%;
+		transform: translateX(-50%);
+		font-family: serif;
+		z-index: 0;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<div class="clock">
+			<div class="dot"></div>
+			<div class="hour"></div>
+			<div class="min"></div>
+			<div class="sec"></div>
+		</div>
+		<ul class="grid"></ul>
+		<span class="brand">Coolivan</span>
+	</div>
+	<div style="text-align: center">
+		<button>秒针跳动</button>
+		<button>秒针滑动</button>
+	</div>
+
+	<script>
+		(function () {
+			let app = document.querySelector('#app');
+			let grid = app.querySelector('.grid');
+			let hour = app.querySelector('.hour');
+			let min = app.querySelector('.min');
+			let sec = app.querySelector('.sec');
+			let btn = document.querySelectorAll('button');
+			let timer = null;
+
+			//生成刻度
+			grid.innerHTML = createGrid();
+			function createGrid() {
+				let html = '';
+				let deg = 360 / 12;
+				for (let i = 0; i < 12; i++) {
+					html += `<li style="transform:rotate(${deg * i}deg)"></li>`;
+				}
+				return html;
+			}
+
+			btn[0].addEventListener('click', function () {
+				start();
+			})
+
+			btn[1].addEventListener('click', function () {
+				start(30, true)
+			})
+
+			
+			document.addEventListener('visibilitychange', function () { //浏览器切换事件
+				if (document.visibilityState == 'hidden') { //状态判断
+					clearInterval(timer)
+				} else {
+					start()
+				}
+			});
+
+
+			start()
+			function start(time = 1000, ismill) {
+				setPointer(ismill);
+				clearInterval(timer);
+				timer = setInterval(setPointer, time, ismill);
+			}
+
+			function setPointer() {
+				//判断第三个参数，默认为false,如果true,则启用毫秒
+				let mill = arguments.length && arguments[0];
+				let d = new Date(),
+					l = mill ? d.getMilliseconds() : 0,
+					s = d.getSeconds() + l / 1000,
+					m = d.getMinutes() + s / 60,
+					h = d.getHours() + m / 60;
+				let sDeg = 360 / 60 * s,
+					mDeg = 360 / 60 * m,
+					hDeg = 360 / 12 * h;
+
+				hour.style.transform = `rotate(${hDeg}deg)`;
+				min.style.transform = `rotate(${mDeg}deg)`;
+				sec.style.transform = `rotate(${sDeg}deg)`;
+			}
+		}())
+
+
+
+	</script>
+</body>
+
+</html>

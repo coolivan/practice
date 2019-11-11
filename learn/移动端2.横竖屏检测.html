@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<style>
+	div {
+		width: 100px;
+		height: 100px;
+		background: red;
+		color: white;
+	}
+
+	div::after {
+		color: white;
+	}
+
+	@media screen and (orientation: portrait) {
+		div::after {
+			content: "竖屏css";
+		}
+	}
+
+	@media screen and (orientation: landscape) {
+		div::after {
+			content: "横屏css";
+		}
+	}
+</style>
+
+<body>
+	<div></div>
+
+	<script>
+		{
+			let div = document.querySelector('div');
+
+			window.addEventListener('orientationchange', _ => {
+				getOrientation()
+			})
+
+
+			getOrientation()
+
+			function getOrientation() {
+				
+				switch(orientation){
+					case 0:
+					case 180:
+						div.innerHTML = '竖屏js';
+						break;
+					case -90:
+					case 90:
+						div.innerHTML = '横屏js';
+						break;
+				}
+			}
+
+
+		}
+
+	</script>
+</body>
+
+</html>

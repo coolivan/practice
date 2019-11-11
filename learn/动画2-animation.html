@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>动画2-animation</title>
+</head>
+<style>
+	div {
+		width: 100px;
+		height: 100px;
+		background: red;
+		position: absolute;
+		transition: 0.5s;
+		animation: move 1s linear 1s;
+	}
+
+	@keyframes move{
+		0% {
+			left: 0;
+			top: 0;
+		}
+		
+		25% {
+			left: 300px;
+			top: 0;
+		}
+
+		50% {
+			left: 300px;
+			top:300px;
+		}
+		75% {
+			left: 0;
+			top:300px;
+		}
+		100% {
+			left: 0;
+			top: 0;
+		}
+	}
+</style>
+
+<body>
+	<div></div>
+
+	<script type="text/javascript">
+		let div = document.querySelector('div');
+
+		setTimeout(()=>{
+			div.style.background= 'yellow'
+		},1000)
+
+		// animationstart - CSS 动画开始后触发
+		// animationiteration - CSS 动画重复播放时触发
+		// animationend - CSS 动画完成后触发
+
+		div.addEventListener('animationstart',function(){
+			console.log('animationstart');
+		})
+		div.addEventListener('animationend',function(){
+			console.log('animationend');
+		})
+
+		div.addEventListener('transitionend',function(){
+			console.log('transitionend');
+		})
+
+
+
+	</script>
+
+</body>
+
+</html>

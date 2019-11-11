@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>员工列表筛选</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    #app {
+        width: 600px;
+        background: #f5f5f5;
+        margin: 50px auto;
+        padding: 15px;
+    }
+
+    .control {
+        text-align: center;
+    }
+
+    a {
+        padding: 5px;
+        display: inline-block;
+    }
+    table{
+        width: 100%;
+        text-align: center;
+    }
+    tr:nth-child(even){
+        background: rgba(173,216,230,0.2);
+    }
+    th{
+        background: rgba(173,216,230,1);
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div class="control">
+            <p class="age"><a href="javascript:;">年龄从小到大</a><a href="javascript:;">年龄从大到小</a><a href="javascript:;">默认排序</a></p>
+            <p class="gender"><a href="javascript:;">只显示男性</a><a href="javascript:;">只显示女性</a><a href="javascript:;">默认</a></p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        {
+            let data = [
+                {
+                    id: 0,
+                    name: '小明',
+                    age: 24,
+                    gender: '男'
+                },
+                {
+                    id: 1,
+                    name: '小芳',
+                    age: 30,
+                    gender: '女'
+                },
+                {
+                    id: 2,
+                    name: '小美',
+                    age: 31,
+                    gender: '女'
+                },
+                {
+                    id: 3,
+                    name: '小刚',
+                    age: 21,
+                    gender: '男'
+                },
+                {
+                    id: 4,
+                    name: '小琪',
+                    age: 18,
+                    gender: '女'
+                }
+            ];
+
+           
+            let tbody = document.querySelector('tbody');
+            render(data)
+            function render(d){
+                tbody.innerHTML = d.map(item=>{
+                    return `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.age}</td>
+                            <td>${item.gender}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            
+
+            let age = document.querySelectorAll('.age a');
+            let gender = document.querySelectorAll('.gender a');
+
+            let sortType = [
+                //从大到小
+                ()=>{data.sort((a,b)=>a.age-b.age);console.log(data);},
+                // 从小到大
+                ()=>{data.sort((a,b)=>b.age-a.age);console.log(data);},
+                // 默认id
+                ()=>{data.sort((a,b)=>a.id-b.id);console.log(data);}
+            ];
+
+            let filterType = [
+                ()=>data.filter(item=>item.gender == '男'),
+                ()=>data.filter(item=>item.gender == '女'),
+                ()=>[...data]
+            ];
+
+            let sortState = 2,filterState=2;
+            function updateData(){
+                // 每次过滤前先执行排序，是否影响性能？
+                sortType[sortState]();
+                let newdata = filterType[filterState]();
+                render(newdata);
+            }
+
+            age.forEach((item,index)=>{
+                item.onclick = function(){
+                    sortState = index;
+                    updateData();
+                }
+            });
+
+            gender.forEach((item,index)=>{
+                item.onclick = function(){
+                    filterState = index;
+                    updateData();
+                }
+            })
+
+
+
+            // 改良版///////////////////////////////////////////
+
+            // let filterData = [];
+
+            // let sortType = [
+            //     (sortData)=>{sortData.sort((a,b)=>a.age-b.age)},
+            //     (sortData)=>{sortData.sort((a,b)=>b.age-a.age)},
+            //     (sortData)=>{sortData.sort((a,b)=>a.id-b.id)}
+            // ];
+
+            // let filterType = [
+            //     ()=>data.filter(item=>item.gender == '男'),
+            //     ()=>data.filter(item=>item.gender == '女'),
+            //     ()=>[...data]
+            // ];
+
+            // age.forEach((item,index)=>{
+            //     item.onclick = function(){
+            //         let sortData=filterData.length?filterData:data;
+            //         sortType[index](sortData);
+            //         render(sortData)
+            //     }
+            // });
+
+            // gender.forEach((item,index)=>{
+            //     item.onclick = function(){
+            //         filterData = filterType[index]();
+            //         render(filterData);
+            //     }
+            // })
+
+
+        }
+    </script>
+</body>
+
+</html>

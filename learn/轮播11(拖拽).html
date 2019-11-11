@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<style>
+	#app{
+		width: 600px;
+		height: 360px;
+		margin: 50px auto;
+		border: 1px solid red;
+		position: relative;
+		overflow: hidden;
+	}
+	img{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.prev,.next{
+		position: absolute;
+		color: red;
+		font: 4em serif;
+		font-weight: bold;
+		top: 50%;
+		transform: translateY(-50%);
+		cursor: pointer;
+	}
+	.prev{
+		left: 10px;
+	}
+	.next{
+		right: 10px;
+	}
+</style>
+<body>
+	<div id="app">
+		<div class="figure">
+			
+		</div>
+		<div class="prev">&lt;</div>
+		<div class="next">&gt;</div>
+	</div>
+</body>
+<script src="js/mTween.js"></script>
+<script>
+	{
+		let app = document.querySelector('#app');
+		let figure = app.querySelector('.figure');
+		let prev = app.querySelector('.prev');
+		let next = app.querySelector('.next');
+
+		let imgArr = ['img/1.jpg','img/2.jpg','img/3.jpg','img/4.jpg'];
+		figure.innerHTML = imgArr.reverse().map((item,index)=>`<img style="z-index:0" src="${item}" />`).join('');
+
+
+		let zIndex = 0;
+		let flag = false;
+		let width = figure.offsetWidth;
+		/*
+			fn(h,v) 
+			h为水平方向，-1向左 1向右
+			v为垂直方向，-1向上 1向下
+
+		*/
+		function fn(h,v){
+			if(flag) return;
+			flag = true;
+			let imgs = figure.querySelectorAll('img');
+			let len = imgs.length-1;
+			css(imgs[len],'translateX',0);
+			css(imgs[len],'translateY',0);
+
+			// 判断是水平切换 还是 垂直切换
+			if(Math.abs(h)>Math.abs(v)){
+				mTween(
+					{
+						el:imgs[len],
+						attr:{
+							translateX:width * h
+						},
+						duration:500,
+						cb(){
+							figure.insertBefore(imgs[len],imgs[0]);
+							imgs[len].style.zIndex = zIndex;
+							imgs.forEach(item=>{
+								css(item,'translateX',0)
+							});
+							flag = false;
+						}
+					}
+				)
+			}else{
+				mTween(
+					{
+						el:imgs[len],
+						attr:{
+							translateY:imgs[len].offsetHeight * v
+						},
+						duration:500,
+						cb(){
+							figure.insertBefore(imgs[len],imgs[0]);
+							imgs[len].style.zIndex = zIndex;
+							imgs.forEach(item=>{
+								css(item,'translateY',0)
+							});
+							flag = false;
+						}
+					}
+				)
+			}
+
+			
+			zIndex--;
+		}
+
+		// 点击
+		prev.addEventListener('click',()=>{
+			fn(-1,0)
+		})
+
+		next.addEventListener('click',()=>{
+			fn(1,0)
+		})
+
+		// 拖曳
+		drag()
+		function drag(){
+			let imgs = figure.querySelectorAll('img');
+			let startMouse={};
+			
+			let move = (e)=>{
+				let nowMouse = {
+					x:e.clientX,
+					y:e.clientY
+				}
+				let dis = {
+					x:nowMouse.x - startMouse.x,
+					y:nowMouse.y - startMouse.y
+				}
+				
+				// console.log(dis);
+				
+
+				/*
+					判断水平移动距离 、 垂直移动距离
+				*/  
+				if(Math.abs(dis.x)>Math.abs(dis.y)){
+					if(dis.x < 0){
+						fn(-1,0)
+					}else{
+						fn(1,0)
+					}
+				}
+
+				if(Math.abs(dis.x) < Math.abs(dis.y)){
+					if(dis.y < 0){
+						fn(0,-1)
+					}else{
+						fn(0,1)
+					}
+				}
+				
+			}
+
+			app.addEventListener('mousedown',(e)=>{
+				startMouse = {
+					x:e.clientX,
+					y:e.clientY
+				}
+
+				document.addEventListener('mousemove',move,{once:true});
+				document.addEventListener('mouseup',()=>{			
+					document.removeEventListener('mousemove',move)
+				},{once:true})
+
+				
+				e.preventDefault();
+			})
+		}
+
+		// 滚轮
+		wheel()
+		function wheel(){
+			let imgs = figure.querySelectorAll('img');
+			let len = imgs[imgs.length-1];
+
+			mouseWheel(app,function(){
+				fn(0,-1);
+			},function(){
+				fn(0,1)
+			})
+		}
+
+		// // 键盘 左37 右39 上38 下40
+		document.addEventListener('keydown',(e)=>{
+			switch(e.keyCode){
+				case 37:
+					fn(-1,0)
+					break;
+				case 39:
+					fn(1,0)
+					break;
+				case 38:
+					fn(0,-1)
+					break;
+				case 40:
+					fn(0,1)
+					break;
+			}
+			
+			// console.log(e.keyCode)
+		})
+
+	}
+</script>
+
+</html>

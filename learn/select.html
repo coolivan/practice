@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>select</title>
+	</head>
+
+	<style type="text/css">
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		#app {
+			background: #CCCCCC;
+			padding: 15px;
+			width: 300px;
+			height: 150px;
+			margin: 50px auto;
+		}
+
+	</style>
+
+
+	<body>
+
+		<div id="app">
+			<select>
+				<option value="blade">大刀字体</option>
+				<option value="dagger">匕首字体</option>
+				<option value="watermelon">西瓜字体</option>
+			</select>
+			<div class="msg"></div>
+			<code>
+				<p>select.onchange = function(){</p>
+				<p>let index = select.selectedIndex;</p>
+				<p>let val = select.options[index].value;</p>
+				<p>let text = select.options[index].text;</p>
+				<p>}</p>
+			</code>
+		</div>
+
+
+
+		<script type="text/javascript">
+			window.onload = function() {
+				let app = document.getElementById("app");
+				
+				let select = document.querySelector('select');
+				let msg = document.querySelector('.msg');
+				
+				
+				select.onchange = function(){
+					let index = select.selectedIndex;
+					let val = select.options[index].value;
+					let text = select.options[index].text;
+
+					msg.innerHTML = `${index}-${val}-${text}`
+					console.log(index,val,text);
+				}
+				
+				
+
+			}
+		</script>
+	</body>
+</html>

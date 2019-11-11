@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>1000行代码完美还原windows7日历时间(html+css+js)</title>
+</head>
+<style>
+	/*
+		author：coolivan
+		date: 2019-05-29
+		web: coolivan.com	
+	 */
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	li {
+		list-style: none;
+	}
+
+	body {
+		background: white;
+	}
+
+	#app {
+		width: 350px;
+		height: 290px;
+		margin: 50px auto;
+		position: relative;
+		border-radius: 5px;
+		box-shadow: 0 0 20px 0 #242b32;
+	}
+
+	.layout {
+		width: 100%;
+		height: 100%;
+		padding: 6px;
+		box-sizing: border-box;
+		border-radius: 5px;
+		background: linear-gradient(#d1e6fc 20%, #f1f7fd 30%, #afd3f7);
+	}
+
+	.layout a {
+		text-decoration: none;
+		color: #0066cc;
+	}
+
+	.layout a:hover {
+		text-decoration: underline;
+	}
+
+	.wrap {
+		background: white;
+		width: 100%;
+		height: 100%;
+		border: #242b32 solid 1px;
+		position: relative;
+		box-sizing: border-box;
+	}
+
+	.inner {
+		height: 230px;
+		width: 100%;
+		background: white;
+		box-shadow: 0 0 10px 0 #ccd9ea;
+		position: relative;
+		z-index: 2;
+		padding: 15px;
+		box-sizing: border-box;
+	}
+
+
+
+	.inner-head {
+		color: #0066cc;
+		text-align: center;
+		font-size: 10px;
+		padding-bottom: 15px;
+		cursor: pointer;
+	}
+
+	.wrap-bottom {
+		height: 45px;
+		background: #f1f5fb;
+		position: absolute;
+		z-index: 1;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		color: #0066cc;
+		text-align: center;
+		line-height: 45px;
+		font-size: 12px;
+	}
+
+	.flex {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	/* .flex-right {} */
+
+	.clock-wrap {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		border: 1px solid #e2e2e3;
+		background: linear-gradient(0deg, #d7d7d7, #a9a9a9);
+		box-sizing: border-box;
+		position: relative;
+		padding: 4px;
+	}
+
+	.clock {
+		width: 110px;
+		height: 110px;
+		border-radius: 50%;
+		box-sizing: border-box;
+		border: 1px solid #e2e2e3;
+		background: linear-gradient(145deg, #eff2f3 30%, #cfd9dc 50%, white);
+		position: relative;
+	}
+
+	.clock-center {
+		width: 2px;
+		height: 2px;
+		border-radius: 50%;
+		background: #335d68;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 5;
+		border: 1px solid #0d3e4b;
+	}
+
+	.clock-hour {
+		width: 2px;
+		height: 35px;
+		background: #0d3e4b;
+		border-radius: 3px;
+		position: absolute;
+		left: 53px;
+		top: 19px;
+		z-index: 1;
+		transform-origin: center bottom;
+		transform: rotate(45deg);
+	}
+
+	.clock-min {
+		width: 2px;
+		height: 46px;
+		background: #0d3e4b;
+		border-radius: 4px;
+		position: absolute;
+		left: 53px;
+		top: 7px;
+		transform-origin: center bottom;
+		z-index: 3;
+		transform: rotate(90deg);
+	}
+
+	.clock-sec {
+		width: 1px;
+		height: 65px;
+		background: #0d3e4b;
+		border-radius: 4px;
+		position: absolute;
+		left: 49.5%;
+		top: 5px;
+		transform-origin: center 49px;
+		z-index: 3;
+	}
+
+	.clock:hover .clock-sec {
+		transform: rotate(45deg);
+	}
+
+	.clock-grid-12 {
+		position: absolute;
+		left: 49.2%;
+		top: 2px;
+	}
+
+	.clock-grid-12 li {
+		width: 2px;
+		height: 8px;
+		background: #0d3e4b;
+		position: absolute;
+		transform-origin: 1px 52px;
+	}
+
+	.clock-grid-60 {
+		position: absolute;
+		left: 49.2%;
+		top: 2px;
+	}
+
+	.clock-grid-60 li {
+		width: 1px;
+		height: 1px;
+		background: #0d3e4b;
+		position: absolute;
+		transform-origin: 1px 52px;
+	}
+
+	.right-time {
+		text-align: center;
+		font-size: 10px;
+		margin-top: 10px;
+	}
+
+	.right-week {
+		text-align: center;
+		color: #575757;
+		font-size: 10px;
+		margin-top: 10px;
+	}
+
+	.inner-left {
+		width: 160px;
+		overflow: hidden;
+	}
+
+	.ctrls {
+		padding-bottom: 3px;
+		font-size: 10px;
+		display: flex;
+		align-items: center;
+		margin: auto;
+	}
+
+	.ctrls a {
+		color: black;
+	}
+
+	.ctrls a:hover {
+		color: #0066cc !important;
+		text-decoration: none;
+	}
+
+	.option {
+		width: 150px;
+		text-align: center;
+		padding-top: 3px;
+	}
+
+	.prev {
+		font-size: 20px;
+	}
+
+	.next {
+		font-size: 20px;
+	}
+
+	.main {
+		position: relative;
+		overflow: hidden;
+		width: 160px;
+		height: 146px;
+	}
+
+	.board {
+		position: absolute;
+		background: white;
+	}
+
+
+	/* table 初始化 */
+	table {
+		user-select: none;
+		margin: auto;
+		width: 160px;
+	}
+
+	td {
+		border: 1px solid white;
+		text-align: center;
+		font-size: 10px;
+		position: relative;
+		box-sizing: border-box;
+	}
+
+	td:hover {
+		border: #b9d7fc solid 1px !important;
+		border-radius: 2px;
+		background: #edf5ff;
+		box-sizing: border-box;
+	}
+
+	td.other {
+		color: #575757;
+	}
+
+	/* 日期 */
+	.date {
+		font-size: 10px;
+	}
+
+	.date thead {
+		font-size: 10px;
+		justify-content: space-around;
+		border-bottom: 1px solid #f5f5f5;
+		position: relative;
+	}
+
+	.date thead::after {
+		content: '';
+		position: absolute;
+		width: 160px;
+		border-bottom: 1px solid #f5f5f5;
+	}
+
+	.date th {
+		font-weight: normal;
+		border: 1px solid white;
+		user-select: none;
+	}
+
+	.date td {
+		width: 24px;
+		height: 12px;
+		text-align: center;
+		vertical-align: bottom;
+		border: 1px solid white;
+		font-size: 10px;
+		user-select: none;
+		position: relative;
+		box-sizing: border-box;
+	}
+
+	.date td.active {
+		border: #84acdd solid 1px !important;
+		border-radius: 2px;
+		background: linear-gradient(white, #d1e6ff);
+	}
+
+	.date td.active::after {
+		content: '';
+		position: absolute;
+		width: 89%;
+		height: 85%;
+		top: 1%;
+		left: 1%;
+		border: 1px dotted black;
+	}
+
+	.date td.current {
+		border: #0066cc solid 1px !important;
+		border-radius: 2px;
+	}
+
+	.date td.other {
+		color: #909090;
+	}
+
+
+	/* 月份 */
+	.month {
+		font-size: 12px;
+	}
+
+	.month td {
+		width: 37px;
+		height: 37px;
+	}
+
+	.month td.current {
+		border: #84acdd solid 1px !important;
+		border-radius: 2px;
+	}
+
+	.month td.current::after {
+		content: '';
+		position: absolute;
+		width: 94%;
+		height: 92%;
+		top: 1%;
+		left: 1%;
+		border: 1px dotted black;
+	}
+
+	/* 年份视图 */
+	.year {
+		font-size: 12px;
+	}
+
+	.year td {
+		width: 37px;
+		height: 37px;
+	}
+
+	.year td.current {
+		border: #84acdd solid 1px !important;
+		border-radius: 2px;
+	}
+
+	.year td.current::after {
+		content: '';
+		position: absolute;
+		width: 94%;
+		height: 92%;
+		top: 1%;
+		left: 1%;
+		border: 1px dotted black;
+	}
+
+	/* century */
+	.century {
+		font-size: 10px;
+	}
+
+	.century td {
+		padding-left: 2px;
+		text-align: left;
+	}
+
+	.century td.current {
+		border: #84acdd solid 1px !important;
+		border-radius: 2px;
+	}
+
+	.century td.current::after {
+		content: '';
+		position: absolute;
+		width: 94%;
+		height: 92%;
+		top: 1%;
+		left: 1%;
+		border: 1px dotted black;
+	}
+
+
+
+	/* moveStyle */
+	.toBottom {
+		animation: toBottom 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toBottom {
+		from {
+			top: -160px
+		}
+
+		to {
+			top: 0px
+		}
+	}
+
+	.toTop {
+		animation: toTop 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toTop {
+		from {
+			top: 160px
+		}
+
+		to {
+			top: 0
+		}
+	}
+
+	.bottomOut {
+		animation: bottomOut 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes bottomOut {
+		from {
+			top: 0
+		}
+
+		to {
+			top: 160px
+		}
+	}
+
+	.topOut {
+		animation: topOut 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes topOut {
+		from {
+			top: 0
+		}
+
+		to {
+			top: -160px
+		}
+	}
+
+	.toLeft {
+		animation: toLeft 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toLeft {
+		from {
+			left: -160px
+		}
+
+		to {
+			left: 0px
+		}
+	}
+
+	.toRight {
+		animation: toRight 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toRight {
+		from {
+			left: 160px
+		}
+
+		to {
+			left: 0
+		}
+	}
+
+	.leftOut {
+		animation: leftOut 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes leftOut {
+		from {
+			left: 0
+		}
+
+		to {
+			left: 160px
+		}
+	}
+
+	.rightOut {
+		animation: rightOut 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes rightOut {
+		from {
+			left: 0
+		}
+
+		to {
+			left: -160px
+		}
+	}
+
+
+	.toHide {
+		animation: toHide 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toHide {
+		from {
+			opacity: 1;
+			transform: scale(1);
+		}
+
+		to {
+			opacity: 0;
+			transform: scale(0);
+		}
+	}
+
+	.toShow {
+		animation: toShow 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toShow {
+		from {
+			opacity: 0;
+			transform: scale(2);
+		}
+
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	.toBlow {
+		animation: toBlow 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toBlow {
+		from {
+			opacity: 1;
+			transform: scale(1)
+		}
+
+		to {
+			opacity: 0;
+			transform: scale(2)
+		}
+	}
+
+	.toNarrow {
+		animation: toNarrow 0.3s ease;
+		animation-fill-mode: both;
+	}
+
+	@keyframes toNarrow {
+		from {
+			opacity: 0;
+			transform: scale(0)
+		}
+
+		to {
+			opacity: 1;
+			transform: scale(1)
+		}
+	}
+</style>
+
+<body>
+	<div id="app">
+		<div class="layout">
+			<div class="wrap">
+				<div class="inner">
+					<div class="inner-head">2019年5月23日</div>
+					<div class="flex">
+						<div class="inner-left">
+							<div class="ctrls">
+								<a href="javascipt:;" class="prev">◂</a>
+								<a href="javascipt:;" class="option">2019年5月</a>
+								<a href="javascipt:;" class="next">▸</a>
+							</div>
+							<div class="main">
+								<div class="board"></div>
+								<!-- <table class="date">
+									<thead>
+										<tr>
+											<th>日</th>
+											<th>一</th>
+											<th>二</th>
+											<th>三</th>
+											<th>四</th>
+											<th>五</th>
+											<th>六</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+
+								<table class="month">
+									<tbody></tbody>
+								</table>
+
+								<table class="year">
+									<tbody></tbody>
+								</table> -->
+							</div>
+
+						</div>
+						<div class="inner-right">
+							<!-- clock -->
+							<div class="clock-wrap">
+								<div class="clock">
+									<div class="clock-center"></div>
+									<div class="clock-hour"></div>
+									<div class="clock-min"></div>
+									<div class="clock-sec"></div>
+									<ul class="clock-grid-12"></ul>
+									<ul class="clock-grid-60"></ul>
+								</div>
+							</div>
+							<!-- 时间 -->
+							<div class="right-time"></div>
+							<div class="right-week"></div>
+						</div>
+
+					</div>
+				</div>
+				<div class="wrap-bottom">
+					<a href="//www.coolivan.com">更改日期和时间设置...</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		//时钟
+		(function () {
+			let clock = document.querySelector('.clock');
+			let grid12 = clock.querySelector('.clock-grid-12');
+			let grid60 = clock.querySelector('.clock-grid-60');
+			let hour = clock.querySelector('.clock-hour');
+			let min = clock.querySelector('.clock-min');
+			let sec = clock.querySelector('.clock-sec');
+
+
+			function creatGrid(num) {
+				let str = '';
+				for (let i = 0; i < num; i++) {
+					str += `<li style="transform:rotate(${360 / num * i}deg)"></li>`
+				}
+				return str;
+			}
+			grid12.innerHTML = creatGrid(12);
+			grid60.innerHTML = creatGrid(60);
+
+			setInterval(setPointer, 1000)
+			setPointer();
+			function setPointer() {
+				let d = new Date(),
+					s = d.getSeconds(),
+					m = d.getMinutes() + s / 60,
+					h = d.getHours() + m / 60;
+				let sDeg = 360 / 60 * s,
+					mDeg = 360 / 60 * m,
+					hDeg = 360 / 12 * h;
+				hour.style.transform = `rotate(${hDeg}deg)`;
+				min.style.transform = `rotate(${mDeg}deg)`;
+				sec.style.transform = `rotate(${sDeg}deg)`;
+				// console.log(d)
+			}
+		}());
+
+		//设置时间日期
+		(function () {
+			let head = document.querySelector('.inner-head');
+			let time = document.querySelector('.right-time');
+			let week = document.querySelector('.right-week');
+			let weekArr = ["日", "一", "二", "三", "四", "五", "六"];
+			let weekStr = '日一二三四五六';
+
+			let d = new Date,
+				Y = d.getFullYear(),
+				M = d.getMonth() + 1,
+				D = d.getDate(),
+				A = d.getDay(),
+				s = d.getSeconds(),
+				m = d.getMinutes(),
+				h = d.getHours();
+
+			head.innerHTML = `<a href='' data-date="${D}" title="转到今日">${Y}年${M}月${D}日</a>`;
+			time.innerHTML = `${h}:${zero(m)}:${zero(s)}`;
+			week.innerHTML = `星期${weekArr[A]}`;
+
+
+			setInterval(function () {
+				let d = new Date(),
+					s = d.getSeconds(),
+					m = d.getMinutes(),
+					h = d.getHours();
+				time.innerHTML = `${h}:${zero(m)}:${zero(s)}`;
+			}, 1000);
+			function zero(n) {
+				return n < 10 ? '0' + n : '' + n;
+			}
+			// console.log(h,m,s,A);
+		}());
+
+		// 生成日历
+		(function () {
+			let main = document.querySelector('.main');
+			let board = document.querySelector('.board');
+			let option = document.querySelector('.option');
+			let optionType = 0;
+			let nextOptionType = 0;
+			let d = new Date(),
+				thisYear = d.getFullYear(),
+				thisMonth = d.getMonth(),
+				thisDate = d.getDate();
+
+			let nowYear = thisYear;
+			let nowMonth = thisMonth;
+			let nowDate = thisDate;
+			let activeDate = thisDate;
+
+			//点击滚动
+			let prev = document.querySelector('.prev');
+			let next = document.querySelector('.next');
+			prev.onclick = function () { tabScroll(-1) };
+			next.onclick = function () { tabScroll(1) };
+
+			//滚动
+			function tabScroll(dir) {
+				if (dir > 0) {
+					// 向右移动
+					main.innerHTML = '<div class="rightOut board"></div><div class="board toRight"></div>';
+					var board = main.querySelectorAll(".board");
+					switch (optionType) {
+						case 0:
+							createDateView(board[0], nowYear, nowMonth);
+							nowMonth++;
+							getNowDate();
+							createDateView(board[1], nowYear, nowMonth);
+							break;
+						case 1:
+							createMonthView(board[0], nowYear);
+							nowYear++;
+							getNowDate();
+							createMonthView(board[1], nowYear);
+							break;
+						case 2:
+							createYearView(board[0], nowYear);
+							nowYear += 10;
+							getNowDate();
+							createYearView(board[1], nowYear);
+							break;
+						case 3:
+							createCenturyView(board[0], nowYear);
+							nowYear += 100;
+							getNowDate();
+							createCenturyView(board[1], nowYear);
+							break;
+					}
+				} else {
+					// 向左移动
+					main.innerHTML = '<div class="leftOut board"></div><div class="board toLeft"></div>';
+					var board = main.querySelectorAll(".board");
+					switch (optionType) {
+						case 0:
+							createDateView(board[0], nowYear, nowMonth);
+							nowMonth--;
+							getNowDate();
+							createDateView(board[1], nowYear, nowMonth);
+							break;
+						case 1:
+							createMonthView(board[0], nowYear);
+							nowYear--;
+							getNowDate();
+							createMonthView(board[1], nowYear);
+							break;
+						case 2:
+							createYearView(board[0], nowYear);
+							nowYear -= 10;
+							getNowDate();
+							createYearView(board[1], nowYear);
+							break;
+						case 3:
+							createCenturyView(board[0], nowYear);
+							nowYear -= 100;
+							getNowDate();
+							createCenturyView(board[1], nowYear);
+							break;
+					}
+				}
+				createOption();
+			}
+			function getNowDate() {
+				var date = new Date(nowYear, nowMonth);
+				nowYear = date.getFullYear();
+				nowMonth = date.getMonth();
+			}
+
+
+			//点击切换
+			option.onclick = function () {
+				nextOptionType = optionType + 1;
+				if (nextOptionType > 3) {
+					optionType = 3
+				} else {
+					tabView();
+				}
+			}
+
+			createOption();
+			createDateView(board, nowYear, nowMonth);
+
+			function tabView() {
+				console.log(nextOptionType, optionType);
+				if (nextOptionType > optionType) {
+					main.innerHTML = '<div class="toHide board"></div><div class="toShow board"></div>';
+					let board = main.querySelectorAll(".board");
+					switch (nextOptionType) {
+						case 1:
+							// 当前在日期视图
+							// 要切换到月份视图
+							createDateView(board[0], nowYear, nowMonth);
+							createMonthView(board[1], nowYear);
+							optionType = nextOptionType;
+							break;
+						case 2:
+							// 当前在月份视图
+							// 要切换到年份视图
+							createMonthView(board[0], nowYear, nowMonth);
+							createYearView(board[1], nowYear);
+							optionType = nextOptionType;
+							break;
+						case 3:
+							// 当前在年份视图
+							//要切换到世纪视图
+							createYearView(board[0], nowYear);
+							createCenturyView(board[1], nowYear);
+							optionType = nextOptionType;
+							break;
+
+					}
+				} else {
+					main.innerHTML = '<div class="toBlow board"></div><div class="toNarrow board"></div>';
+					let board = main.querySelectorAll(".board");
+					switch (nextOptionType) {
+						case 1:
+							// 当前在年份视图
+							// 要切换到月份视图
+							createYearView(board[0], nowYear, nowMonth);
+							createMonthView(board[1], nowYear);
+							optionType = nextOptionType;
+							break;
+						case 0:
+							// 当前在月份视图
+							// 要切换到日期视图
+							createMonthView(board[0], nowYear);
+							createDateView(board[1], nowYear, nowMonth);
+							optionType = nextOptionType;
+							break;
+						case 2:
+							// 当前在世纪视图
+							// 要切换到年份视图
+							createCenturyView(board[0], nowYear);
+							createYearView(board[1], nowYear, nowMonth);
+							optionType = nextOptionType;
+							break;
+					}
+				}
+				createOption();
+			}
+
+			//option视图
+			function createOption() {
+				switch (optionType) {
+					case 0:
+						option.innerHTML = `${nowYear}年${nowMonth + 1}月`;
+						break;
+					case 1:
+						option.innerHTML = `${nowYear}`;
+						break;
+					case 2:
+						let startYear = Math.floor(nowYear / 10) * 10;
+						let endYear = startYear + 9;
+						option.innerHTML = `${startYear}-${endYear}`;
+						break;
+					case 3:
+						let startCentury = Math.floor(nowYear / 100) * 100;
+						let endCentury = startCentury + 99;
+						option.innerHTML = `${startCentury}-${endCentury}`;
+						break;
+				}
+			}
+
+			function toggleClass(dom) {
+				let td = dom.querySelectorAll('td');
+				//点击添加active
+				td.forEach(item => {
+					item.onclick = function () {
+						td.forEach(dom => dom.classList.remove('active'));
+						this.classList.add('active')
+					}
+				})
+			}
+
+			//日期视图
+			// let dateTable = main.querySelector('.date tbody');
+			// createDateView(dateTable,2019,4)
+			function createDateView(el, year, month) {
+				// 获取当月第一天是周几
+				let firstDay = new Date(year, month, 1).getDay();
+				// 获取上月最后一天是几号
+				let lastMonth = new Date(year, month, 0).getDate();
+				// 获取这月最后一天是几号
+				let lastDate = new Date(year, month + 1, 0).getDate();
+				let nowDate = new Date().getDate();
+				// console.log(firstDay,lastMonth,lastDate,nowDate);
+
+				let thead = `
+					<thead>
+						<tr>
+							<th>日</th>
+							<th>一</th>
+							<th>二</th>
+							<th>三</th>
+							<th>四</th>
+							<th>五</th>
+							<th>六</th>
+						</tr>
+					</thead>
+				`;
+
+				let html = `<table class="date">${thead}<tbody><tr>`;
+				for (let i = 1; i <= 42; i++) {
+					// 判断是否闭合tr
+					let tr = i % 7 ? '' : '</tr><tr>';
+					// 判断是否添加current
+					let current = nowDate == (i - firstDay) ? 'current' : '';
+					let active = activeDate == (i - firstDay) ? 'active' : '';
+
+					if (i <= firstDay) {
+						html += `<td class="other">${lastMonth - (firstDay - i)}</td>${tr}`;
+					} else if (i - firstDay <= lastDate) {
+						html += `<td class="${current} ${active}">${i - firstDay}</td>${tr}`;
+					} else {
+						html += `<td class="other">${i - lastDate - firstDay}</td>${tr}`;
+					}
+				}
+				el.innerHTML = html + '</tbody></table>';
+
+				//点击添加active
+				let td = el.querySelectorAll('td');
+				td.forEach(item => {
+					item.onclick = function () {
+						td.forEach(dom => dom.classList.remove('active'));
+						this.classList.add('active');
+						activeDate = parseInt(this.innerHTML);
+					}
+				})
+			}
+
+
+			//月份视图
+			function createMonthView(el) {
+				let html = '<table class="month"><tbody><tr>';
+				for (let i = 1; i <= 12; i++) {
+					let tr = i % 4 ? '' : '</tr><tr>';
+					let current = (i == nowMonth + 1) ? 'current' : '';
+					html += `<td class="${current}">${i}月</td>${tr}`;
+				}
+				el.innerHTML = html + '</tbody></table>';
+
+				//点击
+				let td = el.querySelectorAll("td");
+				td.forEach(function (item) {
+					item.onclick = function () {
+						nowMonth = parseInt(this.innerHTML) - 1;
+						nextOptionType = 0;
+						tabView();
+					};
+				});
+			}
+
+			//年份视图
+			function createYearView(el, year) {
+				let startYear = Math.floor(year / 10) * 10;
+				// console.log(startYear);
+				let html = '<table class="year"><tbody><tr>'
+
+				for (let i = 0; i < 12; i++) {
+					let tr = (i + 1) % 4 ? '' : '</tr><tr>';
+					let current = (startYear + i - 1 == year) ? "current" : '';
+					if (i == 0) {
+						html += `<td class="other">${startYear - 1}</td>${tr}`
+					} else if (i < 12) {
+						html += `<td class="${current}">${startYear + i - 1}</td>${tr}`
+					} else {
+						html += `<td class="other">${startYear}</td>${tr}`
+					}
+				}
+				el.innerHTML = html + '</tbody></table>';
+				//点击
+				let td = el.querySelectorAll("td");
+				td.forEach(function (item) {
+					item.onclick = function () {
+						nowYear = parseInt(this.innerHTML);
+						nextOptionType = 1;
+						tabView();
+					};
+				});
+			}
+
+			// 世纪视图
+			function createCenturyView(el, year) {
+				let startYear = Math.floor(year / 100) * 100;
+				let html = '<table class="century"><tbody><tr>'
+				for (let i = 0; i < 12; i++) {
+					let tr = (i + 1) % 4 ? '' : '</tr><tr>';
+					let current = (year >= startYear + 10 * (i - 1)) && (year <= startYear + 10 * i - 1) ? "current" : '';
+					if (i < 1) {
+						html += `<td class="other">${startYear - 10}-${startYear - 1}</td>`
+					} else if (i < 11) {
+						html += `<td class="${current}" data-end="${startYear + 10 * i - 1}">${startYear + 10 * (i - 1)}-${startYear + 10 * i - 1}</td>${tr}`
+					} else {
+						html += `<td class="other" data-end="${startYear + 10 * (i - 1) - 1}">${startYear + 10 * (i - 1)}-${startYear + 10 * (i - 1) - 1}</td>${tr}`
+					}
+				}
+				el.innerHTML = html + '</tbody></table>';
+				//点击
+				let td = el.querySelectorAll("td");
+				td.forEach(function (item) {
+					item.onclick = function () {
+						nowYear = parseInt(this.dataset.end);
+						nextOptionType = 2;
+						tabView();
+					};
+				});
+			}
+
+
+		}())
+
+	</script>
+
+</body>
+
+</html>

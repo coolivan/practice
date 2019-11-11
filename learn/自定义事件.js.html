@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    自定义事件——“长按”
+    <button>test</button>
+    <script>
+            {
+                // console.log(document.body.querySelectorAll('*'))
+                
+                Array.from(document.all).forEach(item => {
+                    let ev = new Event('longtap');
+                    ev.timer = 0;
+                    item.addEventListener('mousedown', (e) => {
+                        clearTimeout(ev.timer);
+                        ev.timer = setTimeout(() => {
+                            item.dispatchEvent(ev)
+                        }, 750)
+                    });
+                    item.addEventListener('mouseup', () => clearTimeout(ev.timer));
+                });
+        
+        
+                document.querySelector('button').addEventListener('longtap', function(){
+                    console.log(this);
+                    alert('longtap')
+                })
+        
+        
+        
+        
+        
+            }
+        </script>
+</body>
+
+
+</html>

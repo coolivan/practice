@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+	</head>
+	<body>
+		<h1>工厂模式</h1>
+		<h2>new</h2>
+		<h2>场景</h2>
+		<ul>
+			<li>jquery - $('div')</li>
+			<li>React.createElement</li>
+			<li>vue导步组件</li>
+		</ul>
+		<script type="text/javascript">
+			class Product{
+				constructor(name,weight){
+					this.name = name;
+					this.weight = weight;
+				}
+				
+				getName(){
+					console.log(this.name);
+				}
+				getWeight(){
+					console.log(this.weight);
+				}
+			}
+			class Creator{
+				create(name,weight){
+					return new Product(name,weight)
+				}
+			}
+		
+// 			let p1 = new Product('面包','18g');
+// 			p1.getName();
+			
+			//测试
+			let creator = new Creator();
+			let p2 = creator.create('milk','32g')
+			p2.getWeight()
+		</script>
+	</body>
+</html>

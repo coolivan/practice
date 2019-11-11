@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 200px;
+            padding: 5px;
+            border: 1px solid gray;
+            display: block;
+            background: white;
+        }
+        img{
+            max-width: 100%;
+            width: 100%;
+            display: block;
+        }
+        #img1{
+            width: 50vw;
+            min-width: 350px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            display: none;
+            box-shadow: 0 0 20px 0 black;
+        }
+        #img1:target{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <a class="box" href="#img1">
+            <img src="img/1.jpg" alt="">
+        </a>
+        <a id="img1" href="">
+            <img src="img/1.jpg" alt="">
+        </a>
+    </div>
+</body>
+</html>

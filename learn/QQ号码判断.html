@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>QQ号码判断</title>
+</head>
+<body>
+	请输入QQ号码<input type="text" name="" id="qq" value="" /><button type="button">判断</button><span></span>
+	<script type="text/javascript">
+		var qq = document.getElementById('qq');
+		var btn = document.getElementsByTagName('button')[0];
+		var msg = document.getElementsByTagName('span')[0];
+		
+		
+		btn.onclick = function(){
+			
+			var val = qq.value;
+			msg.innerHTML = '';
+			
+			
+			
+			if(val == ''){
+				msg.innerHTML = '不能为空'
+				return;
+			}
+			if(isNaN(Number(val))){
+				msg.innerHTML = '不是数字'
+				return;
+			}
+			if (val[0] == '0' || val[0] == '-' || val[0] == '+') {
+				msg.innerHTML = '首位不可为0、-、+';
+				return;
+			}
+			
+			
+			if(val.indexOf('.') != -1){//if(String(pareInt(val)) != val)
+				msg.innerHTML = '不能是小数'
+				return;
+			}
+			
+
+			if(val.length < 5 || val.length > 10){
+				msg.innerHTML = '输入的数字必须在5位以上、10位以内'
+				return
+			}
+			
+			msg.innerHTML = 'ok'
+			
+			
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button>debounce</button>
+    <button>throttle</button>
+    <button>normal</button>
+    <!-- 面试版 -->
+    <script>
+        // 防抖
+        function debounce(fn, delay){
+            let timer = null;
+            return (...args)=>{
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    fn.apply(this,args)
+                }, delay);
+            }
+
+        }
+        
+        // 节流
+        function throttle(fn,delay=500){
+            let flag = true;
+            return (...args)=>{
+                if(!flag) return;
+                flag = false;
+                setTimeout(() => {
+                    fn.apply(this,args)
+                    flag = true;
+                }, delay);
+            }
+        }
+
+
+        function test(){
+            console.log(arguments);
+        }
+
+        let d = debounce(test, 500);
+        document.querySelectorAll('button')[0].addEventListener('click',(e)=>{
+            d('debounce')
+        });
+
+        let t = throttle(test, 1000);
+        document.querySelectorAll('button')[1].addEventListener('click',(e)=>{
+            t('throttle')
+        });
+
+        document.querySelectorAll('button')[2].addEventListener('click',(e)=>{
+            test(e,'normal')
+        });
+
+    </script>
+</body>
+</html>

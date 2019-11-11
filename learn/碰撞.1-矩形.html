@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .box1 {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+        .box2 {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: green;
+            top: 50%;
+            left: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box1"></div>
+    <div class="box2"></div>
+
+
+    <script>
+        {
+            let box1 = document.querySelector('.box1');
+            let box2 = document.querySelector('.box2');
+
+            drag(box1);
+            drag(box2);
+            function drag(el) {
+                let startMouse = {};
+                let startPos = {};
+
+                let move = (e) => {
+                    let nowMouse = {
+                        x: e.clientX,
+                        y: e.clientY
+                    }
+                    let dis = {
+                        x: nowMouse.x - startMouse.x,
+                        y: nowMouse.y - startMouse.y
+                    }
+                    console.log(isCollide(box1,box2));
+                    if(isCollide(box1,box2)){
+                        box2.style.background = 'blue'
+                    }else{
+                        box2.style.background = 'green'
+                    }
+                    // console.log(el.className,dis)
+                    el.style.left = dis.x + startPos.x + 'px';
+                    el.style.top = dis.y + startPos.y + 'px';
+                }
+
+                el.addEventListener('mousedown', (e) => {
+                    startMouse = {
+                        x: e.clientX,
+                        y: e.clientY
+                    }
+                    startPos = {
+                        x:el.offsetLeft,
+                        y:el.offsetTop
+                    };
+                    document.addEventListener('mousemove', move);
+                    document.addEventListener('mouseup', () => {
+                        document.removeEventListener('mousemove', move)
+                    }, { once: true });
+
+                    e.preventDefault();
+                })
+            }
+
+ 
+            function isCollide(a,b){
+                let rectA = a.getBoundingClientRect();
+                let rectB = b.getBoundingClientRect();
+                return !(
+                    rectA.right < rectB.left ||
+                    rectB.right < rectA.left ||
+                    rectA.bottom < rectB.top ||
+                    rectB.bottom < rectA.top
+                )
+            }
+        }
+    </script>
+</body>
+
+</html>
