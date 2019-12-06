@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        title Document
+        //- link(rel="stylesheet", href="/css/style.css")
+        style.
+            *{padding:0;margin:0}#app a{text-decoration:none}.list{width:600px;margin:15px auto;border:1px solid gray}.list li{list-style:none;padding:0.5em;overflow:hidden}.list li:not(:last-of-type){border-bottom:1px dashed gray}.list li h2{text-overflow:ellipsis;white-space:nowrap;font-size:16px}.list li span{color:gray;font-size:12px;padding-right:1em;float:left}.list li time{font-size:12px;color:gray;float:right}.page{width:600px;margin:15px auto}.page a{display:inline-block;border:1px solid #cccccc;width:30px;height:30px;line-height:30px;text-align:center;margin-right:2px}.page .active{border-color:red;color:red}.detail{width:600px;margin:15px auto;border:1px solid gray;padding:15px}.detail h1{font-size:20px;text-align:center}.detail .info{border-bottom:1px dashed #eeeeee;padding:0.5em 0;text-align:center}.detail .info span{color:gray;font-size:12px;padding-right:1em}.detail .content{padding:1em 0}.back{width:600px;margin:15px auto;text-align:center}
+    body
+        #app
+           .container
+                ul.list
+                    each v in renderData
+                        li
+                            h2 
+                                a(href=v.id) #{v.title}
+                            .info
+                                span #{v.type}
+                                span #{v.country}
+                                time #{v.addTime}
+                
+                
+                .page
+                    - for (var x = 1; x <= pageCount; x++)
+                        a(class={active: currentUrl === '?page='+x} href="?page="+x) #{x}
+                
+       
+                    
+

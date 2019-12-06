@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p><input type="text" name="wd" id="wd"></p>
+    <script>
+        let input = document.querySelector('input');
+        let script;
+
+        input.oninput = function(){
+            script = document.createElement('script');
+            script.src = `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${this.value}&cb=show`;
+
+            document.head.appendChild(script);
+        }
+        function show(g){
+            console.log(g);
+            document.head.removeChild(script);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://localhost:3000" method="post" enctype="multipart/form-data">
+        <p>name: <input type="text" name="name" id="name"></p>
+        <p>password: <input type="password" name="password" id="password"></p>
+        <p>file: <input type="file" name="upload" id="file" multiple="multiple"></p>
+        <p><input type="submit" value="submit"></p>
+    </form>
+    <script>
+        let form = document.querySelector('form')
+
+        form.onsubmit = function(){
+            let data = new FormData(this);
+
+            console.log(data);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open(this.method,this.action,true);
+            xhr.send(data);
+
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200){
+                        console.log('ok')
+                    }else{
+                        console.log('error')
+                    }
+                }
+            }
+
+
+            return false;
+        }
+        //后台用multiparty接收数据
+    </script>
+
+</body>
+</html>

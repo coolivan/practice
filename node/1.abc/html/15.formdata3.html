@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <p>name: <input type="text" id="name"></p>
+        <p>password: <input type="password" id="password"></p>
+        <p>file: <input type="file" id="file"></p>
+        <p><button>submit</button></p>
+    </div>
+    <script>
+
+        let btn = document.querySelector('button');
+        btn.onclick = function(){
+            let data = new FormData();
+
+            data.append('name',document.querySelector('#name').value)
+            data.append('password',document.querySelector('#password').value)
+            data.append('file',document.querySelector('#file').files[0])//这有坑
+            console.log(data);
+
+            console.log(document.querySelector('#file').files);
+            let xhr = new XMLHttpRequest();
+            xhr.open('post','http://localhost:3000',true);
+            xhr.send(data);
+
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200){
+                        console.log('ok')
+                    }else{
+                        console.log('error')
+                    }
+                }
+            }
+
+        }
+        //后台用multiparty接收数据
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+增
+INSERT INTO <表> （字段，...） VALUE （'值'...）
+INSERT INTO users (name,password) VALUES ('lily','456789')
+
+删
+DELETE FROM <表> WHERE 条件
+DELETE FROM users WHERE id = 3;
+
+改
+UPDATE <表> SET 字段=新值，字段=新值，...， WHERE 条件
+UPDATE users SET 'name'='lily2' WHERE id = 2;
+
+查
+SELECT * FROM <表> WHERE 条件
+SELECT * FROM users WHERE id = 2;

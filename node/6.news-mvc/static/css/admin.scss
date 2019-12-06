@@ -1,0 +1,77 @@
+*{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+}
+.layout{
+    display: flex;
+    min-height: 100vh;
+}
+.menu{
+    width: 200px;
+    background: #666666;
+    color: white;
+    padding: 15px;
+
+    .logo{
+        font-size: 20px;
+        padding-bottom: 15px;
+    }
+
+    li{
+        line-height: 3;
+        border-bottom: 1px dashed #333333;
+        a{
+            color: white;
+            display: block;
+        }
+    }
+}
+.content{
+    flex: 1;
+    padding: 15px;
+
+    .nav{
+        font-style: italic;
+        color: #666666;
+    }
+
+    .main{
+        padding: 15px 0;
+
+        label{
+            display: block;
+            margin-bottom: 0.5em;
+        }
+        input{
+            padding: 0.5em;
+            display: block;
+            margin-bottom: 1em;
+        }
+        #title{
+            display: block;
+            width: 100%;
+            padding: 0.5em;
+            box-sizing: border-box;
+            margin-bottom: 1em;
+        }
+
+        textarea{
+            display: block;
+            width: 100%;
+            padding: 0.5em;
+            box-sizing: border-box;
+            margin-bottom: 1em; 
+        }
+
+        #submit{
+            background-color: #409eff;
+            color: white;
+            border: 0;
+            padding: 0.5em 1em;
+        }
+
+        
+    }
+}

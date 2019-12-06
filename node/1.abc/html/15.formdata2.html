@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://localhost:3000" method="post" enctype="multipart/form-data">
+        <p>name: <input type="text" name="name" id="name"></p>
+        <p>password: <input type="password" name="password" id="password"></p>
+        <p>file: <input type="file" name="upload" id="file" multiple="multiple"></p>
+        <p><input type="submit" value="submit"></p>
+    </form>
+    <script src="../js/jquery.min.js"></script>
+    <script>
+
+        $('form').on('submit',function(){
+            let data = new FormData(this);
+
+            $.ajax({
+                url:this.action,
+                type:this.method,
+                data:data,
+                processData:false,
+                contentType:false
+               
+            }).then(res=>{
+                console.log(res)
+            },err=>{
+                console.log(err);
+            })
+
+            return false;
+        })
+        //后台用multiparty接收数据
+    </script>
+
+</body>
+</html>

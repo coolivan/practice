@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <p><input type="file" class="myfile"></p>
+    <p>
+        <div>进度:<progress value="10" max="100"></progress><span class="percent"></span></div>
+        <div>速度：<span class="speed">0b/s</span></div>
+    </p>
+    <p>
+        <button>上传</button>
+        <button>取消</button>
+    </p>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+
+    <script>
+        let btn = document.querySelectorAll('button');
+        let xhr = new XMLHttpRequest();
+        let form = new FormData();
+        form.append('xms', '%E9%BB%84%E4%B9%89%E8%BD%A9');
+        xhr.open('post', '/a', true);
+        xhr.send(form);
+        xhr.onload = function () {
+            console.log(xhr.responseText)
+        }
+
+        btn[0].onclick = function () {
+
+
+        };
+
+
+    </script>
+</body>
+
+</html>

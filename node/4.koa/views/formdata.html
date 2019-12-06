@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <p><input type="file" class="myfile"></p>
+    <p>
+        <div>进度:<progress value="10" max="100"></progress><span class="percent"></span></div>
+        <div>速度：<span class="speed">0b/s</span></div>
+    </p>
+    <p> 
+        <button>上传</button>
+        <button>取消</button>
+    </p>
+
+
+    <script>
+        let btn = document.querySelectorAll('button');
+        let xhr = new XMLHttpRequest();
+
+        
+        btn[0].onclick = function () {
+            let file = document.querySelector('.myfile').files[0];
+            let form = new FormData();
+            form.append('img',file);
+            form.append('name','ivan');
+
+            xhr.open('post','/upload1',true);
+           
+
+            // 钩子
+            let startTime;
+            let startLoad;
+            xhr.upload.onloadstart = function(){
+                startTime = new Date().getTime();
+                startLoad = 0;
+            }
+            xhr.upload.onprogress = function(evt){
+                // console.log(evt)
+                // 进度
+                let percent = (evt.loaded/evt.total*100).toFixed(0);
+                document.querySelector('progress').value = percent;
+                document.querySelector('.percent').innerHTML = percent + '%';
+                // 速度
+                let nowTime = new Date().getTime();
+                let diffTime = (nowTime - startTime)/1000;//毫秒
+                let nowLoad = evt.loaded;
+                diffLoad = nowLoad - startLoad;
+
+                startTime = nowTime;
+                startLoad = nowLoad;
+                
+                let speed = diffLoad / diffTime;
+                // 单位处理
+                let unit = 'b/s';
+                if(speed/1024>1){
+                    unit = 'kb/s';
+                    speed = speed/1024;
+                }
+                if(speed/1024>1){
+                    unit = 'mb/s';
+                    speed = speed/1024;
+                }
+                
+                document.querySelector('.speed').innerHTML = speed.toFixed(2) + unit;
+
+                // console.log(speed.toFixed(2),unit);
+            }
+            xhr.upload.onload = function(){
+                console.log('onload')
+            }
+            xhr.upload.onloadend = function(){
+                console.log('onloadend')
+            }
+            xhr.upload.onabort = function(){
+                console.log('onabort')
+            }
+
+
+            xhr.send(form);
+
+            xhr.onload = function(){
+                console.log(xhr.responseText)
+            }
+        };
+
+        btn[1].onclick = function(){
+            xhr.abort();
+        }
+    </script>
+</body>
+
+</html>

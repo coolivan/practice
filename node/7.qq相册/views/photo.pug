@@ -1,0 +1,61 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    title Document
+    link(rel='stylesheet', href='css/photo.css')
+  body
+    // 展示相关
+    .container
+      .photoHeader
+        .imgContainer
+          img.photoName(src='img/1.jpg')
+        .btnContainer
+          span.photoTitle #{username}
+          button.mybtn 上传照片
+      .photoContainer
+    // 上传相关
+    .masking
+      .addPhotoContainer
+      .addController
+        h3.addTitle
+          | 上传照片-普通上传(H5)
+          span.close ╳
+        .photoTitles
+          span.uploadTo 上传到
+          .photoSelect
+            img.showPhoto(src='img/1.jpg')
+            |                     #{username}
+        // 上传按钮
+        .showContainer
+          .uploadContainer
+            span.fileinput-button
+              span 上传图片
+              input.imgFile(type='file', name='', multiple='multiple')
+            span.hint
+              | 按住Ctrl可多选
+        // 显示待上传图片
+        .loadContainer
+          .wantUpload
+          .addStyle
+            span.fileinput-add
+              span
+              input.imgFile-add(type='file', multiple='multiple')
+          // 开始上传按钮
+          .bottomStyle
+            span.uploadBtn 开始上传
+
+    .photoScroll
+      .wrap
+        span.close ╳
+        .figure
+          img(src='', alt='')
+        ul.group
+          li.active
+            img(src='', alt='')
+          li
+            img(src='', alt='')
+      
+    script(src='js/script.js')
